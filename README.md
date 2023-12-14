@@ -8,4 +8,4 @@
 |강재혁|원영서|이승진|이준우|
 |:----:|:----:|:----:|:----:|
 |Backend, DevOps, AI|Android, DevOps, Design|iOS, DevOps, Design|Backend, DevOps, AI|
-|<a href="https://github.com/ggamD00">@ggamD00</a>|<a href="https://github.com/youngseo3">@youngseo3</a>|<a href="https://github.com/SeungEEE">@SeungEEE</a>|<a href="https://github.com/junRain2”>@junRain2</a>|
+|<a href="https://github.com/ggamD00">@ggamD00</a>|<a href="https://github.com/youngseo3">@youngseo3</a>|<a href="https://github.com/SeungEEE">@SeungEEE</a>|<a href="https://github.com/junRain2">@junRain2</a>|
