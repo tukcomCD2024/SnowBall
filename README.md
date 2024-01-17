@@ -19,6 +19,9 @@
 
 ... 작업중
 
+## Jira
+<a href=https://happis9899.atlassian.net/jira/software/projects/SNOW/boards/3>@SnowBall With Jira</a>
+
 ## 회의
 - 스크럼: 매일 12:30 (Online)
 - 전체회의: 매주 화요일 13:00 (Offline)
