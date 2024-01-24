@@ -14,6 +14,7 @@
 		5CAB5B582B610EA800B2AF59 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CAB5B572B610EA800B2AF59 /* Assets.xcassets */; };
 		5CAB5B5B2B610EA800B2AF59 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CAB5B592B610EA800B2AF59 /* LaunchScreen.storyboard */; };
 		5CAB5B642B610F5500B2AF59 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 5CAB5B632B610F5500B2AF59 /* Alamofire */; };
+		5CAB5B672B6110F600B2AF59 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5CAB5B662B6110F600B2AF59 /* SnapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5CAB5B642B610F5500B2AF59 /* Alamofire in Frameworks */,
+				5CAB5B672B6110F600B2AF59 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +89,7 @@
 			name = Memetory;
 			packageProductDependencies = (
 				5CAB5B632B610F5500B2AF59 /* Alamofire */,
+				5CAB5B662B6110F600B2AF59 /* SnapKit */,
 			);
 			productName = Memetory;
 			productReference = 5CAB5B4B2B610EA600B2AF59 /* Memetory.app */;
@@ -118,6 +121,7 @@
 			mainGroup = 5CAB5B422B610EA600B2AF59;
 			packageReferences = (
 				5CAB5B622B610F5500B2AF59 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				5CAB5B652B6110F500B2AF59 /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			productRefGroup = 5CAB5B4C2B610EA600B2AF59 /* Products */;
 			projectDirPath = "";
@@ -374,6 +378,14 @@
 				minimumVersion = 5.8.1;
 			};
 		};
+		5CAB5B652B6110F500B2AF59 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -381,6 +393,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5CAB5B622B610F5500B2AF59 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		5CAB5B662B6110F600B2AF59 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CAB5B652B6110F500B2AF59 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
