@@ -15,6 +15,13 @@
 
 ![밈토리](https://github.com/JunRain2/practice-java/assets/107318116/c1f84a01-c138-4355-86e5-55e6cb57a064)
 
-## 디자인
+## Figma
 
-![view](https://github.com/JunRain2/practice-java/assets/107318116/17843426-bf39-4fac-94d8-c2c302c438dd)
+... 작업중
+
+## Jira
+<a href=https://happis9899.atlassian.net/jira/software/projects/SNOW/boards/3>@SnowBall With Jira</a>
+
+## 회의
+- 스크럼: 매일 12:30 (Online)
+- 전체회의: 매주 화요일 13:00 (Offline)
