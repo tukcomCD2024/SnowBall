@@ -16,6 +16,7 @@ FACE_SWAPPER = None
 THREAD_LOCK = threading.Lock()
 NAME = 'ROOP.FACE-SWAPPER'
 
+
 # 얼굴 교환 모델을 가져온다
 def get_face_swapper() -> Any:
     global FACE_SWAPPER
@@ -26,17 +27,21 @@ def get_face_swapper() -> Any:
             FACE_SWAPPER = insightface.model_zoo.get_model(model_path, providers=roop.globals.execution_providers)
     return FACE_SWAPPER
 
+
 # 얼굴 교환 모델을 초기화
 def clear_face_swapper() -> None:
     global FACE_SWAPPER
 
     FACE_SWAPPER = None
 
+
 # 사전 검사를 수행
 def pre_check() -> bool:
     download_directory_path = resolve_relative_path('../models')
-    conditional_download(download_directory_path, ['https://huggingface.co/CountFloyd/deepfake/resolve/main/inswapper_128.onnx'])
+    conditional_download(download_directory_path,
+                         ['https://huggingface.co/CountFloyd/deepfake/resolve/main/inswapper_128.onnx'])
     return True
+
 
 # 시작 전 사전 확인을 수행
 def pre_start() -> bool:
@@ -51,14 +56,17 @@ def pre_start() -> bool:
         return False
     return True
 
+
 # 후처리를 수행
 def post_process() -> None:
     clear_face_swapper()
     clear_face_reference()
 
+
 # 얼굴을 교환
 def swap_face(source_face: Face, target_face: Face, temp_frame: Frame) -> Frame:
     return get_face_swapper().get(temp_frame, target_face, source_face, paste_back=True)
+
 
 # 프레임을 처리
 def process_frame(source_face: Face, reference_face: Face, temp_frame: Frame) -> Frame:
@@ -73,29 +81,12 @@ def process_frame(source_face: Face, reference_face: Face, temp_frame: Frame) ->
             temp_frame = swap_face(source_face, target_face, temp_frame)
     return temp_frame
 
-# 프레임을 처리
-def process_frames(source_path: str, temp_frame_paths: List[str], update: Callable[[], None]) -> None:
-    source_face = get_one_face(cv2.imread(source_path))
-    reference_face = None if roop.globals.many_faces else get_face_reference()
-    for temp_frame_path in temp_frame_paths:
-        temp_frame = cv2.imread(temp_frame_path)
-        result = process_frame(source_face, reference_face, temp_frame)
-        cv2.imwrite(temp_frame_path, result)
-        if update:
-            update()
 
 # 이미지를 처리
 def process_image(source_path: str, target_path: str, output_path: str) -> None:
     source_face = get_one_face(cv2.imread(source_path))
     target_frame = cv2.imread(target_path)
-    reference_face = None if roop.globals.many_faces else get_one_face(target_frame, roop.globals.reference_face_position)
+    reference_face = None if roop.globals.many_faces else get_one_face(target_frame,
+                                                                       roop.globals.reference_face_position)
     result = process_frame(source_face, reference_face, target_frame)
     cv2.imwrite(output_path, result)
-
-# 비디오를 처리
-def process_video(source_path: str, temp_frame_paths: List[str]) -> None:
-    if not roop.globals.many_faces and not get_face_reference():
-        reference_frame = cv2.imread(temp_frame_paths[roop.globals.reference_frame_number])
-        reference_face = get_one_face(reference_frame, roop.globals.reference_face_position)
-        set_face_reference(reference_face)
-    roop.processors.frame.core.process_video(source_path, temp_frame_paths, process_frames)

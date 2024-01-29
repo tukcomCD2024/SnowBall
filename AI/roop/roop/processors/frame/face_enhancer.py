@@ -15,6 +15,7 @@ THREAD_SEMAPHORE = threading.Semaphore()  # 스레드 세마포어 객체 생성
 THREAD_LOCK = threading.Lock()  # 스레드 락 객체 생성
 NAME = 'ROOP.FACE-ENHANCER'  # 모듈의 이름
 
+
 # 얼굴 향상기 객체를 반환하는 함수
 def get_face_enhancer() -> Any:
     global FACE_ENHANCER
@@ -25,6 +26,7 @@ def get_face_enhancer() -> Any:
             FACE_ENHANCER = GFPGANer(model_path=model_path, upscale=1, device=get_device())  # GFPGANer 객체 생성
     return FACE_ENHANCER  # 얼굴 향상기 객체 반환
 
+
 # 사용 가능한 실행 프로바이더에 따라 장치를 선택하는 함수
 def get_device() -> str:
     if 'CUDAExecutionProvider' in roop.globals.execution_providers:  # CUDAExecutionProvider가 있는 경우
@@ -33,17 +35,21 @@ def get_device() -> str:
         return 'mps'  # MPS 디바이스 선택
     return 'cpu'  # CPU 디바이스 선택
 
+
 # 얼굴 향상기 객체를 초기화하는 함수
 def clear_face_enhancer() -> None:
     global FACE_ENHANCER
 
     FACE_ENHANCER = None  # 얼굴 향상기 객체를 None으로 재설정
 
+
 # 전처리 작업을 수행하는 함수
 def pre_check() -> bool:
     download_directory_path = resolve_relative_path('../models')  # 모델 다운로드 경로 지정
-    conditional_download(download_directory_path, ['https://github.com/TencentARC/GFPGAN/releases/download/v1.3.4/GFPGANv1.4.pth'])  # 필요한 모델 다운로드
+    conditional_download(download_directory_path, [
+        'https://github.com/TencentARC/GFPGAN/releases/download/v1.3.4/GFPGANv1.4.pth'])  # 필요한 모델 다운로드
     return True  # 전처리 성공을 나타내는 True 반환
+
 
 # 처리 직전에 필요한 작업을 수행하는 함수
 def pre_start() -> bool:
@@ -52,9 +58,11 @@ def pre_start() -> bool:
         return False  # 시작할 수 없음을 나타내는 False 반환
     return True  # 시작 가능을 나타내는 True 반환
 
+
 # 처리 후 정리 작업을 수행하는 함수
 def post_process() -> None:
     clear_face_enhancer()  # 얼굴 향상기 객체 초기화
+
 
 # 얼굴을 향상시키는 함수
 def enhance_face(target_face: Face, temp_frame: Frame) -> Frame:
@@ -75,6 +83,7 @@ def enhance_face(target_face: Face, temp_frame: Frame) -> Frame:
         temp_frame[start_y:end_y, start_x:end_x] = temp_face  # 향상된 얼굴 영역을 원본 프레임에 복사
     return temp_frame  # 향상된 프레임 반환
 
+
 # 단일 프레임을 처리하는 함수
 def process_frame(source_face: Face, reference_face: Face, temp_frame: Frame) -> Frame:
     many_faces = get_many_faces(temp_frame)  # 다수의 얼굴을 가져옴
@@ -83,21 +92,9 @@ def process_frame(source_face: Face, reference_face: Face, temp_frame: Frame) ->
             temp_frame = enhance_face(target_face, temp_frame)  # 얼굴 향상 처리
     return temp_frame  # 처리된 프레임 반환
 
-# 다중 프레임을 처리하는 함수
-def process_frames(source_path: str, temp_frame_paths: List[str], update: Callable[[], None]) -> None:
-    for temp_frame_path in temp_frame_paths:  # 각 임시 프레임에 대해
-        temp_frame = cv2.imread(temp_frame_path)  # 이미지 로드
-        result = process_frame(None, None, temp_frame)  # 프레임 처리
-        cv2.imwrite(temp_frame_path, result)  # 처리된 프레임 저장
-        if update:  # 업데이트 함수가 있는 경우
-            update()  # 업데이트 실행
 
 # 이미지를 처리하는 함수
 def process_image(source_path: str, target_path: str, output_path: str) -> None:
     target_frame = cv2.imread(target_path)  # 대상 이미지 로드
     result = process_frame(None, None, target_frame)  # 이미지 프레임 처리
     cv2.imwrite(output_path, result)  # 처리된 이미지 저장
-
-# 비디오를 처리하는 함수
-def process_video(source_path: str, temp_frame_paths: List[str]) -> None:
-    roop.processors.frame.core.process_video(None, temp_frame_paths, process_frames)  # 프레임 처리 함수 호출

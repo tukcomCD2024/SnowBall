@@ -14,14 +14,13 @@ import roop
 FRAME_PROCESSORS_MODULES: List[ModuleType] = []
 # 프레임 처리기 인터페이스 목록
 FRAME_PROCESSORS_INTERFACE = [
-    'pre_check', # 사전 체크 함수
-    'pre_start', # 사전 시작 함수
-    'process_frame', # 프레임 처리 함수
-    'process_frames', # 프레임들 처리 함수
-    'process_image', # 이미지 처리 함수
-    'process_video', # 비디오 처리 함수
-    'post_process' # 후처리 함수
+    'pre_check',  # 사전 체크 함수
+    'pre_start',  # 사전 시작 함수
+    'process_frame',  # 프레임 처리 함수
+    'process_image',  # 이미지 처리 함수
+    'post_process'  # 후처리 함수
 ]
+
 
 # 주어진 프레임 처리기를 로드하는 함수
 def load_frame_processor_module(frame_processor: str) -> Any:
@@ -37,6 +36,7 @@ def load_frame_processor_module(frame_processor: str) -> Any:
         sys.exit(f'Frame processor {frame_processor} not implemented correctly.')
     return frame_processor_module
 
+
 # 주어진 프레임 처리기 목록에 대한 모듈들을 반환하는 함수
 def get_frame_processors_modules(frame_processors: List[str]) -> List[ModuleType]:
     # 주어진 프레임 처리기 목록에 대한 모듈들을 반환하는 함수
@@ -48,44 +48,6 @@ def get_frame_processors_modules(frame_processors: List[str]) -> List[ModuleType
             frame_processor_module = load_frame_processor_module(frame_processor)
             FRAME_PROCESSORS_MODULES.append(frame_processor_module)
     return FRAME_PROCESSORS_MODULES
-
-# 여러 프레임을 병렬로 처리하는 함수
-def multi_process_frame(source_path: str, temp_frame_paths: List[str], process_frames: Callable[[str, List[str], Any], None], update: Callable[[], None]) -> None:
-    with ThreadPoolExecutor(max_workers=roop.globals.execution_threads) as executor:
-        futures = []
-        queue = create_queue(temp_frame_paths)
-        queue_per_future = max(len(temp_frame_paths) // roop.globals.execution_threads, 1)
-        while not queue.empty():
-            # 프레임 처리 함수를 비동기적으로 실행
-            future = executor.submit(process_frames, source_path, pick_queue(queue, queue_per_future), update)
-            futures.append(future)
-        for future in as_completed(futures):
-            future.result()
-
-
-def create_queue(temp_frame_paths: List[str]) -> Queue[str]:
-    # 임시 프레임 경로를 큐로 생성하는 함수
-    queue: Queue[str] = Queue()
-    for frame_path in temp_frame_paths:
-        queue.put(frame_path)
-    return queue
-
-
-def pick_queue(queue: Queue[str], queue_per_future: int) -> List[str]:
-    # 큐에서 일정 개수의 항목을 가져오는 함수
-    queues = []
-    for _ in range(queue_per_future):
-        if not queue.empty():
-            queues.append(queue.get())
-    return queues
-
-
-def process_video(source_path: str, frame_paths: list[str], process_frames: Callable[[str, List[str], Any], None]) -> None:
-    # 비디오를 처리하는 함수
-    progress_bar_format = '{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}{postfix}]'
-    total = len(frame_paths)
-    with tqdm(total=total, desc='Processing', unit='frame', dynamic_ncols=True, bar_format=progress_bar_format) as progress:
-        multi_process_frame(source_path, frame_paths, process_frames, lambda: update_progress(progress))
 
 
 def update_progress(progress: Any = None) -> None:
