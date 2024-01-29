@@ -9,6 +9,7 @@ from roop.typing import Frame, Face
 FACE_ANALYSER = None
 THREAD_LOCK = threading.Lock()
 
+
 # 얼굴 분석기 객체를 반환. 없으면 새로 생성
 def get_face_analyser() -> Any:
     global FACE_ANALYSER
@@ -19,11 +20,13 @@ def get_face_analyser() -> Any:
             FACE_ANALYSER.prepare(ctx_id=0)
     return FACE_ANALYSER
 
+
 # 얼굴 분석기 객체를 초기화
 def clear_face_analyser() -> Any:
     global FACE_ANALYSER
 
     FACE_ANALYSER = None
+
 
 # 이미지에서 한 개의 얼굴을 가져온다.
 def get_one_face(frame: Frame, position: int = 0) -> Optional[Face]:
@@ -35,12 +38,14 @@ def get_one_face(frame: Frame, position: int = 0) -> Optional[Face]:
             return many_faces[-1]
     return None
 
+
 # 이미지에서 여러 개의 얼굴을 가져온다 -> 여러 개는 필요 없는데;
 def get_many_faces(frame: Frame) -> Optional[List[Face]]:
     try:
         return get_face_analyser().get(frame)
     except ValueError:
         return None
+
 
 # 이미지에서 주어진 얼굴과 유사한 얼굴을 찾는다.
 def find_similar_face(frame: Frame, reference_face: Face) -> Optional[Face]:
