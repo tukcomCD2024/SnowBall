@@ -55,21 +55,6 @@ def normalize_output_path(source_path: str, target_path: str, output_path: str) 
     return output_path
 
 
-# 임시 디렉토리를 생성하는 함수
-def create_temp(target_path: str) -> None:
-    temp_directory_path = get_temp_directory_path(target_path)
-    Path(temp_directory_path).mkdir(parents=True, exist_ok=True)
-
-
-# 임시 파일을 이동시키는 함수
-def move_temp(target_path: str, output_path: str) -> None:
-    temp_output_path = get_temp_output_path(target_path)
-    if os.path.isfile(temp_output_path):
-        if os.path.isfile(output_path):
-            os.remove(output_path)
-        shutil.move(temp_output_path, output_path)
-
-
 # 임시 디렉토리를 정리하는 함수
 def clean_temp(target_path: str) -> None:
     temp_directory_path = get_temp_directory_path(target_path)

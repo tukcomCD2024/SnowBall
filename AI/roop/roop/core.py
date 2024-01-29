@@ -22,8 +22,7 @@ import roop.globals
 import roop.metadata
 from roop.predictor import predict_image
 from roop.processors.frame.core import get_frame_processors_modules
-from roop.utilities import has_image_extension, is_image, create_temp, move_temp, clean_temp, \
-    normalize_output_path
+from roop.utilities import has_image_extension, is_image, clean_temp, normalize_output_path
 
 warnings.filterwarnings('ignore', category=FutureWarning, module='insightface')
 warnings.filterwarnings('ignore', category=UserWarning, module='torchvision')
