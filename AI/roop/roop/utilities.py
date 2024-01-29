@@ -93,14 +93,6 @@ def is_image(image_path: str) -> bool:
     return False
 
 
-# 파일이 비디오인지 확인하는 함수
-def is_video(video_path: str) -> bool:
-    if video_path and os.path.isfile(video_path):
-        mimetype, _ = mimetypes.guess_type(video_path)
-        return bool(mimetype and mimetype.startswith('video/'))
-    return False
-
-
 # 필요에 따라 파일을 다운로드하는 함수
 def conditional_download(download_directory_path: str, urls: List[str]) -> None:
     if not os.path.exists(download_directory_path):

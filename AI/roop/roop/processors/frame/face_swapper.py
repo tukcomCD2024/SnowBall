@@ -7,9 +7,9 @@ import roop.globals
 import roop.processors.frame.core
 from roop.core import update_status
 from roop.face_analyser import get_one_face, get_many_faces, find_similar_face
-from roop.face_reference import get_face_reference, set_face_reference, clear_face_reference
+from roop.face_reference import clear_face_reference
 from roop.typing import Face, Frame
-from roop.utilities import conditional_download, resolve_relative_path, is_image, is_video
+from roop.utilities import conditional_download, resolve_relative_path, is_image
 
 # 전역 변수 초기화
 FACE_SWAPPER = None
