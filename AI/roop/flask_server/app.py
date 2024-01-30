@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
@@ -28,6 +29,22 @@ def upload_file():
         # 저장할 경로 + 고유한 파일명
         target_image.save('../image/' + target_image_name)
         source_image.save('../image/' + source_image_name)
+
+        command = [
+            "python",
+            "../run.py",
+            "-s",
+            "../image/" + source_image_name,
+            "-t",
+            '../image/' + target_image_name,
+            "-o",
+            "../image/",
+            "--frame-processor",
+            "face_swapper"
+        ]
+
+        subprocess.run(command)
+
         return 'uploads 디렉토리 -> 파일 업로드 성공!'
 
 
