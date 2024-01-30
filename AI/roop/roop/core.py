@@ -3,10 +3,6 @@
 import os
 import sys
 
-# single thread doubles cuda performance - needs to be set before torch import
-# 토치 임포트 전에 설정되어야 함
-if any(arg.startswith('--execution-provider') for arg in sys.argv):
-    os.environ['OMP_NUM_THREADS'] = '1'
 # reduce tensorflow log level
 # 텐서플로우 로그 레벨 줄이기
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
