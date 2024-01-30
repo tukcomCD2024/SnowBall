@@ -15,3 +15,7 @@ def upload_file():
         target_file.save('/Users/junrain/Downloads/server/' + secure_filename(target_file.filename))
         source_file.save('/Users/junrain/Downloads/server/' + secure_filename(source_file.filename))
         return 'uploads 디렉토리 -> 파일 업로드 성공!'
+
+
+if __name__ == '__main__':
+    app.run()
