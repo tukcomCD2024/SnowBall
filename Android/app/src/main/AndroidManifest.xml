@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Memetory"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.ui.auth.AuthActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.ui.MainActivity"
             android:exported="false" />
         <activity

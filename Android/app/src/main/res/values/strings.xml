@@ -7,4 +7,6 @@
     <string name="tutorial_second_title">얼굴, 목소리, 대사를 입력하면?</string>
     <string name="tutorial_third_title">나만의 밈 완성!</string>
     <string name="nickname_title">자신만의 닉네임을\n입력해주세요!</string>
+    <string name="auth_google">Google 계정으로 로그인</string>
+    <string name="auth_kakao">카카오 로그인</string>
 </resources>
