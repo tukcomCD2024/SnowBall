@@ -4,7 +4,7 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="android:windowBackground">@android:color/white</item>
-
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="Theme.Memetory" parent="Base.Theme.Memetory" />
