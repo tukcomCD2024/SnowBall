@@ -6,9 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".presentation.ui.splash.SplashActivity">
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/splash_title"
+        android:textAppearance="@style/TextAppearance.App.h1"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/mainLogoImg"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:id="@+id/mainLogoImg"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:layout_marginTop="80dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
