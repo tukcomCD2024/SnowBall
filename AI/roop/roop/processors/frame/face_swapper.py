@@ -51,8 +51,8 @@ def pre_start() -> bool:
     elif not get_one_face(cv2.imread(roop.globals.source_path)):
         update_status('No face in source path detected.', NAME)
         return False
-    if not is_image(roop.globals.target_path) and not is_video(roop.globals.target_path):
-        update_status('Select an image or video for target path.', NAME)
+    if not is_image(roop.globals.target_path):
+        update_status('Select an image for target path.', NAME)
         return False
     return True
 

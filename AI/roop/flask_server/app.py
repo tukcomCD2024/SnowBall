@@ -38,7 +38,7 @@ def upload_file():
             "-t",
             '../image/' + target_image_name,
             "-o",
-            "../image/",
+            "../image/faceswap_image/",
             "--frame-processor",
             "face_swapper"
         ]
