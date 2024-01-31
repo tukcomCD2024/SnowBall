@@ -27,24 +27,24 @@ def file_swap(target_image, source_image):
     hash_input = target_image.filename + str(time.time())
     target_image_extension = secure_filename(os.path.splitext(target_image.filename)[1])
     target_image_name = hashlib.sha256(hash_input.encode()).hexdigest()[:4]
-    target_image_all_name = target_image_name + "." + target_image_extension
+    target_image_full_name = target_image_name + "." + target_image_extension
 
     hash_input = source_image.filename + str(time.time())
     source_image_extension = secure_filename(os.path.splitext(source_image.filename)[1])
     source_image_name = hashlib.sha256(hash_input.encode()).hexdigest()[:4]
-    source_image_all_name = source_image_name + "." + source_image_extension
+    source_image_full_name = source_image_name + "." + source_image_extension
 
     # 저장할 경로 + 고유한 파일명
-    target_image.save('../image/' + target_image_all_name)
-    source_image.save('../image/' + source_image_all_name)
+    target_image.save('../image/' + target_image_full_name)
+    source_image.save('../image/' + source_image_full_name)
 
     command = [
         "python",
         "../run.py",
         "-s",
-        "../image/" + source_image_all_name,
+        "../image/" + source_image_full_name,
         "-t",
-        '../image/' + target_image_all_name,
+        '../image/' + target_image_full_name,
         "-o",
         "../image/faceswap_image/",
         "--frame-processor",
@@ -53,9 +53,9 @@ def file_swap(target_image, source_image):
 
     subprocess.run(command)
 
-    face_swap_image_path = "../image/faceswap_image/" + source_image_name + "-" + target_image_all_name
+    face_swap_image_name = source_image_name + "-" + target_image_full_name
 
-    return face_swap_image_path
+    return face_swap_image_name
 
 
 if __name__ == '__main__':
