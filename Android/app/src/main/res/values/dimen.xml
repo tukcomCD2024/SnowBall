@@ -8,6 +8,8 @@
 
     <dimen name="text_body1">16sp</dimen>
     <dimen name="text_body2">14sp</dimen>
+    <dimen name="text_body3">12sp</dimen>
+
     <dimen name="text_button">18sp</dimen>
 
 </resources>

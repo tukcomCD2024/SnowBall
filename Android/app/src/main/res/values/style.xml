@@ -31,6 +31,11 @@
         <item name="fontFamily">@font/bmjua_otf</item>
     </style>
 
+    <style name="TextAppearance.App.body3" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_body3</item>
+        <item name="fontFamily">@font/bmjua_otf</item>
+    </style>
+
     <style name="TextAppearance.App.button" parent="TextAppearance.AppCompat">
         <item name="android:textSize">@dimen/text_button</item>
         <item name="fontFamily">@font/bmjua_otf</item>
