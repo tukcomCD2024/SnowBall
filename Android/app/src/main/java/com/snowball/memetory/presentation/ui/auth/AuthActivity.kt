@@ -2,11 +2,22 @@ package com.snowball.memetory.presentation.ui.auth
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.snowball.memetory.R
+import com.snowball.memetory.databinding.ActivityAuthBinding
 
 class AuthActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityAuthBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_auth)
+        binding = ActivityAuthBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val adapter = TutorialVPAdapter(this)
+        val viewPager = binding.tutorialViewPager
+        val circleIndicator = binding.circleIndicator
+        viewPager.adapter = adapter
+        circleIndicator.setViewPager(viewPager)
+//        adapter.registerAdapterDataObserver(circleIndicator.getAdapterDataObserver());
+
     }
 }
