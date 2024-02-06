@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextAppearance.App.h1" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_h1</item>
+        <item name="fontFamily">@font/bmjua_otf</item>
+    </style>
+
+    <style name="TextAppearance.App.h2" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_h2</item>
+        <item name="fontFamily">@font/bmjua_otf</item>
+    </style>
+
+    <style name="TextAppearance.App.h3" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_h3</item>
+        <item name="fontFamily">@font/bmjua_otf</item>
+    </style>
+
+    <style name="TextAppearance.App.h4" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_h4</item>
+        <item name="fontFamily">@font/bmjua_otf</item>
+    </style>
+
+    <style name="TextAppearance.App.body1" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_body1</item>
+        <item name="fontFamily">@font/bmjua_otf</item>
+    </style>
+
+    <style name="TextAppearance.App.body2" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_body2</item>
+        <item name="fontFamily">@font/bmjua_otf</item>
+    </style>
+
+    <style name="TextAppearance.App.body3" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_body3</item>
+        <item name="fontFamily">@font/bmjua_otf</item>
+    </style>
+
+    <style name="TextAppearance.App.button" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_button</item>
+        <item name="fontFamily">@font/bmjua_otf</item>
+    </style>
+
+</resources>
