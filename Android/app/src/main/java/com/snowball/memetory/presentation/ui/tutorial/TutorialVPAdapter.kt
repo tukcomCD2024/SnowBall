@@ -1,4 +1,4 @@
-package com.snowball.memetory.presentation.ui.auth
+package com.snowball.memetory.presentation.ui.tutorial
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

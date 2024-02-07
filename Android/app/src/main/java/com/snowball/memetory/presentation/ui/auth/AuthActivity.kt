@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.view.isVisible
 import com.snowball.memetory.databinding.ActivityAuthBinding
+import com.snowball.memetory.presentation.ui.tutorial.TutorialVPAdapter
 
 class AuthActivity : AppCompatActivity() {
 
