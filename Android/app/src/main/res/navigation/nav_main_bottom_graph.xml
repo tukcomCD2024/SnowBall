@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main_bottom_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.snowball.memetory.presentation.ui.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/generateMemeFragment"
+        android:name="com.snowball.memetory.presentation.ui.generatememe.GenerateMemeFragment"
+        android:label="fragment_generate_meme"
+        tools:layout="@layout/fragment_generate_meme" />
+    <fragment
+        android:id="@+id/memesFragment"
+        android:name="com.snowball.memetory.presentation.ui.memes.MemesFragment"
+        android:label="fragment_memes"
+        tools:layout="@layout/fragment_memes" />
+    <fragment
+        android:id="@+id/lockerFragment"
+        android:name="com.snowball.memetory.presentation.ui.locker.LockerFragment"
+        android:label="fragment_locker"
+        tools:layout="@layout/fragment_locker" />
+</navigation>
