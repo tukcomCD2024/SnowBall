@@ -10,7 +10,7 @@ with open('conf.yaml', 'r') as f:
 # D-ID에게 영상 제작을 요청
 # 대사, 소스 이미지(s3)를 매개변수로 전해줘야 함.
 # talk_id 를 리턴 받아야 함
-def upload_image():
+def upload_scene():
     payload = {
         "script": {
             "type": "text",  # 텍스트 형태로 대사를 받음
@@ -39,7 +39,7 @@ def upload_image():
     print(response.text)
 
 
-def download_image():
+def download_scene():
     # D-ID가 만든 영상을 가져옴
 
     headers = {
@@ -49,5 +49,21 @@ def download_image():
     # talks/{talk_id}
     # result_url 에서 영상을 가져옴 -> {talk_id} 를 변수 처리해야 함
     response = requests.get(TALK_URL + "/" + "tlk_2XT89GW1t0R8vImW4WQDg", headers=headers)
+
+    print(response.text)
+
+
+# Response 에서 url 을 받아옴
+def upload_image():
+    url = "https://api.d-id.com/images"
+
+    # (이미지 이름, open 이미지, 이미지 파일 객체, 파일의 MIME 타입)
+    files = {"image": ("image1.jpeg", open("image1.jpeg", "rb"), "image/jpeg")}
+    headers = {
+        "accept": "application/json",
+        "authorization": "Basic" + " " + conf['D-ID_API_KEY']
+    }
+
+    response = requests.post(url, files=files, headers=headers)
 
     print(response.text)
