@@ -3,4 +3,4 @@ models
 temp
 __pycache__
 image/*
-d-id/conf.yaml
+d_id/conf.yaml

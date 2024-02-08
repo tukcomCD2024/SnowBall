@@ -1,8 +1,11 @@
 import requests
+import os
 import yaml
 
 TALK_URL = "https://api.d-id.com/talks"
 IMAGE_URL = "https://api.d-id.com/images"
+FACESWAP_IAMGE_PATH = "../image/faceswap_image"
+CONF_PATH = "/Users/jaehuek/PycharmProjects/SnowBall/AI/roop/d_id/conf.yaml"
 
 
 class DIdAPI:
@@ -12,7 +15,7 @@ class DIdAPI:
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
-            with open('conf.yaml', 'r') as f:
+            with open(os.path.abspath(CONF_PATH), 'r') as f:
                 cls._instance.conf = yaml.safe_load(f)
         return cls._instance
 
@@ -22,8 +25,8 @@ class DIdAPI:
     3. talk_id를 url끝에 붙여서 get요청 -> result_url 리턴 (생성된 talk 가져오기)
     4. 사용자가 브라우저에 result_url 입력하면 밈 다운로드
     """
-    def run(self, face_swap_image_url, text):
-        s3_image_url = self.upload_image(face_swap_image_url)
+    def run(self, face_swap_image_name, text):
+        s3_image_url = self.upload_image(face_swap_image_name)
         talk_id = self.upload_scene(s3_image_url, text)
         result_url = self.download_scene(talk_id)
 
@@ -73,15 +76,14 @@ class DIdAPI:
         # talks/{talk_id}
         # result_url 에서 영상을 가져옴 -> {talk_id} 를 변수 처리해야 함
         response = requests.get(TALK_URL + "/" + talk_id, headers=headers)
-        response.raise_for_status()
         response_dict = response.json()
 
         return response_dict["result_url"]
 
     # Response 에서 url 을 받아옴
-    def upload_image(self, face_swap_image_url):
+    def upload_image(self, face_swap_image_name):
         # (이미지 이름, open 이미지, 이미지 파일 객체, 파일의 MIME 타입)
-        files = {"image": (face_swap_image_url, open(face_swap_image_url, "rb"), "image/jpeg")}
+        files = {"image": (face_swap_image_name, open(FACESWAP_IAMGE_PATH+"/"+face_swap_image_name, "rb"), "image/jpeg")}
         headers = {
             "accept": "application/json",
             "authorization": "Basic" + " " + self.conf['D-ID_API_KEY']

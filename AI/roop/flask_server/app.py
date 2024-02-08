@@ -1,8 +1,9 @@
 import os
 import subprocess
 
-from flask import Flask, render_template, request
+from flask import Flask, request
 from werkzeug.utils import secure_filename
+from d_id.did_reqeust import DIdAPI
 import hashlib
 import time
 
@@ -16,8 +17,12 @@ def upload_file():
         # target 파일이 바탕화면
         target_image = request.files['targetImage']
         source_image = request.files['sourceImage']
+        text = request.form['text']
 
-        print(file_swap(target_image, source_image))
+        face_swap_image_name = file_swap(target_image, source_image, text)
+        did = DIdAPI()
+        result_url = did.run(face_swap_image_name, text)
+        print(result_url)
 
         return 'uploads 디렉토리 -> 파일 업로드 성공!'
 
