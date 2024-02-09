@@ -1,0 +1,6 @@
+.idea
+models
+temp
+__pycache__
+image/*
+d_id/conf.yaml
