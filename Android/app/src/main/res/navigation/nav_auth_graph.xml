@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_auth_graph"
+    app:startDestination="@id/signInFragment">
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.snowball.memetory.presentation.ui.auth.SignInFragment"
+        android:label="fragment_sign_in"
+        tools:layout="@layout/fragment_sign_in" >
+        <action
+            android:id="@+id/action_signInFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.snowball.memetory.presentation.ui.auth.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/action_signUpFragment_to_tutorialFirstFragment"
+            app:destination="@id/tutorialFirstFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tutorialFirstFragment"
+        android:name="com.snowball.memetory.presentation.ui.tutorial.TutorialFirstFragment"
+        android:label="fragment_tutorial_first"
+        tools:layout="@layout/fragment_tutorial_first" />
+</navigation>
