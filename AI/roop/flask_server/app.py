@@ -1,7 +1,10 @@
+import base64
 import os
 import subprocess
+from io import BytesIO
 
-from flask import Flask, request
+from PIL import Image
+from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
 from d_id.did_reqeust import DIdAPI
 import hashlib
@@ -25,6 +28,38 @@ def upload_file():
         print(result_url)
 
         return 'uploads 디렉토리 -> 파일 업로드 성공!'
+
+
+@app.route('/files', methods=['GET', 'POST'])
+def process_data():
+    try:
+        # JSON 데이터를 파싱하여 Python 객체로 변환
+        data = request.get_json()
+
+        # 받은 데이터 확인
+        print('Received Data:', data)
+
+        # 여기에서 데이터를 원하는 대로 처리
+        for item in data:
+            text_data = item.get('text')
+            source_image_base64 = item.get('source_image')
+
+            # Base64 디코딩 및 처리 예시 (이미지를 파일로 저장하는 경우)
+            if source_image_base64:
+                image_data = base64.b64decode(source_image_base64)
+                image = Image.open(BytesIO(image_data))
+                image.save('../image/decoded_image.jpg')
+
+            print('Text Data:', text_data)
+
+        # 처리 결과 응답
+        return jsonify({'message': 'Data processed successfully'})
+
+    except Exception as e:
+        # 예외 처리
+        print('Error:', str(e))
+        return jsonify({'error': 'An error occurred during data processing'})
+
 
 
 def file_swap(target_image, source_image):
