@@ -133,7 +133,8 @@ class NickNameSetViewController: UIViewController {
     }
     
     @objc func checkButtonTapped() {
-        
+        let onboardingViewController = OnboardingViewController()
+        navigationController?.pushViewController(onboardingViewController, animated: true)
     }
 
 }
