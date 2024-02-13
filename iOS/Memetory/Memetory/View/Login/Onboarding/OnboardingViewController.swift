@@ -84,8 +84,8 @@ class OnboardingViewController: UIViewController {
     @objc private func nextButtonTapped() {
         if currentPage == onboardingData.count - 1 {
             print("go to main")
-            let nickNameSetViewController = NickNameSetViewController()
-            navigationController?.pushViewController(nickNameSetViewController, animated: true)
+            let tabBarViewController = TabBarViewController()
+            navigationController?.pushViewController(tabBarViewController, animated: true)
         } else {
             currentPage += 1
             let indexPath = IndexPath(item: currentPage, section: 0)
