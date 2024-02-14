@@ -35,9 +35,8 @@ def process_data():
     try:
         # JSON 데이터를 파싱하여 Python 객체로 변환
         data = request.get_json()
-
-        # 받은 데이터 확인
-        print('Received Data:', data)
+        did = DIdAPI()
+        talk_id_queue = []
 
         # 여기에서 데이터를 원하는 대로 처리
         for item in data:
@@ -57,8 +56,18 @@ def process_data():
                 # 고유한 파일 이름으로 저장 (예: decoded_image_<unique_hash>.jpg)
                 image.save(f'../image/{unique_hash}.jpg')
 
-            face_swap(target_image_number, unique_hash)
-            print('Text Data:', text_data)
+            face_swap_image_name = face_swap(target_image_number, unique_hash)
+            talk_id = did.run(face_swap_image_name, text_data)
+            talk_id_queue.append(talk_id)
+            print(talk_id)
+
+        print(talk_id_queue)
+        result_url_queue = []
+
+        for item in talk_id_queue:
+            result_url_queue.append(did.download_scene(item))
+
+        print(result_url_queue)
 
         # 처리 결과 응답
         return jsonify({'message': 'Data processed successfully'})
