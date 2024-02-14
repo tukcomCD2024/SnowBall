@@ -42,6 +42,7 @@ def process_data():
         # 여기에서 데이터를 원하는 대로 처리
         for item in data:
             text_data = item.get('text')
+            target_image_number = item.get('target_image')
             source_image_base64 = item.get('source_image')
 
             # Base64 디코딩 및 처리 예시 (이미지를 파일로 저장하는 경우)
@@ -56,6 +57,7 @@ def process_data():
                 # 고유한 파일 이름으로 저장 (예: decoded_image_<unique_hash>.jpg)
                 image.save(f'../image/{unique_hash}.jpg')
 
+            face_swap(target_image_number, unique_hash)
             print('Text Data:', text_data)
 
         # 처리 결과 응답
@@ -67,29 +69,15 @@ def process_data():
         return jsonify({'error': 'An error occurred during data processing'})
 
 
-def face_swap(target_image, source_image):
-    # 파일 확장자와 현재 시간을 결합하여 고유한 해시 생성
-    hash_input = target_image.filename + str(time.time())
-    target_image_extension = secure_filename(os.path.splitext(target_image.filename)[1])
-    target_image_name = hashlib.sha256(hash_input.encode()).hexdigest()[:4]
-    target_image_full_name = target_image_name + "." + target_image_extension
-
-    hash_input = source_image.filename + str(time.time())
-    source_image_extension = secure_filename(os.path.splitext(source_image.filename)[1])
-    source_image_name = hashlib.sha256(hash_input.encode()).hexdigest()[:4]
-    source_image_full_name = source_image_name + "." + source_image_extension
-
-    # 저장할 경로 + 고유한 파일명
-    target_image.save('../image/' + target_image_full_name)
-    source_image.save('../image/' + source_image_full_name)
+def face_swap(target_image_number, source_image):
 
     command = [
         "python",
         "../run.py",
         "-s",
-        "../image/" + source_image_full_name,
+        "../image/" + source_image + '.jpg',
         "-t",
-        '../image/' + target_image_full_name,
+        '../target_image/' + target_image_number + '.jpg',
         "-o",
         "../image/faceswap_image/",
         "--frame-processor",
@@ -98,7 +86,7 @@ def face_swap(target_image, source_image):
 
     subprocess.run(command)
 
-    face_swap_image_name = source_image_name + "-" + target_image_full_name
+    face_swap_image_name = source_image + "-" + target_image_number + '.jpg'
 
     return face_swap_image_name
 
