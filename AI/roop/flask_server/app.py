@@ -48,7 +48,13 @@ def process_data():
             if source_image_base64:
                 image_data = base64.b64decode(source_image_base64)
                 image = Image.open(BytesIO(image_data))
-                image.save('../image/decoded_image.jpg')
+
+                # 현재 시간을 기반으로 한 해시값 생성
+                hash_input = str(time.time())
+                unique_hash = hashlib.sha256(hash_input.encode()).hexdigest()[:4]
+
+                # 고유한 파일 이름으로 저장 (예: decoded_image_<unique_hash>.jpg)
+                image.save(f'../image/{unique_hash}.jpg')
 
             print('Text Data:', text_data)
 
@@ -59,7 +65,6 @@ def process_data():
         # 예외 처리
         print('Error:', str(e))
         return jsonify({'error': 'An error occurred during data processing'})
-
 
 
 def face_swap(target_image, source_image):
