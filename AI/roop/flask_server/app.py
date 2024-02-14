@@ -22,7 +22,7 @@ def upload_file():
         source_image = request.files['sourceImage']
         text = request.form['text']
 
-        face_swap_image_name = file_swap(target_image, source_image, text)
+        face_swap_image_name = face_swap(target_image, source_image, text)
         did = DIdAPI()
         result_url = did.run(face_swap_image_name, text)
         print(result_url)
@@ -62,7 +62,7 @@ def process_data():
 
 
 
-def file_swap(target_image, source_image):
+def face_swap(target_image, source_image):
     # 파일 확장자와 현재 시간을 결합하여 고유한 해시 생성
     hash_input = target_image.filename + str(time.time())
     target_image_extension = secure_filename(os.path.splitext(target_image.filename)[1])
