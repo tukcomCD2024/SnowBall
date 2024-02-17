@@ -81,7 +81,8 @@ class DIdAPI:
             result_url = response_dict.get("result_url", None)
 
             if result_url is not None:
-                return result_url
+                duration = response_dict["duration"]
+                return result_url, duration
 
             time.sleep(1)
             # 10초가 지나도 값을 못가져 왔을 경우 발생시킬 예외 구현
