@@ -10,6 +10,8 @@ from d_id.did_reqeust import DIdAPI
 import hashlib
 import time
 
+from shotstack.shot_stack import ShotStackAPI
+
 app = Flask(__name__)
 
 
@@ -36,6 +38,7 @@ def process_data():
         # JSON 데이터를 파싱하여 Python 객체로 변환
         data = request.get_json()
         did = DIdAPI()
+        shotstack = ShotStackAPI()
         talk_id_queue = []
 
         # 여기에서 데이터를 원하는 대로 처리
@@ -69,6 +72,31 @@ def process_data():
 
         print(result_url_queue)
 
+        # 초기 타임라인 데이터 객체 -> flask 서버에다 복사해두고, 함수 시작할 때 실행
+        timeline_data = {
+            "timeline": {
+                "tracks": []
+            },
+            "output": {
+                "format": "mp4",
+                "resolution": "sd"
+            }
+        }
+
+        start_time = 0
+
+        while result_url_queue:
+            item = result_url_queue.pop(0)
+            duration = int(item[1])
+            print("duration : " + str(duration))
+            shotstack.add_track(timeline_data["timeline"]["tracks"], "video", item[0], start_time, duration)
+            start_time = start_time + duration
+
+        print(timeline_data)
+
+        shotstack_id = shotstack.send_timeline_data(timeline_data)
+        shotstack.download_file(shotstack_id)
+
         # 처리 결과 응답
         return jsonify({'message': 'Data processed successfully'})
 
@@ -79,7 +107,6 @@ def process_data():
 
 
 def face_swap(target_image_number, source_image):
-
     command = [
         "python",
         "../run.py",
