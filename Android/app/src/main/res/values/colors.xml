@@ -6,4 +6,5 @@
     <color name="gray_indicator">#EAEAEA</color>
     <color name="black_indicator">#333333</color>
     <color name="mainBtn">#DD8858</color>
+    <color name="subBtn">#F6F7F9</color>
 </resources>

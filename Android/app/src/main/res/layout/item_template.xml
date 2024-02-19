@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@drawable/corner_radius_10"
+        android:backgroundTint="@color/subBtn"
+        android:layout_marginBottom="20dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/templateNumText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="템플릿1"
+            android:textAppearance="@style/TextAppearance.App.h2"
+            android:gravity="center" />
+
+    </LinearLayout>
+</layout>
