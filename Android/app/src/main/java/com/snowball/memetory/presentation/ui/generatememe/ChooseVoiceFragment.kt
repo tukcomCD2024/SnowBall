@@ -6,14 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import com.snowball.memetory.R
 import com.snowball.memetory.databinding.FragmentChooseVoiceBinding
 import com.snowball.memetory.presentation.ui.generatememe.adapter.VoiceRVAdapter
 
 class ChooseVoiceFragment : Fragment() {
 
+    lateinit var navController: NavController
     lateinit var binding: FragmentChooseVoiceBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -38,6 +40,11 @@ class ChooseVoiceFragment : Fragment() {
             "ㅂㅂ"
         )
         binding.voiceRecyclerView.adapter = VoiceRVAdapter(arryList)
+
+        navController = Navigation.findNavController(view)
+        binding.confirmBtn.setOnClickListener {
+            navController.navigate(R.id.action_chooseVoiceFragment_to_sceneDetailFragment)
+        }
     }
 
 }

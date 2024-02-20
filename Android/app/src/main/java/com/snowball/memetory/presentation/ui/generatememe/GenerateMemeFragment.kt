@@ -23,9 +23,6 @@ class GenerateMemeFragment : Fragment(), TemplateRVAdater.OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-//        startActivity(Intent(activity, GenerateMemeActivity::class.java))
-
         val binding: FragmentGenerateMemeBinding = DataBindingUtil.inflate(inflater,
                                                     R.layout.fragment_generate_meme,
                                                     container,
@@ -34,9 +31,8 @@ class GenerateMemeFragment : Fragment(), TemplateRVAdater.OnItemClickListener {
         binding.templateRecyclerView.adapter = TemplateRVAdater(arrayList, this)
 
         return binding.root
-
+        
     }
-
 
     override fun onItemClick(view: View, position: Int) {
         val intent = Intent(activity, GenerateMemeActivity::class.java)

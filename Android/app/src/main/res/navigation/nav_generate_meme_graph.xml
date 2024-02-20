@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_generate_meme_graph"
+    app:startDestination="@id/chooseTemplateFragment">
+
+    <fragment
+        android:id="@+id/chooseTemplateFragment"
+        android:name="com.snowball.memetory.presentation.ui.generatememe.ChooseTemplateFragment"
+        android:label="ChooseTemplateFragment" >
+        <action
+            android:id="@+id/action_chooseTemplateFragment_to_sceneDetailFragment"
+            app:destination="@id/sceneDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/sceneDetailFragment"
+        android:name="com.snowball.memetory.presentation.ui.generatememe.SceneDetailFragment"
+        android:label="fragment_scene_detail"
+        tools:layout="@layout/fragment_scene_detail" >
+        <action
+            android:id="@+id/action_sceneDetailFragment_to_chooseFaceFragment"
+            app:destination="@id/chooseFaceFragment" />
+        <action
+            android:id="@+id/action_sceneDetailFragment_to_enterLinesFragment"
+            app:destination="@id/enterLinesFragment" />
+        <action
+            android:id="@+id/action_sceneDetailFragment_to_chooseVoiceFragment"
+            app:destination="@id/chooseVoiceFragment" />
+        <action
+            android:id="@+id/action_sceneDetailFragment_to_chooseTemplateFragment"
+            app:destination="@id/chooseTemplateFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chooseFaceFragment"
+        android:name="com.snowball.memetory.presentation.ui.generatememe.ChooseFaceFragment"
+        android:label="fragment_choose_face"
+        tools:layout="@layout/fragment_choose_face" >
+
+        <action
+            android:id="@+id/action_chooseFaceFragment_to_sceneDetailFragment"
+            app:destination="@id/sceneDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/enterLinesFragment"
+        android:name="com.snowball.memetory.presentation.ui.generatememe.EnterLinesFragment"
+        android:label="fragment_enter_lines"
+        tools:layout="@layout/fragment_enter_lines" >
+
+        <action
+            android:id="@+id/action_enterLinesFragment_to_sceneDetailFragment"
+            app:destination="@id/sceneDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chooseVoiceFragment"
+        android:name="com.snowball.memetory.presentation.ui.generatememe.ChooseVoiceFragment"
+        android:label="fragment_choose_voice"
+        tools:layout="@layout/fragment_choose_voice" >
+
+        <action
+            android:id="@+id/action_chooseVoiceFragment_to_sceneDetailFragment"
+            app:destination="@id/sceneDetailFragment" />
+    </fragment>
+
+</navigation>

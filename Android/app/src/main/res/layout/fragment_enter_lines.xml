@@ -1,50 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="20dp"
-    tools:context=".presentation.ui.generatememe.EnterLinesFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/titleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/scene_enter_lines"
-        android:textAppearance="@style/TextAppearance.App.h3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/linesEditText"
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/enter_lines_edittext_background"
-        android:gravity="top|start"
-        android:hint="대사를 입력해주세요."
-        android:textAppearance="@style/TextAppearance.App.body2"
-        android:padding="10dp"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleText" />
+        android:layout_height="match_parent"
+        android:paddingTop="20dp"
+        tools:context=".presentation.ui.generatememe.EnterLinesFragment">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/confirmBtn"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/corner_radius_10"
-        android:backgroundTint="@color/mainBtn"
-        android:text="@string/button_confirm"
-        android:textAppearance="@style/TextAppearance.App.button"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linesEditText" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/titleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/scene_enter_lines"
+            android:textAppearance="@style/TextAppearance.App.h3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/linesEditText"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/enter_lines_edittext_background"
+            android:gravity="top|start"
+            android:hint="대사를 입력해주세요."
+            android:textAppearance="@style/TextAppearance.App.body2"
+            android:padding="10dp"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleText" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/confirmBtn"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/corner_radius_10"
+            android:backgroundTint="@color/mainBtn"
+            android:text="@string/button_confirm"
+            android:textAppearance="@style/TextAppearance.App.button"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linesEditText" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -7,7 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.viewpager2.widget.ViewPager2
 import com.snowball.memetory.R
 import com.snowball.memetory.databinding.FragmentChooseTemplateBinding
@@ -16,6 +17,7 @@ import kotlin.math.abs
 
 class ChooseTemplateFragment : Fragment() {
 
+    lateinit var navController: NavController
     lateinit var binding: FragmentChooseTemplateBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +33,13 @@ class ChooseTemplateFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        navController = Navigation.findNavController(view)
+        binding.confirmBtn.setOnClickListener {
+            navController.navigate(R.id.action_chooseTemplateFragment_to_sceneDetailFragment)
+        }
+    }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -44,14 +53,10 @@ class ChooseTemplateFragment : Fragment() {
         binding.templateViewPager.adapter = TemplateDetailVPAdater(imgRes)
         setOffsetBetweenPages()
 
-        binding.templateViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-
-            override fun onPageSelected(position: Int) {
+        binding.templateViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() { // 페이지 바뀔때마다
+            override fun onPageSelected(position: Int) { // 이 페이지의 번호가 선택되면
                 super.onPageSelected(position)
                 Log.d("ViewPagerFragment", "Page ${position+1}")
-                if (position == 1) {
-                    findNavController().navigate(R.id.chooseVoiceFragment)
-                }
             }
         })
 
