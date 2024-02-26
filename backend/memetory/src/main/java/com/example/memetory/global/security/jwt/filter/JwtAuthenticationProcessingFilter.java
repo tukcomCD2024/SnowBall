@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -39,11 +40,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
+	// 이후, NO_CHECK_URL이 많아질 경우 리스트 형식으로 저장해서 .contain 으로 값이 있는지 없는지 파악
 	private static final String NO_CHECK_URL = "/login"; // "/login"으로 들어오는 요청은 Filter 작동 X
 
 	private final JwtService jwtService;
 	private final MemberRepository memberRepository;
 
+	// GrantedAuthoritiesMapper -> 인증된 사용자 권한을 매핑하는 역할
+	// NullAuthoritiesMapper -> 인증된 사용자 권한을 변경하지 않는 역할
 	private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
 	@Override
@@ -142,12 +146,10 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 	 * setAuthentication()을 이용하여 위에서 만든 Authentication 객체에 대한 인증 허가 처리
 	 */
 	public void saveAuthentication(Member myMember) {
-		String password = myMember.getPassword();
-		if (password == null) { // 소셜 로그인 유저의 비밀번호 임의로 설정 하여 소셜 로그인 유저도 인증 되도록 설정
-			password = PasswordUtil.generateRandomPassword();
-		}
+		// 소셜 로그인 유저의 비밀번호 임의로 설정 하여 소셜 로그인 유저도 인증 되도록 설정
+		String password = PasswordUtil.generateRandomPassword();
 
-		UserDetails userDetailsUser = org.springframework.security.core.userdetails.User.builder()
+		UserDetails userDetailsUser = User.builder()
 			.username(myMember.getEmail())
 			.password(password)
 			.roles(myMember.getRole().name())

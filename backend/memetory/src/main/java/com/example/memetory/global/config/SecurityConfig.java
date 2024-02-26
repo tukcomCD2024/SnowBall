@@ -47,8 +47,10 @@ public class SecurityConfig {
 			.oauth2Login(oauth2 -> oauth2   // oauth2.0 설정
 				.successHandler(oAuth2LoginSuccessHandler)
 				.failureHandler(oAuth2LoginFailureHandler)
+				// oauth2 로그인에 성공했을 떄 유저 정보를 가져올 때 설정을 담당
 				.userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
 			);
+
 		http.addFilterAfter(jwtAuthenticationProcessingFilter(), LogoutFilter.class);
 
 		return http.build();

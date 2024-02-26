@@ -69,6 +69,7 @@ public class OAuthAttributes {
 			.socialId(oauth2UserInfo.getId())
 			.email(UUID.randomUUID() + "@socialUser.com")
 			.nickname(oauth2UserInfo.getNickname())
+			// 이미지는 기본 이미지로 할 것인지, 아니면 뺄 것인지 정해야 함.
 			.imageUrl(oauth2UserInfo.getImageUrl())
 			.role(Role.GUEST)
 			.build();

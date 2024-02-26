@@ -33,12 +33,15 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 			CustomOAuth2User oAuth2User = (CustomOAuth2User)authentication.getPrincipal();
 
 			// User의 Role이 GUEST일 경우 처음 요청한 회원이므로 회원가입 페이지로 리다이렉트
+			// header에 accesstoken은 잘 넘어가는지, 페이지는 알맞게 변경되는지 등을 고려해서 다시 봐야 함.
 			if (oAuth2User.getRole() == Role.GUEST) {
 				String accessToken = jwtService.createAccessToken(oAuth2User.getEmail());
 				response.addHeader(jwtService.getAccessHeader(), "Bearer " + accessToken);
 				response.sendRedirect("oauth2/sign-up"); // 프론트의 회원가입 추가 정보 입력 폼으로 리다이렉트
 
 				jwtService.sendAccessAndRefreshToken(response, accessToken, null);
+
+				//	회원가입 성공시 GUEST 에서 USER로 업데이트 하는 로직 -> 회원가입쪽 메서드에서 작성할 것인지 고민
 				//                User findUser = memberRepository.findByEmail(oAuth2User.getEmail())
 				//                                .orElseThrow(() -> new IllegalArgumentException("이메일에 해당하는 유저가 없습니다."));
 				//                findUser.authorizeUser();

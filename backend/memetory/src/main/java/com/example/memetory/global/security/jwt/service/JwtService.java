@@ -106,6 +106,7 @@ public class JwtService {
 				.getClaim(EMAIL_CLAIM) // claim(Emial) 가져오기
 				.asString());
 		} catch (Exception e) {
+			// 예외로 출력 -> NotValidTokenException
 			log.error("액세스 토큰이 유효하지 않습니다.");
 			return Optional.empty();
 		}
@@ -123,7 +124,7 @@ public class JwtService {
 		memberRepository.findByEmail(email)
 			.ifPresentOrElse(
 				user -> user.updateRefreshToken(refreshToken),
-				() -> new Exception("일치하는 회원이 없습니다.")
+				() -> new Exception("일치하는 회원이 없습니다.") // NotFoundMemberException 으로 변경
 			);
 	}
 
@@ -132,6 +133,7 @@ public class JwtService {
 			JWT.require(Algorithm.HMAC512(secretKey)).build().verify(token);
 			return true;
 		} catch (Exception e) {
+			// 예외로 출력 -> NotValidTokenException
 			log.error("유효하지 않은 토큰입니다. {}", e.getMessage());
 			return false;
 		}
