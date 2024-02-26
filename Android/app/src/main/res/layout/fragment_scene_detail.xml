@@ -6,90 +6,104 @@
     <data>
 
     </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="20dp"
-        tools:context=".presentation.ui.generatememe.SceneDetailFragment">
+        android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/settingText"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.App.h3"
-            android:text="설정하기"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:paddingVertical="20dp"
+            tools:context=".presentation.ui.generatememe.SceneDetailFragment">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/exampleImg"
-            android:layout_width="wrap_content"
-            android:layout_height="300dp"
-            android:src="@drawable/main_logo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/settingText"
-            app:layout_constraintBottom_toTopOf="@id/chooseFaceBtn" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/titleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.App.h3"
+                android:text="설정하기"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/chooseFaceBtn"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/corner_radius_10"
-            android:backgroundTint="@color/subBtn"
-            android:textAppearance="@style/TextAppearance.App.body2"
-            android:textColor="@color/black"
-            android:text="@string/scene_choose_face"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@id/exampleImg"
-            app:layout_constraintBottom_toTopOf="@id/enterLinesBtn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/imgConstraintLayout"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:background="@drawable/corner_radius_10"
+                android:backgroundTint="@color/subBtn"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/titleText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/enterLinesBtn"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/corner_radius_10"
-            android:backgroundTint="@color/subBtn"
-            android:textAppearance="@style/TextAppearance.App.body2"
-            android:textColor="@color/black"
-            android:text="@string/scene_enter_lines"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@id/chooseFaceBtn"
-            app:layout_constraintBottom_toTopOf="@id/chooseVoiceBtn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/chooseFaceImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_add_50"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/chooseVoiceBtn"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/corner_radius_10"
-            android:backgroundTint="@color/subBtn"
-            android:textAppearance="@style/TextAppearance.App.body2"
-            android:textColor="@color/black"
-            android:text="@string/scene_choose_voice"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@id/enterLinesBtn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/alertText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.App.body3"
+                android:textColor="@android:color/darker_gray"
+                android:text="한 사람의 얼굴이 정 가운데에 위치한 사진을 선택해주세요!"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="@id/imgConstraintLayout"
+                app:layout_constraintTop_toBottomOf="@id/imgConstraintLayout" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/confirmBtn"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/corner_radius_10"
-            android:backgroundTint="@color/mainBtn"
-            android:textAppearance="@style/TextAppearance.App.button"
-            android:textColor="@color/white"
-            android:text="@string/button_confirm"
-            app:layout_constraintTop_toBottomOf="@id/chooseVoiceBtn"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/linesEditText"
+                android:layout_width="300dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/enter_lines_edittext_background"
+                android:gravity="top|start"
+                android:hint="대사를 입력해주세요."
+                android:textAppearance="@style/TextAppearance.App.body2"
+                android:padding="10dp"
+                android:inputType="textMultiLine"
+                app:layout_constraintTop_toBottomOf="@id/alertText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/chooseVoiceBtn"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/corner_radius_10"
+                android:backgroundTint="@color/subBtn"
+                android:textAppearance="@style/TextAppearance.App.body2"
+                android:textColor="@color/black"
+                android:text="@string/scene_choose_voice"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/linesEditText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/confirmBtn"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/corner_radius_10"
+                android:backgroundTint="@color/mainBtn"
+                android:textAppearance="@style/TextAppearance.App.button"
+                android:textColor="@color/white"
+                android:text="@string/button_confirm"
+                android:layout_marginTop="40dp"
+                app:layout_constraintTop_toBottomOf="@id/chooseVoiceBtn"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>

@@ -35,9 +35,13 @@ class ChooseTemplateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         navController = Navigation.findNavController(view)
-        binding.confirmBtn.setOnClickListener {
+        binding.chooseBtn.setOnClickListener {
             navController.navigate(R.id.action_chooseTemplateFragment_to_sceneDetailFragment)
+        }
+        binding.confirmBtn.setOnClickListener {
+            navController.navigate(R.id.action_chooseTemplateFragment_to_previewFragment)
         }
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {

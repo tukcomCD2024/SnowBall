@@ -26,28 +26,13 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/voiceRecyclerView"
             android:layout_width="0dp"
-            android:layout_height="450dp"
-            android:layout_marginTop="30sp"
+            android:layout_height="500dp"
+            android:layout_marginTop="40sp"
             tools:listitem="@layout/item_choose_voice"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/titleText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/importVoiceFileBtn"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/corner_radius_10"
-            android:backgroundTint="@color/mainBtn"
-            android:text="내 목소리 가져오기"
-            android:textAppearance="@style/TextAppearance.App.button"
-            android:textColor="@color/white"
-            android:layout_marginTop="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/voiceRecyclerView"
-            app:layout_constraintBottom_toTopOf="@id/confirmBtn" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/confirmBtn"
@@ -61,7 +46,7 @@
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/importVoiceFileBtn" />
+            app:layout_constraintTop_toBottomOf="@id/voiceRecyclerView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

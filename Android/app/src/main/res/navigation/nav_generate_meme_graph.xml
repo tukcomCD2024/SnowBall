@@ -8,10 +8,14 @@
     <fragment
         android:id="@+id/chooseTemplateFragment"
         android:name="com.snowball.memetory.presentation.ui.generatememe.ChooseTemplateFragment"
-        android:label="ChooseTemplateFragment" >
+        android:label="ChooseFragment"
+        tools:layout="@layout/fragment_choose_template">
         <action
             android:id="@+id/action_chooseTemplateFragment_to_sceneDetailFragment"
             app:destination="@id/sceneDetailFragment" />
+        <action
+            android:id="@+id/action_chooseTemplateFragment_to_previewFragment"
+            app:destination="@id/previewFragment" />
     </fragment>
 
     <fragment
@@ -20,39 +24,13 @@
         android:label="fragment_scene_detail"
         tools:layout="@layout/fragment_scene_detail" >
         <action
-            android:id="@+id/action_sceneDetailFragment_to_chooseFaceFragment"
-            app:destination="@id/chooseFaceFragment" />
-        <action
-            android:id="@+id/action_sceneDetailFragment_to_enterLinesFragment"
-            app:destination="@id/enterLinesFragment" />
-        <action
             android:id="@+id/action_sceneDetailFragment_to_chooseVoiceFragment"
             app:destination="@id/chooseVoiceFragment" />
         <action
             android:id="@+id/action_sceneDetailFragment_to_chooseTemplateFragment"
-            app:destination="@id/chooseTemplateFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/chooseFaceFragment"
-        android:name="com.snowball.memetory.presentation.ui.generatememe.ChooseFaceFragment"
-        android:label="fragment_choose_face"
-        tools:layout="@layout/fragment_choose_face" >
-
-        <action
-            android:id="@+id/action_chooseFaceFragment_to_sceneDetailFragment"
-            app:destination="@id/sceneDetailFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/enterLinesFragment"
-        android:name="com.snowball.memetory.presentation.ui.generatememe.EnterLinesFragment"
-        android:label="fragment_enter_lines"
-        tools:layout="@layout/fragment_enter_lines" >
-
-        <action
-            android:id="@+id/action_enterLinesFragment_to_sceneDetailFragment"
-            app:destination="@id/sceneDetailFragment" />
+            app:destination="@id/chooseTemplateFragment"
+            app:popUpTo="@id/chooseTemplateFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -63,7 +41,23 @@
 
         <action
             android:id="@+id/action_chooseVoiceFragment_to_sceneDetailFragment"
-            app:destination="@id/sceneDetailFragment" />
+            app:destination="@id/sceneDetailFragment"
+            app:popUpTo="@id/sceneDetailFragment"
+            app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/previewFragment"
+        android:name="com.snowball.memetory.presentation.ui.generatememe.PreviewFragment"
+        android:label="PreviewFragment"
+        tools:layout="@layout/fragment_preview">
+        <action
+            android:id="@+id/action_previewFragment_to_previewDetailFragment"
+            app:destination="@id/previewDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/previewDetailFragment"
+        android:name="com.snowball.memetory.presentation.ui.generatememe.PreviewDetailFragment"
+        android:label="PreviewDetailFragment"
+        tools:layout="@layout/fragment_preview_detail"/>
 
 </navigation>
