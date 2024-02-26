@@ -36,10 +36,10 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/chooseFaceImg"
-                android:layout_width="300dp"
-                android:layout_height="300dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
-                android:src="@drawable/lets_icons_add_duotone"
+                android:src="@drawable/ic_add_50"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
