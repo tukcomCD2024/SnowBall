@@ -1,43 +1,61 @@
 package com.example.memetory.domain.member.entity;
 
 import com.example.memetory.global.entity.BaseEntity;
-import jakarta.persistence.*;
-import lombok.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Builder
-@RequiredArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Table(name = "members")
 public class Member extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "member_id")
+	private Long id;
 
-    private String email;
-    private String password;
-    private String nickname;
-    private String imageUrl;
+	private String email;
+	private String password;
+	private String nickname;
+	private String imageUrl;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+	@Enumerated(EnumType.STRING)
+	private Role role;
 
-    @Enumerated(EnumType.STRING)
-    private SocialType socialType;
+	@Enumerated(EnumType.STRING)
+	private SocialType socialType;
 
-    private String socialId;
+	private String socialId;
 
-    private String refreshToken;
+	private String refreshToken;
 
-    public void authorizeMember() {
-        this.role = Role.USER;
-    }
+	@Builder
+	public Member(String email, String nickname, String imageUrl, Role role, SocialType socialType, String socialId) {
+		this.email = email;
+		this.nickname = nickname;
+		this.imageUrl = imageUrl;
+		this.role = role;
+		this.socialType = socialType;
+		this.socialId = socialId;
+	}
 
-    public void updateRefreshToken(String updateRefreshToken) {
-        this.refreshToken = updateRefreshToken;
-    }
+	public void authorizeMember() {
+		this.role = Role.USER;
+	}
+
+	public void updateRefreshToken(String updateRefreshToken) {
+		this.refreshToken = updateRefreshToken;
+	}
 }
