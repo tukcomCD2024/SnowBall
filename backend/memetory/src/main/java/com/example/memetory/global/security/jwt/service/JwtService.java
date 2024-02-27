@@ -3,6 +3,7 @@ package com.example.memetory.global.security.jwt.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.memetory.domain.member.repository.MemberRepository;
+import com.example.memetory.global.security.jwt.exception.NotFoundTokenException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
