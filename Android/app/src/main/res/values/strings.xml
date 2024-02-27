@@ -13,4 +13,7 @@
     <string name="sign_up_hint">한글, 영어, 숫자로 구성할 수 있어요</string>
     <string name="sign_up_nickname">닉네임</string>
     <string name="button_confirm">확인</string>
+    <string name="button_finish">완료하기</string>
+    <string name="scene_choose_voice">목소리 선택하기</string>
+
 </resources>

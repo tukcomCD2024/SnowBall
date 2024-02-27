@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="20dp"
+        tools:context=".presentation.ui.generatememe.ChooseVoiceFragment">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/titleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.App.h3"
+            android:text="@string/scene_choose_voice"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/voiceRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="500dp"
+            android:layout_marginTop="40sp"
+            tools:listitem="@layout/item_choose_voice"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/titleText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/confirmBtn"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/corner_radius_10"
+            android:backgroundTint="@color/mainBtn"
+            android:text="@string/button_confirm"
+            android:textAppearance="@style/TextAppearance.App.button"
+            android:textColor="@color/white"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/voiceRecyclerView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

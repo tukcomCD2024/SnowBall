@@ -12,4 +12,6 @@
 
     <dimen name="text_button">18sp</dimen>
 
+    <!--  item_view 간의 양 옆 여백을 상쇄할 값   -->
+    <dimen name="offsetBetweenPages">50dp</dimen>
 </resources>

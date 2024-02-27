@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_generate_meme_graph"
+    app:startDestination="@id/chooseTemplateFragment">
+
+    <fragment
+        android:id="@+id/chooseTemplateFragment"
+        android:name="com.snowball.memetory.presentation.ui.generatememe.ChooseTemplateFragment"
+        android:label="ChooseFragment"
+        tools:layout="@layout/fragment_choose_template">
+        <action
+            android:id="@+id/action_chooseTemplateFragment_to_sceneDetailFragment"
+            app:destination="@id/sceneDetailFragment" />
+        <action
+            android:id="@+id/action_chooseTemplateFragment_to_previewFragment"
+            app:destination="@id/previewFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/sceneDetailFragment"
+        android:name="com.snowball.memetory.presentation.ui.generatememe.SceneDetailFragment"
+        android:label="fragment_scene_detail"
+        tools:layout="@layout/fragment_scene_detail" >
+        <action
+            android:id="@+id/action_sceneDetailFragment_to_chooseVoiceFragment"
+            app:destination="@id/chooseVoiceFragment" />
+        <action
+            android:id="@+id/action_sceneDetailFragment_to_chooseTemplateFragment"
+            app:destination="@id/chooseTemplateFragment"
+            app:popUpTo="@id/chooseTemplateFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chooseVoiceFragment"
+        android:name="com.snowball.memetory.presentation.ui.generatememe.ChooseVoiceFragment"
+        android:label="fragment_choose_voice"
+        tools:layout="@layout/fragment_choose_voice" >
+
+        <action
+            android:id="@+id/action_chooseVoiceFragment_to_sceneDetailFragment"
+            app:destination="@id/sceneDetailFragment"
+            app:popUpTo="@id/sceneDetailFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/previewFragment"
+        android:name="com.snowball.memetory.presentation.ui.generatememe.PreviewFragment"
+        android:label="PreviewFragment"
+        tools:layout="@layout/fragment_preview">
+        <action
+            android:id="@+id/action_previewFragment_to_previewDetailFragment"
+            app:destination="@id/previewDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/previewDetailFragment"
+        android:name="com.snowball.memetory.presentation.ui.generatememe.PreviewDetailFragment"
+        android:label="PreviewDetailFragment"
+        tools:layout="@layout/fragment_preview_detail"/>
+
+</navigation>
