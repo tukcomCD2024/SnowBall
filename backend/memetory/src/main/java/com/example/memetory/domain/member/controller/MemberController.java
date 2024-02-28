@@ -12,6 +12,7 @@ import com.example.memetory.global.security.jwt.service.JwtService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,9 +24,6 @@ public class MemberController {
 	@PostMapping("/sign-up")
 	public ResponseEntity<HttpStatus> register(@RequestBody MemberSignUpRequest memberSignUpRequest,
 		HttpServletRequest request) {
-
-
-
 		memberService.register(request, memberSignUpRequest);
 
 		return ResponseEntity.status(HttpStatus.OK).build();
