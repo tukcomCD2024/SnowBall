@@ -1,0 +1,16 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 387033724786-ifc3ubtl3vp86m4c3berlthnpjma14ki.apps.googleusercontent.com
+            client-secret: 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
+            scope: profile, email
+
+# 1. registration 부분 : OAuth 로그인 시 설정한 Application의 정보를 사용하여
+# AccessToken을 Authorization Server에게 발급받을 때 사용
+#
+# 2. provider 부분 : AccessToken을 Authorization Server에게 발급 받은 후,
+# 해당 AccessToken으로 Resource Server의 API를 사용할 때
+# provider 부분의 정보를 사용하여 API 호출
