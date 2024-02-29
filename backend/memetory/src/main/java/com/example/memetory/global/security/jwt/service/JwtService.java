@@ -2,6 +2,7 @@ package com.example.memetory.global.security.jwt.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.example.memetory.domain.member.exception.NotFoundMemberException;
 import com.example.memetory.domain.member.repository.MemberRepository;
 import com.example.memetory.global.security.jwt.exception.NotFoundTokenException;
 
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.Optional;
@@ -121,11 +123,14 @@ public class JwtService {
 		response.setHeader(refreshHeader, refreshToken);
 	}
 
+	@Transactional
 	public void updateRefreshToken(String email, String refreshToken) {
+		log.info("userEmail : " + email);
+
 		memberRepository.findByEmail(email)
 			.ifPresentOrElse(
 				user -> user.updateRefreshToken(refreshToken),
-				() -> new Exception("일치하는 회원이 없습니다.") // NotFoundMemberException 으로 변경
+				NotFoundMemberException::new
 			);
 	}
 
