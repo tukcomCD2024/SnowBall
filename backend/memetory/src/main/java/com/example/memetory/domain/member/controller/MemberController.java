@@ -11,21 +11,21 @@ import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.global.security.jwt.service.JwtService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
 
 	private final MemberService memberService;
+	private final JwtService jwtService;
 
 	@PostMapping("/sign-up")
 	public ResponseEntity<HttpStatus> register(@RequestBody MemberSignUpRequest memberSignUpRequest,
-		HttpServletRequest request) {
-		memberService.register(request, memberSignUpRequest);
+		HttpServletRequest request, HttpServletResponse response) {
+		memberService.register(request, response, memberSignUpRequest);
 
 		return ResponseEntity.status(HttpStatus.OK).build();
-
 	}
 }

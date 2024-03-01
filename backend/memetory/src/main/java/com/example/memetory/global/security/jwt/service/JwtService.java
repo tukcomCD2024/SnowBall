@@ -118,12 +118,12 @@ public class JwtService {
 
 	// 헤더에 accessToken 설정
 	public void setAccessTokenHeader(HttpServletResponse response, String accessToken) {
-		response.setHeader(accessHeader,"Bearer " + accessToken);
+		response.setHeader(accessHeader,BEARER + accessToken);
 	}
 
 	// 헤더에 refreshToken 설정
 	public void setRefreshTokenHeader(HttpServletResponse response, String refreshToken) {
-		response.setHeader(refreshHeader,"Bearer " + refreshToken);
+		response.setHeader(refreshHeader,BEARER + refreshToken);
 	}
 
 	@Transactional
