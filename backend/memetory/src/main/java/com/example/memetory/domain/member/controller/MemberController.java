@@ -7,11 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.memetory.domain.member.dto.MemberSignUpRequest;
+import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
-import com.example.memetory.global.security.jwt.service.JwtService;
+import com.example.memetory.global.annotation.LoginMember;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -19,12 +18,11 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 
 	private final MemberService memberService;
-	private final JwtService jwtService;
 
 	@PostMapping("/sign-up")
 	public ResponseEntity<HttpStatus> register(@RequestBody MemberSignUpRequest memberSignUpRequest,
-		HttpServletRequest request, HttpServletResponse response) {
-		memberService.register(request, response, memberSignUpRequest);
+		@LoginMember Member member) {
+		memberService.register(member, memberSignUpRequest);
 
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}

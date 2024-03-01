@@ -23,16 +23,22 @@ public class MemberService {
 
 	private final MemberRepository memberRepository;
 	private final JwtService jwtService;
+	private final HttpServletRequest request;
+	private final HttpServletResponse response;
 
 	@Transactional
-	public void register(HttpServletRequest request, HttpServletResponse response,
-		MemberSignUpRequest memberSignUpRequest) {
+	public void register(Member member, MemberSignUpRequest memberSignUpRequest) {
+		member.register(memberSignUpRequest);
+
+		jwtService.setRefreshTokenHeader(response, jwtService.createRefreshToken());
+	}
+
+	@Transactional(readOnly = true)
+	public Member getLoginMember() {
 		String accessToken = jwtService.extractAccessToken(request).orElseThrow(NotFoundTokenException::new);
 		String email = jwtService.extractEmail(accessToken).orElseThrow(NotFoundEmailException::new);
 		Member member = memberRepository.findByEmail(email).orElseThrow(NotFoundMemberException::new);
 
-		jwtService.setRefreshTokenHeader(response, jwtService.createRefreshToken());
-
-		member.register(memberSignUpRequest);
+		return member;
 	}
 }
