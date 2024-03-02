@@ -9,11 +9,13 @@ spring:
   config:
     activate:
       on-profile: "local"
+
   datasource:
     url: jdbc:mysql://localhost:3306/snowball
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     hibernate:
       ddl-auto: create
@@ -22,3 +24,8 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
 
+  redis:
+    host: "localhost"
+    port: 6379
+    refreshToken:
+      expiration: 1209600
