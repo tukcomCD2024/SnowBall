@@ -5,6 +5,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.example.memetory.domain.member.exception.NotFoundMemberException;
 import com.example.memetory.domain.member.repository.MemberRepository;
 import com.example.memetory.global.security.jwt.exception.NotFoundTokenException;
+import com.example.memetory.global.security.jwt.refresh.RefreshToken;
+import com.example.memetory.global.security.jwt.refresh.RefreshTokenRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,7 +35,10 @@ public class JwtService {
 	private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
 	private static final String EMAIL_CLAIM = "email";
 	private static final String BEARER = "Bearer ";
+
 	private final MemberRepository memberRepository;
+	private final RefreshTokenRepository refreshTokenRepository;
+
 	@Value("${jwt.secretKey}")
 	private String secretKey;
 	@Value("${jwt.access.expiration}")
@@ -127,14 +132,13 @@ public class JwtService {
 	}
 
 	@Transactional
-	public void updateRefreshToken(String email, String refreshToken) {
-		log.info("userEmail : " + email);
+	public void updateRefreshToken(String email, String token) {
+		RefreshToken refreshToken = refreshTokenRepository.findById(email)
+			.orElse(new RefreshToken(email));
 
-		memberRepository.findByEmail(email)
-			.ifPresentOrElse(
-				user -> user.updateRefreshToken(refreshToken),
-				NotFoundMemberException::new
-			);
+		refreshToken.setRefreshToken(token, refreshTokenExpirationPeriod/1000);
+
+		refreshTokenRepository.save(refreshToken);
 	}
 
 	public boolean isTokenValid(String token) {

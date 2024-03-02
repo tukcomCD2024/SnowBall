@@ -9,15 +9,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @RedisHash(value = "refreshToken")
-@NoArgsConstructor(access= AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class RefreshToken {
 
 	@Id
-	private String refreshToken;
-
 	private String email;
 
+	private String refreshToken;
+
 	@TimeToLive
-	private Long ExpirationPeriod;
+	private Long expirationPeriod;
+
+	public void setRefreshToken(String refreshToken, Long expiration) {
+		this.refreshToken = refreshToken;
+		this.expirationPeriod = expiration;
+	}
+
+	public RefreshToken(String email) {
+		this.email = email;
+	}
 }
