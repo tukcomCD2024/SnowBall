@@ -29,6 +29,7 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis:2.3.1.RELEASE' // Redis 라이브러리
 
     implementation 'com.auth0:java-jwt:4.2.1'
     implementation 'org.springframework.boot:spring-boot-starter-security'
