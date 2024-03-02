@@ -13,6 +13,7 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 import com.example.memetory.domain.member.repository.MemberRepository;
 import com.example.memetory.global.security.jwt.filter.JwtAuthenticationProcessingFilter;
+import com.example.memetory.global.security.jwt.refresh.service.RefreshTokenService;
 import com.example.memetory.global.security.jwt.service.JwtService;
 import com.example.memetory.global.security.oauth.handler.OAuth2LoginFailureHandler;
 import com.example.memetory.global.security.oauth.handler.OAuth2LoginSuccessHandler;
@@ -31,6 +32,7 @@ public class SecurityConfig {
 	private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 	private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
 	private final CustomOAuth2UserService customOAuth2UserService;
+	private final RefreshTokenService refreshTokenService;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -63,6 +65,6 @@ public class SecurityConfig {
 
 	@Bean
 	public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
-		return new JwtAuthenticationProcessingFilter(jwtService, memberRepository);
+		return new JwtAuthenticationProcessingFilter(jwtService, memberRepository, refreshTokenService);
 	}
 }

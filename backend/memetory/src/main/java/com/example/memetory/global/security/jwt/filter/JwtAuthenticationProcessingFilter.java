@@ -13,6 +13,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.repository.MemberRepository;
+import com.example.memetory.global.security.jwt.refresh.domain.RefreshToken;
+import com.example.memetory.global.security.jwt.refresh.service.RefreshTokenService;
 import com.example.memetory.global.security.jwt.service.JwtService;
 import com.example.memetory.global.util.PasswordUtil;
 
@@ -45,6 +47,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
 	private final JwtService jwtService;
 	private final MemberRepository memberRepository;
+	private final RefreshTokenService refreshTokenService;
 
 	// GrantedAuthoritiesMapper -> 인증된 사용자 권한을 매핑하는 역할
 	// NullAuthoritiesMapper -> 인증된 사용자 권한을 변경하지 않는 역할
@@ -90,12 +93,10 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 	 *  그 후 JwtService.sendAccessTokenAndRefreshToken()으로 응답 헤더에 보내기
 	 */
 	public void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken) {
-		memberRepository.findByRefreshToken(refreshToken)
-			.ifPresent(user -> {
-				String reIssuedRefreshToken = reIssueRefreshToken(user);
-				jwtService.sendAccessAndRefreshToken(response, jwtService.createAccessToken(user.getEmail()),
-					reIssuedRefreshToken);
-			});
+		RefreshToken refresh = refreshTokenService.findByToken(refreshToken);
+		String reIssuedRefreshToken = reIssueRefreshToken(refresh.getEmail());
+		jwtService.sendAccessAndRefreshToken(response, jwtService.createAccessToken(refresh.getEmail()),
+			reIssuedRefreshToken);
 	}
 
 	/**
@@ -103,10 +104,10 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 	 * jwtService.createRefreshToken()으로 리프레시 토큰 재발급 후
 	 * DB에 재발급한 리프레시 토큰 업데이트 후 Flush
 	 */
-	private String reIssueRefreshToken(Member member) {
+	private String reIssueRefreshToken(String email) {
 		String reIssuedRefreshToken = jwtService.createRefreshToken();
-		member.updateRefreshToken(reIssuedRefreshToken);
-		memberRepository.saveAndFlush(member);
+		// redis 에 업데이트해주는 코드
+		refreshTokenService.updateToken(email, reIssuedRefreshToken);
 		return reIssuedRefreshToken;
 	}
 

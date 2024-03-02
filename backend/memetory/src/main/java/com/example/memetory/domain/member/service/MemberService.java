@@ -9,6 +9,7 @@ import com.example.memetory.domain.member.exception.NotFoundMemberException;
 import com.example.memetory.domain.member.repository.MemberRepository;
 import com.example.memetory.global.security.jwt.exception.NotFoundEmailException;
 import com.example.memetory.global.security.jwt.exception.NotFoundTokenException;
+import com.example.memetory.global.security.jwt.refresh.service.RefreshTokenService;
 import com.example.memetory.global.security.jwt.service.JwtService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ public class MemberService {
 
 	private final MemberRepository memberRepository;
 	private final JwtService jwtService;
+	private final RefreshTokenService refreshTokenService;
 	private final HttpServletRequest request;
 	private final HttpServletResponse response;
 
@@ -30,7 +32,10 @@ public class MemberService {
 	public void register(Member member, MemberSignUpRequest memberSignUpRequest) {
 		member.register(memberSignUpRequest);
 
-		jwtService.setRefreshTokenHeader(response, jwtService.createRefreshToken());
+		String refreshToken = jwtService.createRefreshToken();
+
+		jwtService.setRefreshTokenHeader(response, refreshToken);
+		refreshTokenService.updateToken(member.getEmail(), refreshToken);
 	}
 
 	@Transactional(readOnly = true)

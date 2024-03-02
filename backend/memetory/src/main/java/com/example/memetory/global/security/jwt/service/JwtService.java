@@ -2,11 +2,10 @@ package com.example.memetory.global.security.jwt.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.example.memetory.domain.member.exception.NotFoundMemberException;
 import com.example.memetory.domain.member.repository.MemberRepository;
-import com.example.memetory.global.security.jwt.exception.NotFoundTokenException;
-import com.example.memetory.global.security.jwt.refresh.RefreshToken;
-import com.example.memetory.global.security.jwt.refresh.RefreshTokenRepository;
+import com.example.memetory.global.security.jwt.refresh.domain.RefreshToken;
+import com.example.memetory.global.security.jwt.refresh.repository.RefreshTokenRepository;
+import com.example.memetory.global.security.jwt.refresh.service.RefreshTokenService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -37,7 +36,7 @@ public class JwtService {
 	private static final String BEARER = "Bearer ";
 
 	private final MemberRepository memberRepository;
-	private final RefreshTokenRepository refreshTokenRepository;
+	private final RefreshTokenService refreshTokenService;
 
 	@Value("${jwt.secretKey}")
 	private String secretKey;
@@ -67,14 +66,6 @@ public class JwtService {
 			.withSubject(REFRESH_TOKEN_SUBJECT)
 			.withExpiresAt(new Date(now.getTime() + refreshTokenExpirationPeriod))
 			.sign(Algorithm.HMAC512(secretKey));
-	}
-
-	// setAccessTokenHeader 으로 대체 가능
-	public void sendAccessToken(HttpServletResponse response, String accessToken) {
-		response.setStatus(HttpServletResponse.SC_OK);
-
-		response.setHeader(accessHeader, accessToken);
-		log.info("재발급된 Access Token : {}", accessToken);
 	}
 
 	public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
@@ -131,14 +122,8 @@ public class JwtService {
 		response.setHeader(refreshHeader,BEARER + refreshToken);
 	}
 
-	@Transactional
 	public void updateRefreshToken(String email, String token) {
-		RefreshToken refreshToken = refreshTokenRepository.findById(email)
-			.orElse(new RefreshToken(email));
-
-		refreshToken.setRefreshToken(token, refreshTokenExpirationPeriod/1000);
-
-		refreshTokenRepository.save(refreshToken);
+		refreshTokenService.updateToken(email, token);
 	}
 
 	public boolean isTokenValid(String token) {
