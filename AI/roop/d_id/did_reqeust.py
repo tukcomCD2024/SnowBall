@@ -1,3 +1,5 @@
+import time
+
 import requests
 import os
 import yaml
@@ -5,8 +7,7 @@ import yaml
 TALK_URL = "https://api.d-id.com/talks"
 IMAGE_URL = "https://api.d-id.com/images"
 FACESWAP_IAMGE_PATH = "../image/faceswap_image"
-CONF_PATH = "/Users/jaehuek/PycharmProjects/SnowBall/AI/roop/d_id/conf.yaml"
-
+CONF_PATH = "../d_id/conf.yaml"
 
 class DIdAPI:
     _instance = None
@@ -28,9 +29,8 @@ class DIdAPI:
     def run(self, face_swap_image_name, text):
         s3_image_url = self.upload_image(face_swap_image_name)
         talk_id = self.upload_scene(s3_image_url, text)
-        result_url = self.download_scene(talk_id)
 
-        return result_url
+        return talk_id
 
     # D-ID에게 영상 제작을 요청
     # 대사, 소스 이미지(s3)를 매개변수로 전해줘야 함.
@@ -68,17 +68,24 @@ class DIdAPI:
     def download_scene(self, talk_id):
         # D-ID가 만든 영상을 가져옴
 
-        headers = {
-            "accept": "application/json",
-            "authorization": "Basic" + " " + self.conf['D-ID_API_KEY']
-        }
+        for i in range(1, 11):
+            headers = {
+                "accept": "application/json",
+                "authorization": "Basic" + " " + self.conf['D-ID_API_KEY']
+            }
 
-        # talks/{talk_id}
-        # result_url 에서 영상을 가져옴 -> {talk_id} 를 변수 처리해야 함
-        response = requests.get(TALK_URL + "/" + talk_id, headers=headers)
-        response_dict = response.json()
+            # talks/{talk_id}
+            # result_url 에서 영상을 가져옴 -> {talk_id} 를 변수 처리해야 함
+            response = requests.get(TALK_URL + "/" + talk_id, headers=headers)
+            response_dict = response.json()
+            result_url = response_dict.get("result_url", None)
 
-        return response_dict["result_url"]
+            if result_url is not None:
+                duration = response_dict["duration"]
+                return result_url, duration
+
+            time.sleep(1)
+            # 10초가 지나도 값을 못가져 왔을 경우 발생시킬 예외 구현
 
     # Response 에서 url 을 받아옴
     def upload_image(self, face_swap_image_name):
