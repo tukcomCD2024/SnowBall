@@ -28,7 +28,6 @@ public class Member extends BaseEntity {
 	private Long id;
 
 	private String email;
-	private String password;
 	private String nickname;
 	private String imageUrl;
 
@@ -40,8 +39,6 @@ public class Member extends BaseEntity {
 
 	private String socialId;
 
-	private String refreshToken;
-
 	@Builder
 	public Member(String email, String nickname, String imageUrl, Role role, SocialType socialType, String socialId) {
 		this.email = email;
@@ -50,10 +47,6 @@ public class Member extends BaseEntity {
 		this.role = role;
 		this.socialType = socialType;
 		this.socialId = socialId;
-	}
-
-	public void updateRefreshToken(String updateRefreshToken) {
-		this.refreshToken = updateRefreshToken;
 	}
 
 	public void register(MemberSignUpRequest memberSignUpRequest) {
