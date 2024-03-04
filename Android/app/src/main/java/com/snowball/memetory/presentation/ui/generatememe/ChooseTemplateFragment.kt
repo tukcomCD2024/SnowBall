@@ -13,6 +13,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.snowball.memetory.R
 import com.snowball.memetory.databinding.FragmentChooseTemplateBinding
 import com.snowball.memetory.presentation.ui.generatememe.adapter.TemplateDetailVPAdater
+import com.snowball.memetory.presentation.ui.generatememe.adapter.TemplateRVAdater
 import kotlin.math.abs
 
 class ChooseTemplateFragment : Fragment() {
@@ -37,9 +38,7 @@ class ChooseTemplateFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         navController = Navigation.findNavController(view)
-        binding.chooseBtn.setOnClickListener {
-            navController.navigate(R.id.action_chooseTemplateFragment_to_sceneDetailFragment)
-        }
+
         binding.confirmBtn.setOnClickListener {
             navController.navigate(R.id.action_chooseTemplateFragment_to_previewFragment)
         }
@@ -53,9 +52,15 @@ class ChooseTemplateFragment : Fragment() {
             R.drawable.gamst,
             R.drawable.ic_play_circle_32
         )
-
-        binding.templateViewPager.adapter = TemplateDetailVPAdater(imgRes)
+        var templtVPAdapter = TemplateDetailVPAdater(imgRes)
+        binding.templateViewPager.adapter = templtVPAdapter
         setOffsetBetweenPages()
+
+        templtVPAdapter.itemClickListener = object : TemplateDetailVPAdater.OnItemClickListener {
+            override fun onItemClick(view: View, position: Int) {
+                navController.navigate(R.id.action_chooseTemplateFragment_to_sceneDetailFragment)
+            }
+        }
 
         binding.templateViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() { // 페이지 바뀔때마다
             override fun onPageSelected(position: Int) { // 이 페이지의 번호가 선택되면
