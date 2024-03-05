@@ -36,7 +36,7 @@ final class GenerateViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         // 셀의 높이 설정
-        tableView.rowHeight = 120
+        tableView.rowHeight = 300
         
         // 셀의 등록 과정(스토리보드 사용시에는 스토리보드에서 자동 등록)
         tableView.register(TemplateTableViewCell.self, forCellReuseIdentifier: "TemplateCell")

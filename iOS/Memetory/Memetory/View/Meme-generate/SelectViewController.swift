@@ -74,13 +74,13 @@ class SelectViewController: UIViewController {
 //        return tf
 //    }()
     
-    let characterCountLabel: UILabel = {
-        let label = UILabel()
-        label.text = "0/50"
-        label.font = UIFont(name: "Pretendard-Bold", size: 12)
-        label.textAlignment = .right
-        return label
-    }()
+//    let characterCountLabel: UILabel = {
+//        let label = UILabel()
+//        label.text = "0/50"
+//        label.font = UIFont(name: "Pretendard-Bold", size: 12)
+//        label.textAlignment = .right
+//        return label
+//    }()
     
     let voiceSelectButton: UIButton = {
         let button = UIButton(type: .custom)
@@ -138,7 +138,7 @@ class SelectViewController: UIViewController {
         view.addSubview(adviceLabel)
         view.addSubview(lineTextView)
 //        view.addSubview(lineTextField)
-        view.addSubview(characterCountLabel)
+//        view.addSubview(characterCountLabel)
         view.addSubview(voiceSelectButton)
         view.addSubview(checkButton)
     }
@@ -181,10 +181,10 @@ class SelectViewController: UIViewController {
 //            make.height.equalTo(45)
 //        }
         
-        characterCountLabel.snp.makeConstraints { make in
-            make.top.equalTo(lineTextView.snp.bottom).offset(5)
-            make.right.equalTo(lineTextView)
-        }
+//        characterCountLabel.snp.makeConstraints { make in
+//            make.top.equalTo(lineTextView.snp.bottom).offset(5)
+//            make.right.equalTo(lineTextView)
+//        }
         
         voiceSelectButton.snp.makeConstraints { make in
             make.top.equalTo(lineTextView.snp.bottom).offset(30)
@@ -249,17 +249,17 @@ extension SelectViewController: UITextViewDelegate {
         self.view.endEditing(true)
     }
     
-    func textView(_ textView: UITextView, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let newText = (textView.text as NSString?)?.replacingCharacters(in: range, with: string) ?? ""
-        let characterCount = newText.count
-        
-        if characterCount <= 50 {
-            characterCountLabel.text = "\(characterCount)/50"
-            return true
-        } else {
-            return false
-        }
-    }
+//    func textView(_ textView: UITextView, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//        let newText = (textView.text as NSString?)?.replacingCharacters(in: range, with: string) ?? ""
+//        let characterCount = newText.count
+//        
+//        if characterCount <= 50 {
+//            characterCountLabel.text = "\(characterCount)/50"
+//            return true
+//        } else {
+//            return false
+//        }
+//    }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         // 텍스트 필드가 편집을 시작할 때 호출되는 메서드

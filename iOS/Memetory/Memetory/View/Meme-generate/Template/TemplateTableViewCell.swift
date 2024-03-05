@@ -21,19 +21,19 @@ final class TemplateTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "해리포터 템플릿"
-        label.textColor = .black
-        label.font = UIFont(name: "Pretendard-Bold", size: 25)
-        return label
-    }()
+//    let titleLabel: UILabel = {
+//        let label = UILabel()
+//        label.text = "해리포터 템플릿"
+//        label.textColor = .black
+//        label.font = UIFont(name: "Pretendard-Bold", size: 25)
+//        return label
+//    }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier reuseIndetifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIndetifier)
         
         self.addSubview(mainImageView)
-        self.addSubview(titleLabel)
+//        self.addSubview(titleLabel)
         setConstraints()
     }
     
@@ -43,17 +43,17 @@ final class TemplateTableViewCell: UITableViewCell {
 
     func setConstraints() {
         mainImageView.snp.makeConstraints { make in
-            make.height.width.equalTo(70)
+            make.height.width.equalTo(270)
             make.top.equalTo(self.snp.top).offset(20)
             make.centerY.equalTo(self.snp.centerY)
-            make.leading.equalTo(self.snp.leading).offset(80)
+            make.centerX.equalTo(self.snp.centerX)
             
         }
         
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top).offset(20)
-            make.centerY.equalTo(self.snp.centerY)
-            make.leading.equalTo(mainImageView.snp.trailing).offset(15)
-        }
+//        titleLabel.snp.makeConstraints { make in
+//            make.top.equalTo(self.snp.top).offset(20)
+//            make.centerY.equalTo(self.snp.centerY)
+//            make.leading.equalTo(mainImageView.snp.trailing).offset(15)
+//        }
     }
 }
