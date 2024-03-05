@@ -24,6 +24,7 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>BMJUA_otf.otf</string>
+		<string>Pretendard-Bold.otf</string>
 	</array>
 </dict>
 </plist>
