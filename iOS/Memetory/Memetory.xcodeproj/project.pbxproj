@@ -23,8 +23,6 @@
 		5C4BB4722B7B58AF0045FB28 /* GenerateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4BB4712B7B58AF0045FB28 /* GenerateViewController.swift */; };
 		5C4BB4742B7B5E300045FB28 /* TemplateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4BB4732B7B5E300045FB28 /* TemplateTableViewCell.swift */; };
 		5C4BB4762B7B62D30045FB28 /* TemSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4BB4752B7B62D30045FB28 /* TemSelectViewController.swift */; };
-		5C4BB4782B7B64B40045FB28 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4BB4772B7B64B40045FB28 /* SettingViewController.swift */; };
-		5C4BB47B2B7B90480045FB28 /* FaceSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4BB47A2B7B90480045FB28 /* FaceSelectViewController.swift */; };
 		5C4BB47D2B7BD1B40045FB28 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5C4BB47C2B7BD1B40045FB28 /* Pretendard-Bold.otf */; };
 		5C5536322B8B2967004A3E67 /* SelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5536312B8B2967004A3E67 /* SelectViewController.swift */; };
 		5C83D35B2B68DABC00F34F0B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C83D35A2B68DABC00F34F0B /* LoginViewController.swift */; };
@@ -59,8 +57,6 @@
 		5C4BB4712B7B58AF0045FB28 /* GenerateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateViewController.swift; sourceTree = "<group>"; };
 		5C4BB4732B7B5E300045FB28 /* TemplateTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateTableViewCell.swift; sourceTree = "<group>"; };
 		5C4BB4752B7B62D30045FB28 /* TemSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemSelectViewController.swift; sourceTree = "<group>"; };
-		5C4BB4772B7B64B40045FB28 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
-		5C4BB47A2B7B90480045FB28 /* FaceSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceSelectViewController.swift; sourceTree = "<group>"; };
 		5C4BB47C2B7BD1B40045FB28 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
 		5C5536312B8B2967004A3E67 /* SelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectViewController.swift; sourceTree = "<group>"; };
 		5C83D35A2B68DABC00F34F0B /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -155,18 +151,8 @@
 				5C5536312B8B2967004A3E67 /* SelectViewController.swift */,
 				5C382FD92B95E629003DD4C6 /* Voice */,
 				5C382FD32B95E49D003DD4C6 /* CheckViewController.swift */,
-				5C4BB4792B7B8FD50045FB28 /* New Group */,
 			);
 			path = "Meme-generate";
-			sourceTree = "<group>";
-		};
-		5C4BB4792B7B8FD50045FB28 /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-				5C4BB47A2B7B90480045FB28 /* FaceSelectViewController.swift */,
-				5C4BB4772B7B64B40045FB28 /* SettingViewController.swift */,
-			);
-			path = "New Group";
 			sourceTree = "<group>";
 		};
 		5C83D3572B68D5FC00F34F0B /* Font */ = {
@@ -311,7 +297,6 @@
 				5C4BB4722B7B58AF0045FB28 /* GenerateViewController.swift in Sources */,
 				5C83D35B2B68DABC00F34F0B /* LoginViewController.swift in Sources */,
 				5C25F6712B74A4280038F9AD /* OnboardingViewController.swift in Sources */,
-				5C4BB4782B7B64B40045FB28 /* SettingViewController.swift in Sources */,
 				5C382FD22B95B093003DD4C6 /* TemplateCollectionViewCell.swift in Sources */,
 				5C382FD62B95E4BC003DD4C6 /* VoiceSelectViewController.swift in Sources */,
 				5C4BB4702B7B55720045FB28 /* StorageViewController.swift in Sources */,
@@ -330,7 +315,6 @@
 				5C4BB4762B7B62D30045FB28 /* TemSelectViewController.swift in Sources */,
 				5C382FDE2B96EF8E003DD4C6 /* Scene.swift in Sources */,
 				5C5536322B8B2967004A3E67 /* SelectViewController.swift in Sources */,
-				5C4BB47B2B7B90480045FB28 /* FaceSelectViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
