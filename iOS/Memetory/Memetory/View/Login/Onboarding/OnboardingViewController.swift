@@ -15,9 +15,9 @@ class OnboardingViewController: UIViewController {
             didSet {
                 pageControl.currentPage = currentPage
                 if currentPage == onboardingData.count - 1 {
-                    nextButton.setTitle("Start", for: .normal)
+                    nextButton.setTitle("시작하기", for: .normal)
                 } else {
-                    nextButton.setTitle("Next", for: .normal)
+                    nextButton.setTitle("다음", for: .normal)
                 }
             }
         }
@@ -44,7 +44,9 @@ class OnboardingViewController: UIViewController {
     
     let nextButton: UIButton = {
         let button = UIButton(type: .custom)
+        button.setTitle("다음", for: .normal)
         button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont(name: "Pretendard-Bold", size: 18)
         button.layer.cornerRadius = 10
         button.layer.masksToBounds = true
         button.layer.borderWidth = 1
@@ -83,7 +85,6 @@ class OnboardingViewController: UIViewController {
     
     @objc private func nextButtonTapped() {
         if currentPage == onboardingData.count - 1 {
-            print("go to main")
             let tabBarViewController = TabBarViewController()
             navigationController?.pushViewController(tabBarViewController, animated: true)
         } else {
