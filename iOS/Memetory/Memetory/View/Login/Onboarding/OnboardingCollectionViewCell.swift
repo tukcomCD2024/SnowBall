@@ -22,11 +22,11 @@ class OnboardingCollectionViewCell: UICollectionViewCell {
     
     let mainLabel: UILabel = {
         let label = UILabel()
-//        label.font = UIFont(name: "BMJUA_ttf", size: 25)
+        label.font = UIFont(name: "Pretendard-Bold", size: 25)
         label.textColor = .black
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = .boldSystemFont(ofSize: 25)
+//        label.font = .boldSystemFont(ofSize: 25)
         
         return label
     }()
