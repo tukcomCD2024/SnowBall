@@ -8,13 +8,20 @@
 import UIKit
 
 class TabBarViewController: UITabBarController {
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        // navigationItem 숨기기
+        self.navigationItem.setHidesBackButton(true, animated: false)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tabBar.barTintColor = .white
+        tabBar.barTintColor = .gray
         tabBar.tintColor = .black
-//        tabBar.layer.borderWidth = 0.3
+        tabBar.layer.borderWidth = 0.5
 
         let homeView = HomeViewController()
         let generateView = GenerateViewController()
