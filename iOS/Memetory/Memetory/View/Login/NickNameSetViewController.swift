@@ -16,7 +16,7 @@ class NickNameSetViewController: UIViewController {
         label.numberOfLines = 0
         label.font = .boldSystemFont(ofSize: 30)
         label.textAlignment = .center
-//        label.font = UIFont(name: "BMJUA_otf", size: 30)
+        label.font = UIFont(name: "Pretendard-Bold", size: 30)
         label.textColor = .black
         return label
     }()
@@ -25,8 +25,7 @@ class NickNameSetViewController: UIViewController {
         let label = UILabel()
         label.text = "닉네임"
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 18)
-//        label.font = UIFont(name: "BMJUA_otf", size: 18)
+        label.font = UIFont(name: "Pretendard-Bold", size: 18)
         label.textColor = .black
         return label
     }()
@@ -57,6 +56,7 @@ class NickNameSetViewController: UIViewController {
         let button = UIButton(type: .custom)
         button.setTitle("확인", for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
+        button.titleLabel?.font = UIFont(name: "Pretendard-Bold", size: 18)
         button.layer.cornerRadius = 10
         button.layer.masksToBounds = true
         button.layer.borderWidth = 1
