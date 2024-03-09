@@ -24,7 +24,7 @@ def upload_file():
         source_image = request.files['sourceImage']
         text = request.form['text']
 
-        face_swap_image_name = face_swap(target_image, source_image, text)
+        face_swap_image_name = face_swap(target_image, source_image)
         did = DIdAPI()
         result_url = did.run(face_swap_image_name, text)
         print(result_url)
