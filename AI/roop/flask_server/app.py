@@ -1,11 +1,9 @@
 import base64
-import os
 import subprocess
 from io import BytesIO
 
 from PIL import Image
 from flask import Flask, request, jsonify
-from werkzeug.utils import secure_filename
 from d_id.did_reqeust import DIdAPI
 import hashlib
 import time
