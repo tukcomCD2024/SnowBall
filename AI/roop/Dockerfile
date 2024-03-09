@@ -4,6 +4,8 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /app
 COPY . ./
 
+VOLUME ./image:./roop/image
+
 RUN pip install --upgrade pip
 
 RUN apt-get update

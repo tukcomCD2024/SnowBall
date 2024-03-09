@@ -55,7 +55,7 @@ def process_data():
                 unique_hash = hashlib.sha256(hash_input.encode()).hexdigest()[:4]
 
                 # 고유한 파일 이름으로 저장 (예: decoded_image_<unique_hash>.jpg)
-                image.save(f'../image/{unique_hash}.jpg')
+                image.save(f'./image/{unique_hash}.jpg')
 
             face_swap_image_name = face_swap(target_image_number, unique_hash)
             talk_id = did.run(face_swap_image_name, text_data)
@@ -107,13 +107,13 @@ def process_data():
 def face_swap(target_image_number, source_image):
     command = [
         "python",
-        "../run.py",
+        "./run.py",
         "-s",
-        "../image/" + source_image + '.jpg',
+        "./image/" + source_image + '.jpg',
         "-t",
-        '../target_image/' + target_image_number + '.jpg',
+        './target_image/' + target_image_number + '.jpg',
         "-o",
-        "../image/faceswap_image/",
+        "./image/faceswap_image/",
         "--frame-processor",
         "face_swapper"
     ]
