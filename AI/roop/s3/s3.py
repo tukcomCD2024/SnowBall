@@ -35,3 +35,19 @@ class S3:
             print("s3 bucket connected!")
             return s3
 
+    def s3_put_object(s3, bucket, filepath, access_key):
+        '''
+        s3 bucket에 지정 파일 업로드
+        :param s3: 연결된 s3 객체(boto3 client)
+        :param bucket: 버킷명
+        :param filepath: 파일 위치
+        :param access_key: 저장 파일명
+        :return: 성공 시 True, 실패 시 False 반환
+        '''
+        try:
+            s3.upload_file(filepath, bucket, access_key)
+        except Exception as e:
+            print(e)
+            return False
+        return "s3 업로드 성공!"
+    
