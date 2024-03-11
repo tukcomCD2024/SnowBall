@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -26,6 +27,11 @@ public class Meme extends BaseEntity {
 	@JoinColumn(name = "member_id")
 	private Member member;
 
-	private String name;
 	private String s3Url;
+
+	@Builder
+	public Meme(Member member, String s3Url) {
+		this.member = member;
+		this.s3Url = s3Url;
+	}
 }

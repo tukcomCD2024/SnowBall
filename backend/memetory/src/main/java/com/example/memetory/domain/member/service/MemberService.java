@@ -46,4 +46,9 @@ public class MemberService {
 
 		return member;
 	}
+
+	@Transactional(readOnly = true)
+	public Member findById(Long id) {
+		return memberRepository.findById(id).orElseThrow(NotFoundMemberException::new);
+	}
 }
