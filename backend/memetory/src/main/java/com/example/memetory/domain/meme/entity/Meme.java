@@ -3,6 +3,7 @@ package com.example.memetory.domain.meme.entity;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.global.entity.BaseEntity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 public class Meme extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "meme_id")
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
