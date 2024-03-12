@@ -47,9 +47,11 @@ def process_data():
             text_data = item.get('text')
             target_image_number = item.get('target_image')
             source_image_s3_url = item.get('source_image')
+
+            # s3_url에서 파일이름 추출
             file_name = get_file_name_from_url(source_image_s3_url)
 
-            # Base64 디코딩 및 처리 예시 (이미지를 파일로 저장하는 경우)
+            # s3_url (이미지를 파일로 저장하는 경우)
             if file_name:
                 source_image = s3_request.s3_get_object(s3, file_name)
 
@@ -136,11 +138,11 @@ def face_swap(target_image_number, source_image):
 
 def save_bytes_io_to_file(bytes_io, file_path):
     """
-    BytesIO 객체에 저장된 데이터를 파일로 저장합니다.
+    BytesIO 객체에 저장된 데이터를 파일로 저장
 
     :param bytes_io: BytesIO 객체
     :param file_path: 저장할 파일 경로
-    :return: 저장에 성공하면 True, 실패하면 False를 반환합니다.
+    :return: 저장에 성공하면 True, 실패하면 False를 반환
     """
     try:
         with open(file_path, "wb") as file:
@@ -153,7 +155,7 @@ def save_bytes_io_to_file(bytes_io, file_path):
 
 def get_file_name_from_url(url):
     """
-    URL에서 파일 이름을 추출합니다.
+    URL에서 파일 이름을 추출
 
     :param url: 파일이 위치한 URL
     :return: 추출된 파일 이름 또는 None (URL에서 파일 이름을 추출할 수 없는 경우)
