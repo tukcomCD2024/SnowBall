@@ -6,8 +6,8 @@ import yaml
 
 TALK_URL = "https://api.d-id.com/talks"
 IMAGE_URL = "https://api.d-id.com/images"
-FACESWAP_IAMGE_PATH = "../image/faceswap_image"
-CONF_PATH = "../d_id/conf.yaml"
+FACESWAP_IAMGE_PATH = "./image/faceswap_image"
+CONF_PATH = "./d_id/conf.yaml"
 
 class DIdAPI:
     _instance = None

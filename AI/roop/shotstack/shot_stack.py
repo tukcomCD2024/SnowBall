@@ -28,7 +28,7 @@ class ShotStackAPI:
             return None
 
     # 사용할 YAML 파일 경로
-    yaml_file_path = "../shotstack/conf.yaml"
+    yaml_file_path = "./shotstack/conf.yaml"
     # API 엔드포인트 URL
     api_url = "https://api.shotstack.io/stage/render"
 

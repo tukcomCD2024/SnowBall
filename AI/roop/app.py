@@ -59,8 +59,8 @@ def process_data():
                 hash_input = str(time.time())
                 unique_hash = hashlib.sha256(hash_input.encode()).hexdigest()[:4]
 
-                # 파일을 저장할 경로 및 파일 이름 생성
-                file_path = f"../image/{unique_hash}.jpg"
+                # 고유한 파일 이름으로 저장 (예: decoded_image_<unique_hash>.jpg)
+                image.save(f'./image/{unique_hash}.jpg')
 
                 # BytesIO 객체에 저장된 데이터를 파일로 저장
                 if save_bytes_io_to_file(source_image, file_path):
@@ -118,13 +118,13 @@ def process_data():
 def face_swap(target_image_number, source_image):
     command = [
         "python",
-        "../run.py",
+        "./run.py",
         "-s",
-        "../image/" + source_image + '.jpg',
+        "./image/" + source_image + '.jpg',
         "-t",
-        '../target_image/' + target_image_number + '.jpg',
+        './target_image/' + target_image_number + '.jpg',
         "-o",
-        "../image/faceswap_image/",
+        "./image/faceswap_image/",
         "--frame-processor",
         "face_swapper"
     ]
@@ -171,4 +171,4 @@ def get_file_name_from_url(url):
 
 
 if __name__ == '__main__':
-    app.run(port=5001)
+    app.run(host='0.0.0.0', port=5001)
