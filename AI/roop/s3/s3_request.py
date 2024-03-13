@@ -3,7 +3,7 @@ import io
 import boto3
 import yaml
 
-CONF_PATH = "../s3/conf.yaml"
+CONF_PATH = "./s3/conf.yaml"
 BUKET = "memetory"
 
 

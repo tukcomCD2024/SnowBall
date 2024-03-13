@@ -1,9 +1,6 @@
-import base64
 import subprocess
-from io import BytesIO
 from urllib.parse import urlparse
 
-from PIL import Image
 from flask import Flask, request, jsonify
 from d_id.did_reqeust import DIdAPI
 import hashlib
@@ -59,8 +56,8 @@ def process_data():
                 hash_input = str(time.time())
                 unique_hash = hashlib.sha256(hash_input.encode()).hexdigest()[:4]
 
-                # 고유한 파일 이름으로 저장 (예: decoded_image_<unique_hash>.jpg)
-                image.save(f'./image/{unique_hash}.jpg')
+                # 파일을 저장할 경로 및 파일 이름 생성
+                file_path = f"./image/{unique_hash}.jpg"
 
                 # BytesIO 객체에 저장된 데이터를 파일로 저장
                 if save_bytes_io_to_file(source_image, file_path):
@@ -89,7 +86,8 @@ def process_data():
             "output": {
                 "format": "mp4",
                 "resolution": "sd"
-            }
+            },
+            "callback": "http://ec2-43-202-91-197.ap-northeast-2.compute.amazonaws.com/meme/create/1"
         }
 
         start_time = 0
@@ -104,7 +102,7 @@ def process_data():
         print(timeline_data)
 
         shotstack_id = shotstack.send_timeline_data(timeline_data)
-        shotstack.download_file(shotstack_id)
+        # shotstack.download_file(shotstack_id)
 
         # 처리 결과 응답
         return jsonify({'message': 'Data processed successfully'})
@@ -171,4 +169,4 @@ def get_file_name_from_url(url):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001)
+    app.run(port=5001)
