@@ -13,34 +13,21 @@ app = Flask(__name__)
 s3 = s3_request.s3_connection()
 
 
-# 파일 업로드 처리
-@app.route('/file', methods=['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-        # target 파일이 바탕화면
-        target_image = request.files['targetImage']
-        source_image = request.files['sourceImage']
-        text = request.form['text']
-
-        face_swap_image_name = face_swap(target_image, source_image)
-        did = DIdAPI()
-        result_url = did.run(face_swap_image_name, text)
-        print(result_url)
-
-        return 'uploads 디렉토리 -> 파일 업로드 성공!'
-
-
 @app.route('/files', methods=['GET', 'POST'])
 def process_data():
     try:
-        # JSON 데이터를 파싱하여 Python 객체로 변환
-        data = request.get_json()
         did = DIdAPI()
         shotstack = ShotStackAPI()
+        # JSON 데이터를 파싱하여 Python 객체로 변환
+        data = request.get_json()
         talk_id_queue = []
+        scene = data['scene']
+        member_id = data.get('member_id')
+
+        callback_url = 'http://ec2-43-202-91-197.ap-northeast-2.compute.amazonaws.com/meme/create/' + member_id
 
         # 여기에서 데이터를 원하는 대로 처리
-        for item in data:
+        for item in scene:
             text_data = item.get('text')
             target_image_number = item.get('target_image')
             source_image_s3_url = item.get('source_image')
@@ -87,7 +74,7 @@ def process_data():
                 "format": "mp4",
                 "resolution": "sd"
             },
-            "callback": "http://ec2-43-202-91-197.ap-northeast-2.compute.amazonaws.com/meme/create/1"
+            "callback": callback_url
         }
 
         start_time = 0
@@ -102,7 +89,6 @@ def process_data():
         print(timeline_data)
 
         shotstack_id = shotstack.send_timeline_data(timeline_data)
-        # shotstack.download_file(shotstack_id)
 
         # 처리 결과 응답
         return jsonify({'message': 'Data processed successfully'})
@@ -169,4 +155,4 @@ def get_file_name_from_url(url):
 
 
 if __name__ == '__main__':
-    app.run(port=5001)
+    app.run(host="0.0.0.0", port=5001)
