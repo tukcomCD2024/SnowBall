@@ -6,6 +6,13 @@ spring:
 
 ---
 spring:
+  profiles:
+    group:
+      "dev": "dev, jwt, oauth"
+    active: dev # "dev" 을 실행
+
+---
+spring:
   config:
     activate:
       on-profile: "local"
