@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "aws-sdk-ios-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/aws-amplify/aws-sdk-ios-spm",
+      "state" : {
+        "revision" : "cfcf97f6994b6ffd9a3244dc638458f5822aba56",
+        "version" : "2.34.0"
+      }
+    },
+    {
       "identity" : "rxswift?source=post_page-----c397793660--------------------------------",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ReactiveX/RxSwift?source=post_page-----c397793660--------------------------------",
