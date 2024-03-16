@@ -56,6 +56,5 @@ jib {
     }
     container {
         jvmFlags = ['-Dspring.profiles.active=dev']
-        ports = ['80']
     }
 }
