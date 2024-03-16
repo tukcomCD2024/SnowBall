@@ -40,3 +40,22 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+jib {
+    from {
+        image = 'openjdk:17-alpine'
+//        platforms {
+//            platform {
+//                architecture = 'arm64'
+//                os = 'linux'
+//            }
+//        }
+    }
+    to {
+        image = 'junrain/memetory-server:latest'
+    }
+    container {
+        jvmFlags = ['-Dspring.profiles.active=dev']
+        ports = ['80']
+    }
+}
