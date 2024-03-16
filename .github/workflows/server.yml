@@ -2,7 +2,7 @@ name: server
 
 on:
   workflow_dispatch:
-  
+
   pull_request:
     paths:
       - "./backend"
@@ -28,7 +28,7 @@ jobs:
       - name: Run scripts in server
         uses: appleboy/ssh-action@master
         with:
-          key: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.KEY }}
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER_NAME }}
           script: ${{ secrets.SCRIPT }}
