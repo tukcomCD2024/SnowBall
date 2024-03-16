@@ -44,12 +44,12 @@ tasks.named('test') {
 jib {
     from {
         image = 'openjdk:17-alpine'
-//        platforms {
-//            platform {
-//                architecture = 'arm64'
-//                os = 'linux'
-//            }
-//        }
+        platforms {
+            platform {
+                architecture = 'amd64'
+                os = 'linux'
+            }
+        }
     }
     to {
         image = 'junrain/memetory-server:latest'
