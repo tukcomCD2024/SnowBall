@@ -15,6 +15,9 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend/memetory
 
     steps:
       - uses: actions/checkout@v3
@@ -32,7 +35,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Execute Gradle build and analyze
-        run: ./backend/memetory/gradlew jib
+        run: ./gradlew jib
 
       - name: Run scripts in server
         uses: appleboy/ssh-action@master
