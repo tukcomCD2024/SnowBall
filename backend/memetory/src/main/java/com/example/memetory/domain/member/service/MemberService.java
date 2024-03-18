@@ -29,7 +29,9 @@ public class MemberService {
 	private final HttpServletResponse response;
 
 	@Transactional
-	public void register(Member member, MemberSignUpRequest memberSignUpRequest) {
+	public void register(String email, MemberSignUpRequest memberSignUpRequest) {
+		Member member = findByEmail(email);
+
 		member.register(memberSignUpRequest);
 
 		String refreshToken = jwtService.createRefreshToken();
@@ -38,13 +40,14 @@ public class MemberService {
 		refreshTokenService.updateToken(member.getEmail(), refreshToken);
 	}
 
-	@Transactional(readOnly = true)
-	public Member getLoginMember() {
+	public String getMemberByEmail() {
 		String accessToken = jwtService.extractAccessToken(request).orElseThrow(NotFoundTokenException::new);
-		String email = jwtService.extractEmail(accessToken).orElseThrow(NotFoundEmailException::new);
-		Member member = memberRepository.findByEmail(email).orElseThrow(NotFoundMemberException::new);
+		return jwtService.extractEmail(accessToken).orElseThrow(NotFoundEmailException::new);
+	}
 
-		return member;
+	@Transactional(readOnly = true)
+	public Member findByEmail(String email) {
+		return memberRepository.findByEmail(email).orElseThrow(NotFoundMemberException::new);
 	}
 
 	@Transactional(readOnly = true)
