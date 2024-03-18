@@ -8,7 +8,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.example.memetory.domain.member.service.MemberService;
-import com.example.memetory.global.annotation.LoginMember;
+import com.example.memetory.global.annotation.LoginMemberEmail;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +22,12 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
 
 	@Override
 	public boolean supportsParameter(MethodParameter methodParameter) {
-		return methodParameter.hasParameterAnnotation(LoginMember.class);
+		return methodParameter.hasParameterAnnotation(LoginMemberEmail.class);
 	}
 
 	@Override
 	public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer,
 		NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) {
-		return memberService.getLoginMember();
+		return memberService.getMemberByEmail();
 	}
 }
