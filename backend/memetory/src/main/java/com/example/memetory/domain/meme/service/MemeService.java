@@ -3,6 +3,9 @@ package com.example.memetory.domain.meme.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.memetory.domain.member.entity.Member;
+import com.example.memetory.domain.member.service.MemberService;
+import com.example.memetory.domain.meme.dto.ShotStackCallBackRequest;
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.repository.MemeRepository;
 
@@ -11,10 +14,14 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class MemeService {
+	private final MemberService memberService;
 	private final MemeRepository memeRepository;
 
 	@Transactional
-	public void save(Meme meme) {
+	public void register(Long id, ShotStackCallBackRequest shotStackCallBackRequest) {
+		Member member = memberService.findById(id);
+		Meme meme = shotStackCallBackRequest.toEntity(member);
+
 		memeRepository.save(meme);
 	}
 }

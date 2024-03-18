@@ -20,17 +20,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/meme")
 public class MemeController {
-	private final MemberService memberService;
 	private final MemeService memeService;
 
 	@PostMapping("/create/{id}")
 	public ResponseEntity<HttpStatus> callBackMeme(@PathVariable Long id,
 		@RequestBody ShotStackCallBackRequest shotStackCallBackRequest) {
 
-		Member member = memberService.findById(id);
-		Meme meme = shotStackCallBackRequest.toEntity(member);
-
-		memeService.save(meme);
+		memeService.register(id, shotStackCallBackRequest);
 
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
