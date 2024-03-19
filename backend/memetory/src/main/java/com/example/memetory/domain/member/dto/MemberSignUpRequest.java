@@ -8,4 +8,11 @@ import lombok.NoArgsConstructor;
 @Getter
 public class MemberSignUpRequest {
 	private String nickName;
+
+	public MemberServiceDto toServiceDto(String email) {
+		return MemberServiceDto.builder()
+			.email(email)
+			.nickname(nickName)
+			.build();
+	}
 }
