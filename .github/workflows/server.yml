@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
 
   pull_request:
-    paths:
-      - "./backend"
     branches:
       - develop
+    paths:
+      - "./backend/**"
 
 permissions:
   contents: read
