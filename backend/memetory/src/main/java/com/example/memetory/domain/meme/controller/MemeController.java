@@ -8,10 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.memetory.domain.member.entity.Member;
-import com.example.memetory.domain.member.service.MemberService;
+import com.example.memetory.domain.meme.dto.MemeServiceDto;
 import com.example.memetory.domain.meme.dto.ShotStackCallBackRequest;
-import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.service.MemeService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +24,9 @@ public class MemeController {
 	public ResponseEntity<HttpStatus> callBackMeme(@PathVariable Long id,
 		@RequestBody ShotStackCallBackRequest shotStackCallBackRequest) {
 
-		memeService.register(id, shotStackCallBackRequest);
+		MemeServiceDto memeServiceDto = shotStackCallBackRequest.toServiceDto(id);
+
+		memeService.register(memeServiceDto);
 
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
