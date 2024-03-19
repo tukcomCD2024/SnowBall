@@ -6,10 +6,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.memetory.domain.member.dto.MemberServiceDto;
 import com.example.memetory.domain.member.dto.MemberSignUpRequest;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
-import com.example.memetory.global.annotation.LoginMember;
+import com.example.memetory.global.annotation.LoginMemberEmail;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,8 +22,10 @@ public class MemberController {
 
 	@PostMapping("/sign-up")
 	public ResponseEntity<HttpStatus> register(@RequestBody MemberSignUpRequest memberSignUpRequest,
-		@LoginMember Member member) {
-		memberService.register(member, memberSignUpRequest);
+		@LoginMemberEmail String email) {
+		MemberServiceDto memberServiceDto = memberSignUpRequest.toServiceDto(email);
+
+		memberService.register(memberServiceDto);
 
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}

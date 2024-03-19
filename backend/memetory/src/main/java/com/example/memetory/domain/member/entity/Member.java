@@ -1,5 +1,6 @@
 package com.example.memetory.domain.member.entity;
 
+import com.example.memetory.domain.member.dto.MemberServiceDto;
 import com.example.memetory.domain.member.dto.MemberSignUpRequest;
 import com.example.memetory.global.entity.BaseEntity;
 
@@ -49,8 +50,8 @@ public class Member extends BaseEntity {
 		this.socialId = socialId;
 	}
 
-	public void register(MemberSignUpRequest memberSignUpRequest) {
-		this.nickname = memberSignUpRequest.getNickName();
+	public void register(MemberServiceDto memberServiceDto) {
+		this.nickname = memberServiceDto.getNickname();
 		this.role = Role.USER;
 	}
 }
