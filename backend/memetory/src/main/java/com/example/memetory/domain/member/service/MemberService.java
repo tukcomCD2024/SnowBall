@@ -3,6 +3,7 @@ package com.example.memetory.domain.member.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.memetory.domain.member.dto.MemberServiceDto;
 import com.example.memetory.domain.member.dto.MemberSignUpRequest;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.exception.NotFoundMemberException;
@@ -29,10 +30,10 @@ public class MemberService {
 	private final HttpServletResponse response;
 
 	@Transactional
-	public void register(String email, MemberSignUpRequest memberSignUpRequest) {
-		Member member = findByEmail(email);
+	public void register(MemberServiceDto memberServiceDto) {
+		Member member = findByEmail(memberServiceDto.getEmail());
 
-		member.register(memberSignUpRequest);
+		member.register(memberServiceDto);
 
 		String refreshToken = jwtService.createRefreshToken();
 
