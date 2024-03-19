@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.memetory.domain.member.dto.MemberServiceDto;
 import com.example.memetory.domain.member.dto.MemberSignUpRequest;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
@@ -22,7 +23,9 @@ public class MemberController {
 	@PostMapping("/sign-up")
 	public ResponseEntity<HttpStatus> register(@RequestBody MemberSignUpRequest memberSignUpRequest,
 		@LoginMemberEmail String email) {
-		memberService.register(email, memberSignUpRequest);
+		MemberServiceDto memberServiceDto = memberSignUpRequest.toServiceDto(email);
+
+		memberService.register(memberServiceDto);
 
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
