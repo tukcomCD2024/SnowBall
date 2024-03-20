@@ -9,6 +9,7 @@ IMAGE_URL = "https://api.d-id.com/images"
 FACESWAP_IAMGE_PATH = "./image/faceswap_image"
 CONF_PATH = "./d_id/conf.yaml"
 
+
 class DIdAPI:
     _instance = None
 
@@ -26,23 +27,23 @@ class DIdAPI:
     3. talk_id를 url끝에 붙여서 get요청 -> result_url 리턴 (생성된 talk 가져오기)
     4. 사용자가 브라우저에 result_url 입력하면 밈 다운로드
     """
-    def run(self, face_swap_image_name, text):
+    def run(self, face_swap_image_name, text, voice_id):
         s3_image_url = self.upload_image(face_swap_image_name)
-        talk_id = self.upload_scene(s3_image_url, text)
+        talk_id = self.upload_scene(s3_image_url, text, voice_id)
 
         return talk_id
 
     # D-ID에게 영상 제작을 요청
     # 대사, 소스 이미지(s3)를 매개변수로 전해줘야 함.
     # talk_id 를 리턴 받아야 함
-    def upload_scene(self, s3_image_url, text):
+    def upload_scene(self, s3_image_url, text, voice_id):
         payload = {
             "script": {
                 "type": "text",  # 텍스트 형태로 대사를 받음
                 "subtitles": "false",
                 "provider": {  # 보이스 목소리
-                    "type": "microsoft",
-                    "voice_id": "en-US-JennyNeural"
+                    "type": "elevenlabs",
+                    "voice_id": voice_id
                 },
                 "ssml": "false",
                 "input": text  # 대사
@@ -56,7 +57,8 @@ class DIdAPI:
         headers = {
             "accept": "application/json",
             "content-type": "application/json",
-            "authorization": "Basic" + " " + self.conf['D-ID_API_KEY']  # 유저 API 키
+            "authorization": "Basic" + " " + self.conf['D-ID_API_KEY'],  # 유저 API 키
+            "x-api-key-external": '{"elevenlabs": "d6fdbd4c22a6b090cafa515f0643eeb0"}'
         }
 
         response = requests.post(TALK_URL, json=payload, headers=headers)
