@@ -8,6 +8,13 @@ TALK_URL = "https://api.d-id.com/talks"
 IMAGE_URL = "https://api.d-id.com/images"
 FACESWAP_IAMGE_PATH = "./image/faceswap_image"
 CONF_PATH = "./d_id/conf.yaml"
+ELEVENLABS_CONF_PATH = "./elevenlabs/conf.yaml"
+
+
+def load_config():
+    with open(ELEVENLABS_CONF_PATH, 'r') as file:
+        config = yaml.safe_load(file)
+        return config
 
 
 class DIdAPI:
