@@ -44,6 +44,8 @@ class DIdAPI:
     # 대사, 소스 이미지(s3)를 매개변수로 전해줘야 함.
     # talk_id 를 리턴 받아야 함
     def upload_scene(self, s3_image_url, text, voice_id):
+        config = load_config()
+
         payload = {
             "script": {
                 "type": "text",  # 텍스트 형태로 대사를 받음
@@ -65,7 +67,8 @@ class DIdAPI:
             "accept": "application/json",
             "content-type": "application/json",
             "authorization": "Basic" + " " + self.conf['D-ID_API_KEY'],  # 유저 API 키
-            "x-api-key-external": '{"elevenlabs": "d6fdbd4c22a6b090cafa515f0643eeb0"}'
+            "x-api-key-external": f'{{"elevenlabs": "{config["api_key"]}"}}'
+
         }
 
         response = requests.post(TALK_URL, json=payload, headers=headers)
