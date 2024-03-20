@@ -110,8 +110,8 @@ def add_voice():
 
     save_bytes_io_to_file(voice_file, f"elevenlabs/voice/{file_name}")
 
-    voice_id = elevenlaps_request.add_voice(name, description, file_name)
-    return voice_id
+    voice_id = elevenlabs_request.add_voice(name, description, file_name)
+    return jsonify({"message": "Voice added successfully", "data": voice_id}), 200
 
 
 def face_swap(target_image_number, source_image):
