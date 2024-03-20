@@ -6,6 +6,7 @@ from d_id.did_reqeust import DIdAPI
 import hashlib
 import time
 
+from elevenlabs import elevenlabs_request
 from shotstack.shot_stack import ShotStackAPI
 from s3 import s3_request
 
@@ -23,6 +24,7 @@ def process_data():
         talk_id_queue = []
         scene = data['scene']
         member_id = data.get('member_id')
+        voice_id = data.get('voice_id')
 
         callback_url = 'http://ec2-43-202-91-197.ap-northeast-2.compute.amazonaws.com/meme/create/' + member_id
 
@@ -53,7 +55,7 @@ def process_data():
                     print(f"파일 저장 실패: {file_path}")
 
             face_swap_image_name = face_swap(target_image_number, unique_hash)
-            talk_id = did.run(face_swap_image_name, text_data)
+            talk_id = did.run(face_swap_image_name, text_data, voice_id)
             talk_id_queue.append(talk_id)
             print(talk_id)
 
@@ -97,6 +99,19 @@ def process_data():
         # 예외 처리
         print('Error:', str(e))
         return jsonify({'error': 'An error occurred during data processing'})
+
+
+@app.route("/voice", methods=['POST'])
+def add_voice():
+    voice_file = request.files['voice_file']
+    name = request.form['name']
+    description = request.form['description']
+    file_name = voice_file.filename
+
+    save_bytes_io_to_file(voice_file, f"elevenlabs/voice/{file_name}")
+
+    voice_id = elevenlaps_request.add_voice(name, description, file_name)
+    return voice_id
 
 
 def face_swap(target_image_number, source_image):
