@@ -13,6 +13,6 @@ public class GenerateMemeDto {
 	private String sourceImage;
 	@SerializedName("target_image")
 	private String targetImage;
-	@SerializedName("name")
+	@SerializedName("text")
 	private String text;
 }
