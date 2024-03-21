@@ -35,5 +35,4 @@ spring:
       expiration: 1209600
 
   ai-server:
-    host: "localhost"
-    port: 5001
+    url: "http://localhost:5001/files"

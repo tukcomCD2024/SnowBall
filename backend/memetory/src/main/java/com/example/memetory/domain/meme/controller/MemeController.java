@@ -23,10 +23,8 @@ import lombok.RequiredArgsConstructor;
 public class MemeController {
 	private final MemeService memeService;
 
-	@Value("${spring.ai-server.host}")
-	private String AI_SERVER_HOST;
-	@Value("${spring.ai-server.port}")
-	private String AI_SERVER_PORT;
+	@Value("${spring.ai-server.url}")
+	private String AI_SERVER_URL;
 
 	@PostMapping("/create/{id}")
 	public ResponseEntity<HttpStatus> callBackMeme(@PathVariable Long id,
@@ -45,6 +43,8 @@ public class MemeController {
 
 		MemeServiceDto memeServiceDto = generateMemeListRequest.toServiceDto(email);
 		String aiServerSendDto = memeService.getAIServerSendJson(memeServiceDto);
+
+
 
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
