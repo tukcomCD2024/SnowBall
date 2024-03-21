@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.memetory.domain.member.exception.NotFoundMemberException;
+import com.example.memetory.domain.meme.exception.NotFoundMemeException;
 import com.example.memetory.global.security.jwt.exception.NotFoundEmailException;
 import com.example.memetory.global.security.jwt.exception.NotFoundTokenException;
 
@@ -24,6 +25,11 @@ public class ExceptionAdvice {
 
 	@ExceptionHandler(NotFoundMemberException.class)
 	ResponseEntity<HttpEntity> notFoundMemberException() {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	}
+
+	@ExceptionHandler(NotFoundMemeException.class)
+	ResponseEntity<HttpEntity> notFoundMemeException() {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 }
