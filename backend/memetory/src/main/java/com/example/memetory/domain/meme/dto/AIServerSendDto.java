@@ -18,8 +18,8 @@ public class AIServerSendDto {
 	private List<GenerateMemeDto> scene;
 
 	@Builder
-	public AIServerSendDto(String memberId, List<GenerateMemeDto> scene) {
-		this.memberId = memberId;
+	public AIServerSendDto(Long memberId, List<GenerateMemeDto> scene) {
+		this.memberId = String.valueOf(memberId);
 		this.scene = scene;
 	}
 }
