@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.meme.dto.GenerateMemeListRequest;
+import com.example.memetory.domain.meme.dto.MemeListResponse;
 import com.example.memetory.domain.meme.dto.MemeResponse;
 import com.example.memetory.domain.meme.dto.MemeServiceDto;
 import com.example.memetory.domain.meme.dto.ShotStackCallBackRequest;
@@ -72,5 +74,16 @@ public class MemeController {
 		return ResponseEntity
 			.status(HttpStatus.OK)
 			.body(memeService.getMeme(memeServiceDto));
+	}
+
+	@GetMapping
+	public ResponseEntity<MemeListResponse> findMemeList(@LoginMemberEmail String email) {
+		MemeServiceDto memeServiceDto = MemeServiceDto.create(email);
+
+		MemeListResponse memeListResponse = memeService.getAllMeme(memeServiceDto);
+
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(memeListResponse);
 	}
 }
