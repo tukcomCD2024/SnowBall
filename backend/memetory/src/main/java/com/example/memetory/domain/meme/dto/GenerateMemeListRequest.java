@@ -10,4 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GenerateMemeListRequest {
 	private List<GenerateMeme> scene;
+
+	public MemeServiceDto toServiceDto(String email) {
+		return MemeServiceDto.builder()
+			.email(email)
+			.scene(scene)
+			.build();
+	}
 }
