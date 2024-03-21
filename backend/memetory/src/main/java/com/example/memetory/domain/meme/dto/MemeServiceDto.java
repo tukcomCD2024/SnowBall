@@ -19,6 +19,13 @@ public class MemeServiceDto {
 	private String email;
 	private List<GenerateMemeDto> scene;
 
+	public static MemeServiceDto create(String email, Long memeId) {
+		return MemeServiceDto.builder()
+			.email(email)
+			.memeId(memeId)
+			.build();
+	}
+
 	public Meme toEntity(Member member) {
 		return Meme.builder()
 			.member(member)

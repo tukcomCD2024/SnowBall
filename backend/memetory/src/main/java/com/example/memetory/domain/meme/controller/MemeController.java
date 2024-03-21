@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +14,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.example.memetory.domain.meme.dto.GenerateMemeListRequest;
+import com.example.memetory.domain.meme.dto.MemeResponse;
 import com.example.memetory.domain.meme.dto.MemeServiceDto;
 import com.example.memetory.domain.meme.dto.ShotStackCallBackRequest;
 import com.example.memetory.domain.meme.service.MemeService;
@@ -29,11 +31,11 @@ public class MemeController {
 	@Value("${spring.ai-server.url}")
 	private String AI_SERVER_URL;
 
-	@PostMapping("/create/{id}")
-	public ResponseEntity<HttpStatus> callBackMeme(@PathVariable Long id,
+	@PostMapping("/create/{memberId}")
+	public ResponseEntity<HttpStatus> callBackMeme(@PathVariable Long memberId,
 		@RequestBody ShotStackCallBackRequest shotStackCallBackRequest) {
 
-		MemeServiceDto memeServiceDto = shotStackCallBackRequest.toServiceDto(id);
+		MemeServiceDto memeServiceDto = shotStackCallBackRequest.toServiceDto(memberId);
 
 		memeService.register(memeServiceDto);
 
@@ -57,5 +59,18 @@ public class MemeController {
 			.subscribe();
 
 		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+
+	@GetMapping("/{memeId}")
+	public ResponseEntity<MemeResponse> findMeme(@LoginMemberEmail String email, @PathVariable Long memeId) {
+		MemeServiceDto memeServiceDto = MemeServiceDto.create(email, memeId);
+
+		if (memeService.checkMember(memeServiceDto)) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+		}
+
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(memeService.getMeme(memeServiceDto));
 	}
 }

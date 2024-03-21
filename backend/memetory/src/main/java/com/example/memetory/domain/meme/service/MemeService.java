@@ -49,4 +49,12 @@ public class MemeService {
 
 		return MemeResponse.of(meme);
 	}
+
+	@Transactional(readOnly = true)
+	public boolean checkMember(MemeServiceDto memeServiceDto) {
+		Meme meme = memeRepository.findById(memeServiceDto.getMemeId()).orElseThrow(NotFoundMemeException::new);
+		Member member = memberService.findById(memeServiceDto.getMemberId());
+
+		return meme.getMember() != member;
+	}
 }
