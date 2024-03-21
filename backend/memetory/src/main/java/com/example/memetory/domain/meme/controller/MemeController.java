@@ -54,7 +54,7 @@ public class MemeController {
 			.body(BodyInserters.fromValue(aiServerSendJson))
 			.retrieve()
 			.bodyToMono(Void.class)
-			.block(); // block 해야만 이미지가 전송되는 이유 알아보기
+			.subscribe();
 
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
