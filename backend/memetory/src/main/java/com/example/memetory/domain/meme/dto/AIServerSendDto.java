@@ -3,18 +3,20 @@ package com.example.memetory.domain.meme.dto;
 import java.util.List;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class GenerateMemeListRequest {
+public class AIServerSendDto {
+	private String memberId;
 	private List<GenerateMemeDto> scene;
 
-	public MemeServiceDto toServiceDto(String email) {
-		return MemeServiceDto.builder()
-			.email(email)
-			.scene(scene)
-			.build();
+	@Builder
+	public AIServerSendDto(String memberId, List<GenerateMemeDto> scene) {
+		this.memberId = memberId;
+		this.scene = scene;
 	}
 }
+

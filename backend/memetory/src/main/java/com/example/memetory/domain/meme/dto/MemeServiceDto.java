@@ -16,7 +16,7 @@ public class MemeServiceDto {
 	private Long memberId;
 	private String s3Url;
 	private String email;
-	private List<GenerateMeme> scene;
+	private List<GenerateMemeDto> scene;
 
 	public Meme toEntity(Member member) {
 		return Meme.builder()

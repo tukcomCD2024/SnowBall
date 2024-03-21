@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class GenerateMeme {
+public class GenerateMemeDto {
 	private String sourceImage;
 	private String targetImage;
 	private String text;

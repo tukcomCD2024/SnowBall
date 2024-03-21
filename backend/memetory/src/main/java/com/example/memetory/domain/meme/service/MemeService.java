@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.meme.dto.MemeServiceDto;
-import com.example.memetory.domain.meme.dto.ShotStackCallBackRequest;
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.repository.MemeRepository;
 
