@@ -1,11 +1,14 @@
 package com.example.memetory.domain.meme.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.meme.dto.AIServerSendDto;
+import com.example.memetory.domain.meme.dto.MemeListResponse;
 import com.example.memetory.domain.meme.dto.MemeResponse;
 import com.example.memetory.domain.meme.dto.MemeServiceDto;
 import com.example.memetory.domain.meme.entity.Meme;
@@ -56,5 +59,19 @@ public class MemeService {
 		Member member = memberService.findById(memeServiceDto.getMemberId());
 
 		return meme.getMember() != member;
+	}
+
+	@Transactional
+	public MemeListResponse getAllMeme(MemeServiceDto memeServiceDto) {
+		Member member = memberService.findByEmail(memeServiceDto.getEmail());
+
+		List<MemeResponse> memeList = memeRepository.findAllByMember(member)
+			.stream()
+			.map(MemeResponse::of)
+			.toList();
+
+		return MemeListResponse.builder()
+				.memeList(memeList)
+				.build();
 	}
 }
