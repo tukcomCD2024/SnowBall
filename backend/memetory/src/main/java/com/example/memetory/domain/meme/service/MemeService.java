@@ -6,8 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.meme.dto.AIServerSendDto;
+import com.example.memetory.domain.meme.dto.MemeResponse;
 import com.example.memetory.domain.meme.dto.MemeServiceDto;
 import com.example.memetory.domain.meme.entity.Meme;
+import com.example.memetory.domain.meme.exception.NotFoundMemeException;
 import com.example.memetory.domain.meme.repository.MemeRepository;
 import com.google.gson.Gson;
 
@@ -39,5 +41,12 @@ public class MemeService {
 			.build();
 
 		return gson.toJson(aiServerSendDto);
+	}
+
+	@Transactional(readOnly = true)
+	public MemeResponse getMeme(MemeServiceDto memeServiceDto) {
+		Meme meme = memeRepository.findById(memeServiceDto.getMemeId()).orElseThrow(NotFoundMemeException::new);
+
+		return MemeResponse.of(meme);
 	}
 }

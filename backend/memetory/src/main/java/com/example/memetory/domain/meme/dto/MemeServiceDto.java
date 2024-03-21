@@ -14,6 +14,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class MemeServiceDto {
 	private Long memberId;
+	private Long memeId;
 	private String s3Url;
 	private String email;
 	private List<GenerateMemeDto> scene;
