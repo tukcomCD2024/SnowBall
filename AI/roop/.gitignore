@@ -6,3 +6,4 @@ image/*
 d_id/conf.yaml
 shotstack/conf.yaml
 s3/conf.yaml
+elevenlabs/conf.yaml
