@@ -54,7 +54,7 @@ jib {
         }
     }
     to {
-        image = 'junrain/memetory-server:latest'
+        image = 'memetory/demo:latest'
     }
     container {
         jvmFlags = ['-Dspring.profiles.active=dev']
