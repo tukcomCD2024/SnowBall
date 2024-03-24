@@ -1,16 +1,24 @@
-FROM python:3.10
+FROM python:3.10 AS builder
 
 ENV PYTHONUNBUFFERED 1
+ARG CACHEBUST=1
 WORKDIR /app
-COPY . ./
+COPY requirements.* ./
 
-VOLUME ./image:./image
+RUN apt-get update && apt-get -y install ffmpeg
 
 RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r ./requirements.txt
 
-RUN apt-get update
-RUN apt-get -y install ffmpeg
+COPY . ./
 
-RUN pip install -r ./requirements.txt
+FROM python:3.10-slim AS deployer
+
+COPY --from=builder /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
+COPY --from=builder /app /app
+
+RUN apt-get update && apt-get -y install ffmpeg
+
+WORKDIR /app
 
 CMD ["python3", "app.py"]
