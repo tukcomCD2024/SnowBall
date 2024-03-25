@@ -39,9 +39,9 @@ public class MemeService {
 		Member member = memberService.findByEmail(memeServiceDto.getEmail());
 
 		AIServerSendDto aiServerSendDto = AIServerSendDto.builder()
-			.memberId(member.getId())
-			.scene(memeServiceDto.getScene())
-			.build();
+				.memberId(member.getId())
+				.scene(memeServiceDto.getScene())
+				.build();
 
 		return gson.toJson(aiServerSendDto);
 	}
@@ -66,12 +66,19 @@ public class MemeService {
 		Member member = memberService.findByEmail(memeServiceDto.getEmail());
 
 		List<MemeResponse> memeList = memeRepository.findAllByMember(member)
-			.stream()
-			.map(MemeResponse::of)
-			.toList();
+				.stream()
+				.map(MemeResponse::of)
+				.toList();
 
 		return MemeListResponse.builder()
 				.memeList(memeList)
 				.build();
+	}
+
+	// Service 계층 끼리의 밈 조회
+	@Transactional(readOnly = true)
+	public Meme getMemeBetweenService(Long memeId) {
+		Meme foundMeme = memeRepository.findById(memeId).orElseThrow(NotFoundMemeException::new);
+		return foundMeme;
 	}
 }
