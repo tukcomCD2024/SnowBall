@@ -2,7 +2,6 @@ package com.example.memetory.domain.memes.controller;
 
 import com.example.memetory.domain.memes.dto.MemesServiceDto;
 import com.example.memetory.domain.memes.dto.request.GenerateMemesRequest;
-import com.example.memetory.domain.memes.dto.response.GenerateMemesResponse;
 import com.example.memetory.domain.memes.service.MemesService;
 import com.example.memetory.global.annotation.LoginMemberEmail;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +20,10 @@ public class MemesController {
     private final MemesService memesService;
 
     @PostMapping
-    public ResponseEntity<GenerateMemesResponse> register(@LoginMemberEmail String email, @RequestBody GenerateMemesRequest generateMemesRequest) {
+    public ResponseEntity<HttpStatus> register(@LoginMemberEmail String email, @RequestBody GenerateMemesRequest generateMemesRequest) {
         MemesServiceDto memesServiceDto = generateMemesRequest.toServiceDto(email);
-        GenerateMemesResponse generateMemesResponse = memesService.register(memesServiceDto);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(generateMemesResponse);
+        memesService.register(memesServiceDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 
