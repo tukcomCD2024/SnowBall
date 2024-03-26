@@ -6,19 +6,21 @@ from d_id.did_reqeust import DIdAPI
 import hashlib
 import time
 
-from elevenlabs import elevenlabs_request
+from elevenlabs.elevenlabs_request import ElevenLabsAPI
 from s3.s3_request import S3Manager
 from shotstack.shot_stack import ShotStackAPI
 
-app = Flask(__name__)
+did = DIdAPI()
 s3 = S3Manager()
+shotstack = ShotStackAPI()
+elevenlabs = ElevenLabsAPI()
+
+app = Flask(__name__)
 
 
 @app.route('/files', methods=['POST'])
 def process_data():
     try:
-        did = DIdAPI()
-        shotstack = ShotStackAPI()
         # JSON 데이터를 파싱하여 Python 객체로 변환
         data = request.get_json()
         talk_id_queue = []
@@ -110,7 +112,7 @@ def add_voice():
 
     save_bytes_io_to_file(voice_file, f"elevenlabs/voice/{file_name}")
 
-    voice_id = elevenlabs_request.add_voice(name, description, file_name)
+    voice_id = elevenlabs.add_voice(name, description, file_name)
     return jsonify({"message": "Voice added successfully", "data": voice_id}), 200
 
 
