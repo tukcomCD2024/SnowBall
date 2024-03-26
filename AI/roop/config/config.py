@@ -19,7 +19,9 @@ class Config:
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
+
             load_dotenv()
+
             cls._instance.DID_API_KEY = os.environ.get("D-ID_API_KEY")
             cls._instance.ELEVENLABS_API_KEY = os.environ.get("ELEVENLABS_API_KEY")
             cls._instance.SHOT_STACK_API_KEY = os.environ.get("SHOT_STACK_API_KEY")

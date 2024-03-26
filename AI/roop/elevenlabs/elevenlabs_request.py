@@ -1,19 +1,11 @@
 import requests
-import yaml
 
+from config.config import Config
 
-CONF_PATH = "./elevenlabs/conf.yaml"
-
-
-def load_config():
-    with open(CONF_PATH, 'r') as file:
-        config = yaml.safe_load(file)
-        return config
+config = Config()
 
 
 def add_voice(name, description, file_name):
-    config = load_config()
-
     url = "https://api.elevenlabs.io/v1/voices/add"
 
     payload = {
@@ -26,7 +18,7 @@ def add_voice(name, description, file_name):
     }
 
     headers = {
-        "xi-api-key": config["api_key"],
+        "xi-api-key": config.ELEVENLABS_API_KEY,
     }
 
     response = requests.post(url, data=payload, files=files, headers=headers)

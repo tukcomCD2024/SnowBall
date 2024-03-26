@@ -1,16 +1,10 @@
 import io
 
 import boto3
-import yaml
 
-CONF_PATH = "./s3/conf.yaml"
-BUKET = "memetory"
+from config.config import Config
 
-
-def load_config():
-    with open(CONF_PATH, 'r') as file:
-        config = yaml.safe_load(file)
-    return config
+config = Config()
 
 
 def s3_connection():
@@ -19,12 +13,11 @@ def s3_connection():
     :return: 연결된 s3 객체
     """
     try:
-        config = load_config()
         s3 = boto3.client(
             service_name='s3',
-            region_name=config['AWS_S3_BUCKET_REGION'],
-            aws_access_key_id=config['AWS_ACCESS_KEY'],
-            aws_secret_access_key=config['AWS_SECRET_ACCESS_KEY']
+            region_name=config.AWS_S3_BUCKET_REGION,
+            aws_access_key_id=config.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=config.AWS_SECRET_ACCESS_KEY
         )
     except Exception as e:
         print(e)
@@ -42,7 +35,7 @@ def s3_put_object(s3, file_obj, access_key):
     :return: 성공 시 True, 실패 시 False 반환
     """
     try:
-        s3.upload_fileobj(file_obj, BUKET, access_key)
+        s3.upload_fileobj(file_obj, config.AWS_S3_BUCKET_NAME, access_key)
     except Exception as e:
         print(e)
         return False
@@ -62,7 +55,7 @@ def s3_get_object(s3, object_name):
         source_image = io.BytesIO()
 
         # S3 버킷에서 파일을 파일 유사 객체로 다운로드합니다.
-        s3.download_fileobj(BUKET, object_name, source_image)
+        s3.download_fileobj(config.AWS_S3_BUCKET_NAME, object_name, source_image)
 
         # 파일 유사 객체의 포인터를 파일의 처음으로 되돌립니다.
         source_image.seek(0)
