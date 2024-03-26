@@ -41,4 +41,12 @@ public class Memes extends BaseEntity {
         this.meme = meme;
         this.member = member;
     }
+
+    public void addLikeCount() {
+        this.likeCount++;
+    }
+
+    public void cancelLikeCount() {
+        this.likeCount--;
+    }
 }
