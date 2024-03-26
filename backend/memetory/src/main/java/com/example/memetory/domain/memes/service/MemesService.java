@@ -7,6 +7,7 @@ import com.example.memetory.domain.meme.service.MemeService;
 import com.example.memetory.domain.memes.dto.MemesServiceDto;
 import com.example.memetory.domain.memes.dto.mapper.MemesMapper;
 import com.example.memetory.domain.memes.entity.Memes;
+import com.example.memetory.domain.memes.exception.NotFoundMemesException;
 import com.example.memetory.domain.memes.repository.MemesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,5 +28,11 @@ public class MemesService {
 
         Memes newMemes = memesServiceDto.toEntity(foundMember, foundMeme);
         memesRepository.save(newMemes);
+    }
+
+    @Transactional(readOnly = true)
+    public Memes getMemesBetweenService(Long memesId) {
+        Memes foundMemes = memesRepository.findById(memesId).orElseThrow(NotFoundMemesException::new);
+        return foundMemes;
     }
 }
