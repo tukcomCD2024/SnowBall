@@ -7,14 +7,14 @@ import hashlib
 import time
 
 from elevenlabs import elevenlabs_request
+from s3.s3_request import S3Manager
 from shotstack.shot_stack import ShotStackAPI
-from s3 import s3_request
 
 app = Flask(__name__)
-s3 = s3_request.s3_connection()
+s3 = S3Manager()
 
 
-@app.route('/files', methods=['GET', 'POST'])
+@app.route('/files', methods=['POST'])
 def process_data():
     try:
         did = DIdAPI()
@@ -39,7 +39,7 @@ def process_data():
 
             # s3_url (이미지를 파일로 저장하는 경우)
             if file_name:
-                source_image = s3_request.s3_get_object(s3, file_name)
+                source_image = s3.s3_get_object(file_name)
 
                 # 현재 시간을 기반으로 한 해시값 생성
                 hash_input = str(time.time())
@@ -90,7 +90,7 @@ def process_data():
 
         print(timeline_data)
 
-        shotstack_id = shotstack.send_timeline_data(timeline_data)
+        shotstack.send_timeline_data(timeline_data)
 
         # 처리 결과 응답
         return jsonify({'message': 'Data processed successfully'})
