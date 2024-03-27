@@ -12,13 +12,11 @@
         android:backgroundTint="@color/subBtn"
         android:layout_marginBottom="20dp">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/templateNumText"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/templateImg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="템플릿1"
-            android:textAppearance="@style/TextAppearance.App.h2"
-            android:gravity="center" />
-
+            android:src="@drawable/snake"
+            android:scaleType="centerCrop"/>
     </LinearLayout>
 </layout>
