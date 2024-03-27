@@ -10,6 +10,8 @@ from elevenlabs.elevenlabs_request import ElevenLabsAPI
 from s3.s3_request import S3Manager
 from shotstack.shot_stack import ShotStackAPI
 
+CALLBACK_URL = 'http://ec2-43-202-91-197.ap-northeast-2.compute.amazonaws.com/meme/create/'
+
 did = DIdAPI()
 s3 = S3Manager()
 shotstack = ShotStackAPI()
@@ -21,20 +23,19 @@ app = Flask(__name__)
 @app.route('/files', methods=['POST'])
 def process_data():
     try:
+        talk_id_queue = []
+
         # JSON 데이터를 파싱하여 Python 객체로 변환
         data = request.get_json()
-        talk_id_queue = []
-        scene = data['scene']
+        scene = data.get('scene')
         member_id = data.get('member_id')
-        voice_id = data.get('voice_id')
-
-        callback_url = 'http://ec2-43-202-91-197.ap-northeast-2.compute.amazonaws.com/meme/create/' + member_id
 
         # 여기에서 데이터를 원하는 대로 처리
         for item in scene:
-            text_data = item.get('text')
+            voice_id = item.get('voice_id')
             target_image_number = item.get('target_image')
             source_image_s3_url = item.get('source_image')
+            text_data = item.get('text')
 
             # s3_url에서 파일이름 추출
             file_name = get_file_name_from_url(source_image_s3_url)
@@ -57,9 +58,7 @@ def process_data():
                     print(f"파일 저장 실패: {file_path}")
 
             face_swap_image_name = face_swap(target_image_number, unique_hash)
-            talk_id = did.run(face_swap_image_name, text_data, voice_id)
-            talk_id_queue.append(talk_id)
-            print(talk_id)
+            talk_id_queue.append(did.run(face_swap_image_name, text_data, voice_id))
 
         print(talk_id_queue)
         result_url_queue = []
@@ -78,7 +77,7 @@ def process_data():
                 "format": "mp4",
                 "resolution": "sd"
             },
-            "callback": callback_url
+            "callback": CALLBACK_URL + member_id
         }
 
         start_time = 0
