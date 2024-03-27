@@ -39,9 +39,6 @@ class ChooseVoiceFragment : Fragment(), VoiceRVAdapter.OnItemClickListener  {
             "맨유",
             "손",
             "겜스트",
-            "맹까",
-            "맹박사",
-            "ㅂㅂ"
         )
         rvAdapter = VoiceRVAdapter(arryList, this)
         binding.voiceRecyclerView.adapter = rvAdapter

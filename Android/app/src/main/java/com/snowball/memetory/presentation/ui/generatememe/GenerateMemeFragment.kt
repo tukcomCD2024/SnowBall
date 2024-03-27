@@ -27,7 +27,7 @@ class GenerateMemeFragment : Fragment(), TemplateRVAdater.OnItemClickListener {
                                                     R.layout.fragment_generate_meme,
                                                     container,
                                                     false)
-        val arrayList = arrayListOf<Int>(3, 4, 5, 6)
+        val arrayList = arrayListOf<Int>(3)
         binding.templateRecyclerView.adapter = TemplateRVAdater(arrayList, this)
 
         return binding.root
