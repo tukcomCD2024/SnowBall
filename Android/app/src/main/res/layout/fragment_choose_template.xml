@@ -34,20 +34,6 @@
             app:layout_constraintTop_toBottomOf="@id/titleText" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/chooseBtn"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/corner_radius_10"
-            android:backgroundTint="@color/mainBtn"
-            android:textAppearance="@style/TextAppearance.App.button"
-            android:textColor="@color/white"
-            android:text="선택하기"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/confirmBtn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/confirmBtn"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
@@ -60,6 +46,17 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/alertText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.App.body3"
+            android:textColor="@android:color/darker_gray"
+            android:text="변경사항이 있다면 눌러주세요."
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="@id/confirmBtn"
+            app:layout_constraintTop_toBottomOf="@id/confirmBtn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

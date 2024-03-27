@@ -8,15 +8,15 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="50dp">
+        android:layout_height="match_parent" >
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/templateImg"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="300dp"
             android:src="@drawable/gamst"
             android:background="@drawable/corner_radius_10"
+            android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

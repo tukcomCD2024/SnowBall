@@ -11,6 +11,11 @@ import com.snowball.memetory.databinding.ItemTemplateDetailBinding
 class TemplateDetailVPAdater(private val imgRes: ArrayList<Int>)
     : RecyclerView.Adapter<TemplateDetailVPAdater.ViewHolder>() {
 
+    interface OnItemClickListener {
+        fun onItemClick(view: View, position: Int)
+    }
+
+    var itemClickListener: OnItemClickListener? = null
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -29,5 +34,10 @@ class TemplateDetailVPAdater(private val imgRes: ArrayList<Int>)
 
     inner class ViewHolder(binding : ItemTemplateDetailBinding): RecyclerView.ViewHolder(binding.root) {
         val img = binding.templateImg
+        init {
+            itemView.setOnClickListener {
+                itemClickListener?.onItemClick(it, adapterPosition)
+            }
+        }
     }
 }

@@ -24,7 +24,7 @@ class TemplateRVAdater(private val imgRes: ArrayList<Int>, private val itemClick
     }
 
     override fun onBindViewHolder(holder: TemplateRVAdater.ViewHolder, position: Int) {
-        holder.img.text = imgRes[position].toString()
+//        holder.img.setImageResource(imgRes[position])
     }
 
     override fun getItemCount(): Int {
@@ -32,7 +32,7 @@ class TemplateRVAdater(private val imgRes: ArrayList<Int>, private val itemClick
     }
 
     inner class ViewHolder(binding : ItemTemplateBinding): RecyclerView.ViewHolder(binding.root) {
-        val img = binding.templateNumText
+        val img = binding.templateImg
 
         init {
             itemView.setOnClickListener {

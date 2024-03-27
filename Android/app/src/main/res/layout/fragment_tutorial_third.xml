@@ -6,6 +6,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.ui.tutorial.TutorialThirdFragment">
 
+
+<!--    <androidx.appcompat.widget.AppCompatTextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textAppearance="@style/TextAppearance.App.h4"-->
+<!--        android:textColor="@android:color/darker_gray"-->
+<!--        android:text="skip"-->
+<!--        android:layout_marginBottom="10dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/tutorialFirstTitle"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"/>-->
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tutorialThirdTitle"
         android:layout_width="wrap_content"
@@ -24,6 +36,21 @@
         android:src="@drawable/tutorial_sec_img"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/confirmBtn"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:background="@drawable/corner_radius_10"
+        android:backgroundTint="@color/mainBtn"
+        android:text="@string/button_confirm"
+        android:textAppearance="@style/TextAppearance.App.button"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
