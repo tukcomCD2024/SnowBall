@@ -17,7 +17,7 @@ s3 = S3Manager()
 shotstack = ShotStackAPI()
 elevenlabs = ElevenLabsAPI()
 
-app = Celery('tasks', broker='pyamqp://guest@localhost:5672//')
+app = Celery('tasks', broker='pyamqp://guest@rabbitmq//')
 
 
 @app.task
