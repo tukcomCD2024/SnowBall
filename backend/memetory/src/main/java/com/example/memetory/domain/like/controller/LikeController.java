@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/memes")
-public class LikeController {
+public class LikeController implements LikeApi{
     private final LikeService likeService;
 
     @PostMapping("/{memesId}/like")
+    @Override
     public ResponseEntity<String> register(@LoginMemberEmail String email, @PathVariable Long memesId) {
         LikeServiceDto likeServiceDto = LikeServiceDto.create(email, memesId);
         likeService.register(likeServiceDto);
@@ -25,6 +26,7 @@ public class LikeController {
     }
 
     @DeleteMapping("/{memesId}/like")
+    @Override
     public ResponseEntity<String> cancel(@LoginMemberEmail String email, @PathVariable Long memesId) {
         LikeServiceDto likeServiceDto = LikeServiceDto.create(email, memesId);
         likeService.cancel(likeServiceDto);
