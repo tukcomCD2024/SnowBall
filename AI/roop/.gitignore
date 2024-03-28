@@ -7,3 +7,6 @@ d_id/conf.yaml
 shotstack/conf.yaml
 s3/conf.yaml
 elevenlabs/conf.yaml
+
+# 환경변수 파일
+*.env

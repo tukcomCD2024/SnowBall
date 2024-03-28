@@ -15,4 +15,6 @@ public class GenerateMemeDto {
 	private String targetImage;
 	@SerializedName("text")
 	private String text;
+	@SerializedName("voice_id")
+	private String voiceId;
 }

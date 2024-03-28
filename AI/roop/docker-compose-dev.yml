@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  server:
+    image: memetory/ai
+    ports:
+      - "5001:5001"
+    command: "python3 app.py"
+
+  rabbitmq:
+    container_name: rabbitmq-memetory
+    image: rabbitmq:3.7-alpine
+    ports:
+      - "5672:5672" # Default Port
+      - "15672:15672" # For UI
+    expose:
+      - "15672"
+
+  celery:
+    image: memetory/ai-celery
+    command: "celery -A tasks worker --loglevel=INFO"
+    depends_on:
+      - rabbitmq
+      - server
+

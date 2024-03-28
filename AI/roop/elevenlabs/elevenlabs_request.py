@@ -1,44 +1,41 @@
 import requests
-import yaml
+from config.config import Config
 
 
-CONF_PATH = "./elevenlabs/conf.yaml"
+class ElevenLabsAPI:
+    _instance = None
 
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance.config = Config()  # Config 클래스의 인스턴스를 가져와서 저장
+        return cls._instance
 
-def load_config():
-    with open(CONF_PATH, 'r') as file:
-        config = yaml.safe_load(file)
-        return config
+    def add_voice(self, name, description, file_name):
+        url = "https://api.elevenlabs.io/v1/voices/add"
 
+        payload = {
+            "name": name,
+            "description": description,
+        }
 
-def add_voice(name, description, file_name):
-    config = load_config()
+        files = {
+            "files": open(f"./elevenlabs/voice/{file_name}", "rb"),
+        }
 
-    url = "https://api.elevenlabs.io/v1/voices/add"
+        headers = {
+            "xi-api-key": self.config.ELEVENLABS_API_KEY,
+        }
 
-    payload = {
-        "name": name,
-        "description": description,
-    }
+        response = requests.post(url, data=payload, files=files, headers=headers)
+        response_json = response.json()
+        voice_id = response_json.get("voice_id")
 
-    files = {
-        "files": open(f"./elevenlabs/voice/{file_name}", "rb"),
-    }
+        return voice_id
 
-    headers = {
-        "xi-api-key": config["api_key"],
-    }
+    def delete_voice(self, voice_id):
+        url = f"https://api.elevenlabs.io/v1/voices/{voice_id}"
 
-    response = requests.post(url, data=payload, files=files, headers=headers)
-    response_json = response.json()
-    voice_id = response_json.get("voice_id")
+        response = requests.delete(url, headers={"xi-api-key": self.config.ELEVENLABS_API_KEY})
 
-    return voice_id
-
-
-def delete_voice(voice_id):
-    url = f"https://api.elevenlabs.io/v1/voices/{voice_id}"
-
-    response = requests.request("DELETE", url)
-
-    print(response.text)
+        print(response.text)
