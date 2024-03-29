@@ -16,15 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/memes")
-public class MemesController {
+public class MemesController implements MemesApi{
     private final MemesService memesService;
 
     @PostMapping
+    @Override
     public ResponseEntity<HttpStatus> register(@LoginMemberEmail String email, @RequestBody GenerateMemesRequest generateMemesRequest) {
         MemesServiceDto memesServiceDto = generateMemesRequest.toServiceDto(email);
         memesService.register(memesServiceDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
-
 }
