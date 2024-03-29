@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/memes")
-public class LikeController implements LikeApi{
+public class LikeController implements LikeApi {
     private final LikeService likeService;
 
     @PostMapping("/{memesId}/like")
