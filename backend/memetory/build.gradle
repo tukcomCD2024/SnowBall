@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.2'
     id 'io.spring.dependency-management' version '1.1.4'
-    id 'com.google.cloud.tools.jib' version '3.1.2'
+    id 'com.google.cloud.tools.jib' version '3.4.1'
 }
 
 group = 'com.example'
@@ -57,7 +57,7 @@ jib {
         }
     }
     to {
-        image = 'junrain/memetory-server:latest'
+        image = 'memetory/server:latest'
     }
     container {
         jvmFlags = ['-Dspring.profiles.active=dev']

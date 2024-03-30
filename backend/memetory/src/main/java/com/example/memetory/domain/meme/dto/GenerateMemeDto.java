@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Schema(description = "밈 생성 포맷")
 public class GenerateMemeDto {
-
     @Schema(description = "적용하고 싶은 이미지")
     @SerializedName("source_image")
     private String sourceImage;
@@ -23,4 +22,8 @@ public class GenerateMemeDto {
     @Schema(description = "대사")
     @SerializedName("text")
     private String text;
+  
+    @Schema(description = "일레븐랩스 목소리 ID")
+    @SerializedName("voice_id")
+  	private String voiceId;
 }
