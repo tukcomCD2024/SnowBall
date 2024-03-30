@@ -36,3 +36,11 @@ spring:
 
   ai-server:
     url: "http://localhost:5001/files"
+
+springdoc:
+  swagger-ui:
+    tags-sorter: alpha # 태그를 알파벳 순으로 정렬
+    operations-sorter: method  # delete - get - patch - post - put 순으로 정렬, alpha를 사용하면 알파벳 순으로 정렬 가능
+
+  paths-to-match:
+    - /** # swagger-ui에 표시할 api의 엔드포인트 패턴

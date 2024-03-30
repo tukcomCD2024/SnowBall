@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.memetory.domain.member.dto.MemberServiceDto;
 import com.example.memetory.domain.member.dto.MemberSignUpRequest;
-import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.global.annotation.LoginMemberEmail;
 
@@ -16,17 +15,18 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-public class MemberController {
+public class MemberController implements MemberApi {
 
-	private final MemberService memberService;
+    private final MemberService memberService;
 
-	@PostMapping("/sign-up")
-	public ResponseEntity<HttpStatus> register(@RequestBody MemberSignUpRequest memberSignUpRequest,
-		@LoginMemberEmail String email) {
-		MemberServiceDto memberServiceDto = memberSignUpRequest.toServiceDto(email);
+    @PostMapping("/sign-up")
+    @Override
+    public ResponseEntity<HttpStatus> register(@RequestBody MemberSignUpRequest memberSignUpRequest,
+                                               @LoginMemberEmail String email) {
+        MemberServiceDto memberServiceDto = memberSignUpRequest.toServiceDto(email);
 
-		memberService.register(memberServiceDto);
+        memberService.register(memberServiceDto);
 
-		return ResponseEntity.status(HttpStatus.OK).build();
-	}
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }
