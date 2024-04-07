@@ -3,8 +3,8 @@ package com.example.memetory.global.security.jwt.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.memetory.domain.member.repository.MemberRepository;
-import com.example.memetory.global.security.jwt.refresh.domain.RefreshToken;
-import com.example.memetory.global.security.jwt.refresh.repository.RefreshTokenRepository;
+import com.example.memetory.global.security.jwt.exception.NotFoundEmailException;
+import com.example.memetory.global.security.jwt.exception.NotFoundTokenException;
 import com.example.memetory.global.security.jwt.refresh.service.RefreshTokenService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.Optional;
@@ -110,6 +109,11 @@ public class JwtService {
 			log.error("액세스 토큰이 유효하지 않습니다.");
 			return Optional.empty();
 		}
+	}
+
+	public String getEmail(HttpServletRequest request) {
+		String accessToken = this.extractAccessToken(request).orElseThrow(NotFoundTokenException::new);
+		return this.extractEmail(accessToken).orElseThrow(NotFoundEmailException::new);
 	}
 
 	// 헤더에 accessToken 설정

@@ -7,9 +7,10 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.global.annotation.LoginMemberEmail;
+import com.example.memetory.global.security.jwt.service.JwtService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,9 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolver {
 
-	private final MemberService memberService;
+	private final JwtService jwtService;
 
 	@Override
+
 	public boolean supportsParameter(MethodParameter methodParameter) {
 		return methodParameter.hasParameterAnnotation(LoginMemberEmail.class);
 	}
@@ -28,6 +30,7 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
 	@Override
 	public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer,
 		NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) {
-		return memberService.getMemberByEmail();
+		HttpServletRequest request = (HttpServletRequest)nativeWebRequest.getNativeRequest();
+		return jwtService.getEmail(request);
 	}
 }
