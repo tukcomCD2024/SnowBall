@@ -25,4 +25,10 @@ public class MemberFixture {
 		.nickname("junRain")
 		.email("junrain@ourservice.com")
 		.build();
+
+	public final static MemberServiceDto UPDATE_MEMBER_SERVICE_DTO = MemberServiceDto.builder()
+		.imageUrl("imageUrl2")
+		.nickname("junRain2")
+		.email("junrain@ourservice.com")
+		.build();
 }
