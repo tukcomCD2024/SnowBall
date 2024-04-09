@@ -55,5 +55,6 @@ public class Member extends BaseEntity {
 	// Todo 닉네임이랑, 이미지 변경할 수 있게 하기
 	public void update(MemberServiceDto memberServiceDto) {
 		this.nickname = memberServiceDto.getNickname();
+		this.imageUrl = memberServiceDto.getImageUrl();
 	}
 }
