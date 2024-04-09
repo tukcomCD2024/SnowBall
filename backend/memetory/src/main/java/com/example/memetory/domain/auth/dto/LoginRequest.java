@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 public class LoginRequest {
 	@Schema(description = "인증서버에서 받아온 access token을 입력")
 	private String token;
-	@Schema(description = "인증서버를 소문자로 작성, 현재는 google만 가능")
+	@Schema(description = "인증서버타입, 현재는 google만 가능")
 	private SocialType socialType;
 }

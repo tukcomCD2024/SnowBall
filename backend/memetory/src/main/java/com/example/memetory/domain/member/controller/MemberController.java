@@ -21,7 +21,7 @@ public class MemberController implements MemberApi {
 	private final MemberService memberService;
 
 	@PostMapping
-	ResponseEntity<HttpStatus> updateMember(@LoginMemberEmail String email,
+	public ResponseEntity<HttpStatus> updateMember(@LoginMemberEmail String email,
 		@RequestBody MemberUpdateDto memberUpdateDto) {
 		MemberServiceDto memberServiceDto = memberUpdateDto.toServiceDto(email);
 
