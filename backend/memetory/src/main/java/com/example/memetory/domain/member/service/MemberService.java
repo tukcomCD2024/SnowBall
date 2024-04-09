@@ -18,10 +18,8 @@ public class MemberService {
 	private final MemberRepository memberRepository;
 
 	@Transactional
-	public void register(MemberServiceDto memberServiceDto) {
-		Member member = findByEmail(memberServiceDto.getEmail());
-
-		member.register(memberServiceDto);
+	public void update(MemberServiceDto memberServiceDto) {
+		findByEmail(memberServiceDto.getEmail()).update(memberServiceDto);
 	}
 
 	@Transactional(readOnly = true)
@@ -32,5 +30,10 @@ public class MemberService {
 	@Transactional(readOnly = true)
 	public Member findById(Long id) {
 		return memberRepository.findById(id).orElseThrow(NotFoundMemberException::new);
+	}
+
+	@Transactional(readOnly = true)
+	public boolean isDuplicatedNickname(MemberServiceDto memberServiceDto) {
+		return memberRepository.existsMemberByNickname(memberServiceDto.getNickname());
 	}
 }

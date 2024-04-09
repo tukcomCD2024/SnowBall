@@ -2,7 +2,6 @@ package com.example.memetory.domain.member.controller;
 
 import static com.example.memetory.domain.member.MemberFixture.*;
 import static org.mockito.BDDMockito.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -24,7 +23,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.memetory.config.SecurityTestConfig;
-import com.example.memetory.domain.member.dto.MemberSignUpRequest;
+import com.example.memetory.domain.member.dto.MemberUpdateDto;
 import com.example.memetory.domain.member.repository.MemberRepository;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.global.security.jwt.refresh.service.RefreshTokenService;
@@ -43,11 +42,11 @@ public class MemberControllerTest {
 	private ObjectMapper objectMapper;
 
 	@MockBean
-	private JwtService jwtService;
+	private RefreshTokenService refreshTokenService;
 	@MockBean
 	private MemberService memberService;
 	@MockBean
-	private RefreshTokenService refreshTokenService;
+	private JwtService jwtService;
 	@MockBean
 	private MemberRepository memberRepository;
 
@@ -61,22 +60,25 @@ public class MemberControllerTest {
 		authorization_jwt = JWT.create()
 			.withSubject("AccessToken")
 			.withExpiresAt(new Date(now.getTime() + 180000))
-			.withClaim("email", GUEST_MEMBER.getId())
+			.withClaim("email", MEMBER.getEmail())
 			.sign(Algorithm.HMAC512(secretKey));
 	}
 
-	// 잘 된 테스트인지는 아직 의문
+	protected String toRequestBody(Object value) throws JsonProcessingException {
+		return objectMapper.writeValueAsString(value);
+	}
+
 	@Test
-	@DisplayName("회원가입이 완료되었는가")
-	void 회원가입() throws Exception {
+	@DisplayName("멤버 업데이트 성공")
+	public void 멤버_업데이트_성공() throws Exception {
 		// given -> 결과에 대한 객체, Member 객체 저장할 필요 존재
-		given(memberRepository.findByEmail(GUEST_MEMBER.getEmail())).willReturn(Optional.ofNullable(GUEST_MEMBER));
+		given(memberRepository.findByEmail(MEMBER.getEmail())).willReturn(Optional.ofNullable(MEMBER));
 
 		// when
 		final ResultActions perform = mockMvc.perform(
-			post("/sign-up")
+			post("/member")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(toRequestBody(new MemberSignUpRequest("Memetory")))
+				.content(toRequestBody(new MemberUpdateDto("junrain2", "imageUrl2")))
 				.header("Authorization", "Bearer " + authorization_jwt)
 		);
 
@@ -84,7 +86,21 @@ public class MemberControllerTest {
 		perform.andExpect(status().isOk());
 	}
 
-	protected String toRequestBody(Object value) throws JsonProcessingException {
-		return objectMapper.writeValueAsString(value);
+	@Test
+	@DisplayName("멤버 업데이트 성공(닉네임 중복)")
+	public void 멤버_업데이트_실패_닉네임_중복() throws Exception {
+		// given -> 결과에 대한 객체, Member 객체 저장할 필요 존재
+		given(memberService.isDuplicatedNickname(any())).willReturn(true);
+
+		// when
+		final ResultActions perform = mockMvc.perform(
+			post("/member")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(toRequestBody(new MemberUpdateDto("junrain", "imageUrl")))
+				.header("Authorization", "Bearer " + authorization_jwt)
+		);
+
+		// then
+		perform.andExpect(status().isConflict());
 	}
 }

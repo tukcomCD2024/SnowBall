@@ -13,23 +13,22 @@ public class MemberFixture {
 		.email("junrain@ourservice.com")
 		.role(Role.USER)
 		.imageUrl("imageUrl")
-		.nickname("이준우")
+		.name("이준우")
+		.nickname("junRain")
 		.socialType(SocialType.GOOGLE)
 		.socialId("-1")
 		.build();
 
-	public final static Member GUEST_MEMBER = Member.builder()
-		.email("junrain@ourservice.com")
-		.role(Role.GUEST)
-		.imageUrl("imageUrl")
-		.nickname("이준우")
-		.socialType(SocialType.GOOGLE)
-		.socialId("-1")
-		.build();
 
 	public final static MemberServiceDto MEMBER_SERVICE_DTO = MemberServiceDto.builder()
 		.imageUrl("imageUrl")
 		.nickname("junRain")
+		.email("junrain@ourservice.com")
+		.build();
+
+	public final static MemberServiceDto UPDATE_MEMBER_SERVICE_DTO = MemberServiceDto.builder()
+		.imageUrl("imageUrl2")
+		.nickname("junRain2")
 		.email("junrain@ourservice.com")
 		.build();
 }

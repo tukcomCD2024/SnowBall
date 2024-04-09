@@ -1,7 +1,6 @@
 package com.example.memetory.domain.member.entity;
 
 import com.example.memetory.domain.member.dto.MemberServiceDto;
-import com.example.memetory.domain.member.dto.MemberSignUpRequest;
 import com.example.memetory.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -30,6 +29,7 @@ public class Member extends BaseEntity {
 
 	private String email;
 	private String nickname;
+	private String name;
 	private String imageUrl;
 
 	@Enumerated(EnumType.STRING)
@@ -41,17 +41,20 @@ public class Member extends BaseEntity {
 	private String socialId;
 
 	@Builder
-	public Member(String email, String nickname, String imageUrl, Role role, SocialType socialType, String socialId) {
+	public Member(String email, String nickname, String name, String imageUrl, Role role, SocialType socialType,
+		String socialId) {
 		this.email = email;
 		this.nickname = nickname;
+		this.name = name;
 		this.imageUrl = imageUrl;
 		this.role = role;
 		this.socialType = socialType;
 		this.socialId = socialId;
 	}
 
-	public void register(MemberServiceDto memberServiceDto) {
+	// Todo 닉네임이랑, 이미지 변경할 수 있게 하기
+	public void update(MemberServiceDto memberServiceDto) {
 		this.nickname = memberServiceDto.getNickname();
-		this.role = Role.USER;
+		this.imageUrl = memberServiceDto.getImageUrl();
 	}
 }
