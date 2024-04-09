@@ -65,9 +65,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 		// -> RefreshToken이 없거나 유효하지 않다면(DB에 저장된 RefreshToken과 다르다면) null을 반환
 		// 사용자의 요청 헤더에 RefreshToken이 있는 경우는, AccessToken이 만료되어 요청한 경우밖에 없다.
 		// 따라서, 위의 경우를 제외하면 추출한 refreshToken은 모두 null
-		String refreshToken = jwtService.extractRefreshToken(request)
-			.filter(jwtService::isTokenValid)
-			.orElse(null);
+		String refreshToken = jwtService.extractRefreshToken(request).filter(jwtService::isTokenValid).orElse(null);
 
 		// 리프레시 토큰이 요청 헤더에 존재했다면, 사용자가 AccessToken이 만료되어서
 		// RefreshToken까지 보낸 것이므로 리프레시 토큰이 DB의 리프레시 토큰과 일치하는지 판단 후,
@@ -94,21 +92,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 	 */
 	public void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken) {
 		RefreshToken refresh = refreshTokenService.findByToken(refreshToken);
-		String reIssuedRefreshToken = reIssueRefreshToken(refresh.getEmail());
-		jwtService.sendAccessAndRefreshToken(response, jwtService.createAccessToken(refresh.getEmail()),
-			reIssuedRefreshToken);
-	}
-
-	/**
-	 * [리프레시 토큰 재발급 & DB에 리프레시 토큰 업데이트 메소드]
-	 * jwtService.createRefreshToken()으로 리프레시 토큰 재발급 후
-	 * DB에 재발급한 리프레시 토큰 업데이트 후 Flush
-	 */
-	private String reIssueRefreshToken(String email) {
-		String reIssuedRefreshToken = jwtService.createRefreshToken();
-		// redis 에 업데이트해주는 코드
-		refreshTokenService.updateToken(email, reIssuedRefreshToken);
-		return reIssuedRefreshToken;
+		jwtService.sendAccessAndRefreshToken(response, refresh.getEmail());
 	}
 
 	/**
@@ -125,8 +109,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 		jwtService.extractAccessToken(request)
 			.filter(jwtService::isTokenValid)
 			.ifPresent(accessToken -> jwtService.extractEmail(accessToken)
-				.ifPresent(email -> memberRepository.findByEmail(email)
-					.ifPresent(this::saveAuthentication)));
+				.ifPresent(email -> memberRepository.findByEmail(email).ifPresent(this::saveAuthentication)));
 
 		filterChain.doFilter(request, response);
 	}
@@ -156,9 +139,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 			.roles(myMember.getRole().name())
 			.build();
 
-		Authentication authentication =
-			new UsernamePasswordAuthenticationToken(userDetailsUser, null,
-				authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
+		Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsUser, null,
+			authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
