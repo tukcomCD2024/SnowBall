@@ -2,6 +2,7 @@ package com.example.memetory.domain.member.repository;
 
 import static com.example.memetory.domain.member.MemberFixture.*;
 import static org.assertj.core.api.AssertionsForClassTypes.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 
@@ -48,5 +49,15 @@ public class MemberRepositoryTest {
 
 		// then 확인하기
 		assertThat(savedMember).isEqualTo(findMember.get());
+	}
+
+	@Test
+	@DisplayName("닉네임 존재하는지 확인하기")
+	public void 닉네임_존재_여부() {
+		// given -> 멤버 저장하기
+		Member savedMember = memberRepository.save(MEMBER);
+
+		// then 확인하기
+		assertTrue(memberRepository.existsMemberByNickname(MEMBER.getNickname()));
 	}
 }
