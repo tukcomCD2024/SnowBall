@@ -15,9 +15,6 @@ import com.example.memetory.domain.member.repository.MemberRepository;
 import com.example.memetory.global.security.jwt.filter.JwtAuthenticationProcessingFilter;
 import com.example.memetory.global.security.jwt.refresh.service.RefreshTokenService;
 import com.example.memetory.global.security.jwt.service.JwtService;
-import com.example.memetory.global.security.oauth.handler.OAuth2LoginFailureHandler;
-import com.example.memetory.global.security.oauth.handler.OAuth2LoginSuccessHandler;
-import com.example.memetory.global.security.oauth.service.CustomOAuth2UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,9 +26,6 @@ public class SecurityConfig {
 
 	private final JwtService jwtService;
 	private final MemberRepository memberRepository;
-	private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
-	private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
-	private final CustomOAuth2UserService customOAuth2UserService;
 	private final RefreshTokenService refreshTokenService;
 
 	@Bean
@@ -45,13 +39,7 @@ public class SecurityConfig {
 			)
 			.authorizeHttpRequests(authorizeRequests   // 개발을 진행하기 위해 일단 모든 url 허용
 				-> authorizeRequests
-				.anyRequest().permitAll())
-			.oauth2Login(oauth2 -> oauth2   // oauth2.0 설정
-				.successHandler(oAuth2LoginSuccessHandler)
-				.failureHandler(oAuth2LoginFailureHandler)
-				// oauth2 로그인에 성공했을 떄 유저 정보를 가져올 때 설정을 담당
-				.userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-			);
+				.anyRequest().permitAll());
 
 		http.addFilterAfter(jwtAuthenticationProcessingFilter(), LogoutFilter.class);
 

@@ -21,7 +21,7 @@ public class MemberService {
 	public void register(MemberServiceDto memberServiceDto) {
 		Member member = findByEmail(memberServiceDto.getEmail());
 
-		member.register(memberServiceDto);
+		member.update(memberServiceDto);
 	}
 
 	@Transactional(readOnly = true)
