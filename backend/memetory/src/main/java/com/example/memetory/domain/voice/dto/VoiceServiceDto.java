@@ -12,12 +12,15 @@ import lombok.Getter;
 public class VoiceServiceDto {
 
     private String email;
-    private String s3Url;
+    private String s3Key;
+    private String name;
+    private String description;
+    private String elevenlabsVoiceId;
 
     public Voice toEntity(Member member) {
         return Voice.builder()
                 .member(member)
-                .s3Url(s3Url)
+                .elevenlabsVoiceId(elevenlabsVoiceId)
                 .build();
     }
 }
