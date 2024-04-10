@@ -2,6 +2,7 @@ package com.example.memetory.domain.voice.controller;
 
 import com.example.memetory.domain.voice.dto.VoiceServiceDto;
 import com.example.memetory.domain.voice.dto.request.GenerateVoiceRequestDto;
+import com.example.memetory.domain.voice.dto.response.GenerateVoiceResponseDto;
 import com.example.memetory.domain.voice.service.VoiceService;
 import com.example.memetory.global.annotation.LoginMemberEmail;
 import lombok.RequiredArgsConstructor;
@@ -52,8 +53,8 @@ public class VoiceController implements VoiceApi {
                 .bodyToMono(GenerateVoiceResponseDto.class)
                 .flatMap(response -> {
                     // elevenlabs API 호출이 완료 되면 실행할 로직
-                    String elevenlabsVoiceId = response.getElevenlabsVoiceId();
-                    VoiceServiceDto voiceServiceDtoElevenlabs = generateVoiceRequestDto.toServiceDtoElevenlabs(email, elevenlabsVoiceId);
+                    VoiceServiceDto voiceServiceDtoElevenlabs =
+                            generateVoiceRequestDto.toServiceDtoElevenlabs(email, response.getElevenlabsVoiceId());
                     voiceService.register(voiceServiceDtoElevenlabs);
                     return Mono.just(ResponseEntity.status(HttpStatus.CREATED).build());
                 })
