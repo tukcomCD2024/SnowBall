@@ -1,14 +1,15 @@
 package com.example.memetory.domain.voice.controller;
 
-import com.example.memetory.domain.voice.dto.request.GenerateVoiceDto;
+import com.example.memetory.domain.voice.dto.request.GenerateVoiceRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.io.IOException;
 
 @Tag(name = "Voice")
 public interface VoiceApi {
@@ -24,8 +25,8 @@ public interface VoiceApi {
                     description = "목소리 추출!"
             )
     })
-    ResponseEntity<HttpStatus> register(
+    ResponseEntity<Object> register(
             @Parameter(hidden = true) String email,
-            GenerateVoiceDto generateVoiceDto
-    );
+            GenerateVoiceRequestDto generateVoiceRequestDto
+    ) throws IOException;
 }
