@@ -17,16 +17,16 @@ public class Voice {
     @Column(name = "voice_id")
     private Long id;
 
-    @Column(name = "s3_url")
-    private String s3Url;
+    @Column(name = "elevenlabs_voice_id")
+    private String elevenlabsVoiceId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @Builder
-    public Voice(String s3Url, Member member) {
-        this.s3Url = s3Url;
+    public Voice(String elevenlabsVoiceId, Member member) {
+        this.elevenlabsVoiceId = elevenlabsVoiceId;
         this.member = member;
     }
 }
