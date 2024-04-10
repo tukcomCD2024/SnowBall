@@ -1,10 +1,16 @@
 package com.example.memetory.global.security.jwt.service;
 
+import java.util.Date;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.memetory.domain.member.repository.MemberRepository;
-import com.example.memetory.global.security.jwt.refresh.domain.RefreshToken;
-import com.example.memetory.global.security.jwt.refresh.repository.RefreshTokenRepository;
+import com.example.memetory.global.security.jwt.exception.NotFoundEmailException;
+import com.example.memetory.global.security.jwt.exception.NotFoundTokenException;
 import com.example.memetory.global.security.jwt.refresh.service.RefreshTokenService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,13 +18,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -49,31 +48,31 @@ public class JwtService {
 	@Value("${jwt.refresh.header}")
 	private String refreshHeader;
 
-	public String createAccessToken(String email) {
+	// 함께 보낼때는 둘 다 create
+	public void sendAccessAndRefreshToken(HttpServletResponse response, String email) {
+		setTokenHeader(response, accessHeader, createAccessToken(email));
+
+		String refreshToken = createRefreshToken();
+		setTokenHeader(response, refreshHeader, refreshToken);
+		refreshTokenService.updateToken(email, refreshToken);
+		log.info("Access Token, Refresh Token 헤더 설정 완료");
+	}
+
+	private String createAccessToken(String email) {
 		Date now = new Date();
 		return JWT.create() // JWT 토큰을 생성하는 빌더 반환
 			.withSubject(ACCESS_TOKEN_SUBJECT) // JWT의 Subject 지정 -> AccessToken이므로 AccessToken
 			.withExpiresAt(new Date(now.getTime() + accessTokenExpirationPeriod)) // 토큰 만료 시간 설정
-
-			//추가할 경우 .withClaim(클래임 이름, 클래임 값)으로 설정
 			.withClaim(EMAIL_CLAIM, email)
 			.sign(Algorithm.HMAC512(secretKey));
 	}
 
-	public String createRefreshToken() {
+	private String createRefreshToken() {
 		Date now = new Date();
 		return JWT.create()
 			.withSubject(REFRESH_TOKEN_SUBJECT)
 			.withExpiresAt(new Date(now.getTime() + refreshTokenExpirationPeriod))
 			.sign(Algorithm.HMAC512(secretKey));
-	}
-
-	public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
-		response.setStatus(HttpServletResponse.SC_OK);
-
-		setAccessTokenHeader(response, accessToken);
-		setRefreshTokenHeader(response, refreshToken);
-		log.info("Access Token, Refresh Token 헤더 설정 완료");
 	}
 
 	// 헤더에서 RefreshToken 추출
@@ -112,18 +111,13 @@ public class JwtService {
 		}
 	}
 
-	// 헤더에 accessToken 설정
-	public void setAccessTokenHeader(HttpServletResponse response, String accessToken) {
-		response.setHeader(accessHeader,BEARER + accessToken);
+	public String getEmail(HttpServletRequest request) {
+		String accessToken = this.extractAccessToken(request).orElseThrow(NotFoundTokenException::new);
+		return this.extractEmail(accessToken).orElseThrow(NotFoundEmailException::new);
 	}
 
-	// 헤더에 refreshToken 설정
-	public void setRefreshTokenHeader(HttpServletResponse response, String refreshToken) {
-		response.setHeader(refreshHeader,BEARER + refreshToken);
-	}
-
-	public void updateRefreshToken(String email, String token) {
-		refreshTokenService.updateToken(email, token);
+	private void setTokenHeader(HttpServletResponse response, String headerName, String token) {
+		response.setHeader(headerName, BEARER + token);
 	}
 
 	public boolean isTokenValid(String token) {

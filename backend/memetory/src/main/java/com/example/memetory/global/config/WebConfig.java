@@ -10,7 +10,6 @@ import com.example.memetory.global.resolver.LoginMemberArgumentResolver;
 
 import lombok.RequiredArgsConstructor;
 
-// resolver를 위한 설정
 @Configuration
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {

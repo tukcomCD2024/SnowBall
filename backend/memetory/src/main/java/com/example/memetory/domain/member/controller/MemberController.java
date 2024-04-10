@@ -4,10 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.memetory.domain.member.dto.MemberServiceDto;
-import com.example.memetory.domain.member.dto.MemberSignUpRequest;
+import com.example.memetory.domain.member.dto.MemberUpdateDto;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.global.annotation.LoginMemberEmail;
 
@@ -15,18 +16,20 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/member")
 public class MemberController implements MemberApi {
+	private final MemberService memberService;
 
-    private final MemberService memberService;
+	@PostMapping
+	public ResponseEntity<HttpStatus> updateMember(@LoginMemberEmail String email,
+		@RequestBody MemberUpdateDto memberUpdateDto) {
+		MemberServiceDto memberServiceDto = memberUpdateDto.toServiceDto(email);
 
-    @PostMapping("/sign-up")
-    @Override
-    public ResponseEntity<HttpStatus> register(@RequestBody MemberSignUpRequest memberSignUpRequest,
-                                               @LoginMemberEmail String email) {
-        MemberServiceDto memberServiceDto = memberSignUpRequest.toServiceDto(email);
+		if (memberService.isDuplicatedNickname(memberServiceDto)) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		}
+		memberService.update(memberServiceDto);
 
-        memberService.register(memberServiceDto);
-
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
 }

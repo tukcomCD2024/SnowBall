@@ -36,13 +36,19 @@ dependencies {
 
     implementation 'com.auth0:java-jwt:4.2.1'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
     // Swagger 적용
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
+
     // AWS SDK
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+    // test에 lombok 추가
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.security:spring-security-test'
+
 }
 
 tasks.named('test') {
