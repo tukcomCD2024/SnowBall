@@ -1,7 +1,6 @@
 package com.example.memetory.domain.comment.controller;
 
 import com.example.memetory.domain.comment.dto.CommentServiceDto;
-import com.example.memetory.domain.comment.dto.request.DeleteCommentRequest;
 import com.example.memetory.domain.comment.dto.request.GenerateCommentRequest;
 import com.example.memetory.domain.comment.service.CommentService;
 import com.example.memetory.global.annotation.LoginMemberEmail;
@@ -28,8 +27,8 @@ public class CommentController implements CommentApi{
 
     @DeleteMapping("/{commentId}")
     @Override
-    public ResponseEntity<HttpStatus> delete(@PathVariable Long commentId, @RequestBody DeleteCommentRequest deleteCommentRequest) {
-        CommentServiceDto newCommentServiceDto = deleteCommentRequest.toServiceDto(commentId);
+    public ResponseEntity<HttpStatus> delete(@PathVariable Long commentId) {
+        CommentServiceDto newCommentServiceDto = CommentServiceDto.create(commentId);
         commentService.delete(newCommentServiceDto);
 
         return ResponseEntity.status(HttpStatus.OK).build();

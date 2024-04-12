@@ -34,7 +34,7 @@ public class CommentService {
     @Transactional
     public void delete(CommentServiceDto commentServiceDto) {
         Comment foundComment = commentRepository.findById(commentServiceDto.getCommentId()).orElseThrow(NotFoundCommentException::new);
-        Memes foundMemes = memesService.getMemesBetweenService(commentServiceDto.getMemesId());
+        Memes foundMemes = memesService.getMemesBetweenService(foundComment.getMemes().getId());
         foundMemes.cancelCommentCount();
 
         commentRepository.delete(foundComment);
