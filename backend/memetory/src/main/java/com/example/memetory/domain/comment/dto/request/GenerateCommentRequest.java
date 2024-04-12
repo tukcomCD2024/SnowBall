@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GenerateCommentRequest {
 
-    @JsonProperty("memes_id")
     private Long memesId;
 
     private String content;
