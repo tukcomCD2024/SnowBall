@@ -23,6 +23,8 @@ public class CommentService {
     public void register(CommentServiceDto commentServiceDto) {
         Member foundMember = memberService.findByEmail(commentServiceDto.getEmail());
         Memes foundMemes = memesService.getMemesBetweenService(commentServiceDto.getMemesId());
+        foundMemes.addCommentCount();
+
         Comment newComment = commentServiceDto.toEntity(foundMember, foundMemes);
 
         commentRepository.save(newComment);
