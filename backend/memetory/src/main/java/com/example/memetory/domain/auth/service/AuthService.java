@@ -2,8 +2,6 @@ package com.example.memetory.domain.auth.service;
 
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.example.memetory.domain.auth.dto.LoginRequest;
@@ -20,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-	private static final Logger log = LoggerFactory.getLogger(AuthService.class);
 	private final MemberRepository memberRepository;
 	private final OAuth2ProviderService oAuth2ProviderService;
 	private final JwtService jwtService;
