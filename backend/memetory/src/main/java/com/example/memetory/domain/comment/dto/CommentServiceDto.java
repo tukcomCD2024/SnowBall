@@ -12,6 +12,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CommentServiceDto {
     private Long memesId;
+    private Long commentId;
     private String content;
     private String email;
 
