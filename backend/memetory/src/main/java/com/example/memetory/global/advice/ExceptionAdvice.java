@@ -4,14 +4,14 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.example.memetory.domain.member.exception.NotFoundMemberException;
 import com.example.memetory.domain.meme.exception.NotFoundMemeException;
 import com.example.memetory.global.security.jwt.exception.NotFoundEmailException;
 import com.example.memetory.global.security.jwt.exception.NotFoundTokenException;
 
-@RestController
+@RestControllerAdvice
 public class ExceptionAdvice {
 	@ExceptionHandler(NotFoundTokenException.class)
 	ResponseEntity<HttpEntity> notFoundTokenException() {
