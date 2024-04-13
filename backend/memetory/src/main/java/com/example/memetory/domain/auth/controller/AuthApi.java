@@ -19,7 +19,8 @@ public interface AuthApi {
 	@Operation(
 		summary = "로그인",
 		description = "앱에서 받아온 인증서버의 access_token을 통해서 우리 서버의 JWT를 받아가는 과정"
-			+ "처음 로그인 할 경우 DB에 사용자 등록이 진행된다."
+			+ "\n처음 로그인 할 경우 DB에 사용자 등록이 진행된다."
+			+ "\nProvider에서 Provider의 Id, 사용자 프로필 이미지, 사용자의 이름을 가져온다."
 	)
 	@ApiResponses(
 		@ApiResponse(
