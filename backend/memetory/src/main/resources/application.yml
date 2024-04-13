@@ -1,12 +1,12 @@
 spring:
   profiles:
     group:
-      "local" : "local, jwt, config"
-    active : local # "local" 을 실행
+      "local": "local, jwt, config"
+    active: local # "local" 을 실행
 
 ---
 spring:
-    active: dev # "dev" 을 실행
+  active: dev # "dev" 을 실행
 
 ---
 spring:
