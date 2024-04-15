@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.memetory.domain.member.repository.MemberRepository;
 import com.example.memetory.global.security.jwt.exception.NotFoundEmailException;
 import com.example.memetory.global.security.jwt.exception.NotFoundTokenException;
@@ -24,11 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @Slf4j
 public class JwtService {
-
-	/**
-	 * JWT의 Subject와 Claim으로 email 사용 -> 클레임의 name을 "email"으로 설정
-	 * JWT의 헤더에 들어오는 값 : 'Authorization(Key) = Bearer {토큰} (Value)' 형식
-	 */
 	private static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
 	private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
 	private static final String EMAIL_CLAIM = "email";
@@ -48,7 +44,6 @@ public class JwtService {
 	@Value("${jwt.refresh.header}")
 	private String refreshHeader;
 
-	// 함께 보낼때는 둘 다 create
 	public void sendAccessAndRefreshToken(HttpServletResponse response, String email) {
 		setTokenHeader(response, accessHeader, createAccessToken(email));
 
@@ -60,9 +55,9 @@ public class JwtService {
 
 	private String createAccessToken(String email) {
 		Date now = new Date();
-		return JWT.create() // JWT 토큰을 생성하는 빌더 반환
-			.withSubject(ACCESS_TOKEN_SUBJECT) // JWT의 Subject 지정 -> AccessToken이므로 AccessToken
-			.withExpiresAt(new Date(now.getTime() + accessTokenExpirationPeriod)) // 토큰 만료 시간 설정
+		return JWT.create()
+			.withSubject(ACCESS_TOKEN_SUBJECT)
+			.withExpiresAt(new Date(now.getTime() + accessTokenExpirationPeriod))
 			.withClaim(EMAIL_CLAIM, email)
 			.sign(Algorithm.HMAC512(secretKey));
 	}
@@ -75,37 +70,23 @@ public class JwtService {
 			.sign(Algorithm.HMAC512(secretKey));
 	}
 
-	// 헤더에서 RefreshToken 추출
 	public Optional<String> extractRefreshToken(HttpServletRequest request) {
 		return Optional.ofNullable(request.getHeader(refreshHeader))
 			.filter(refreshToken -> refreshToken.startsWith(BEARER))
 			.map(refreshToken -> refreshToken.replace(BEARER, ""));
 	}
 
-	// 헤더에서 AccessToken 추출
 	public Optional<String> extractAccessToken(HttpServletRequest request) {
 		return Optional.ofNullable(request.getHeader(accessHeader))
 			.filter(refreshToken -> refreshToken.startsWith(BEARER))
 			.map(refreshToken -> refreshToken.replace(BEARER, ""));
 	}
 
-	/**
-	 * AccessToken에서 Email 추출
-	 * 추출 전에 JWT.require()로 검증기 생성
-	 * verify로 AceessToken 검증 후
-	 * 유효하다면 getClaim()으로 이메일 추출
-	 * 유효하지 않다면 빈 Optional 객체 반환
-	 */
-	public Optional<String> extractEmail(String accessToken) {
+	public Optional<String> extractEmail(String accessToken) throws JWTVerificationException {
 		try {
-			// 토큰 유효성 검사하는 데에 사용할 알고리즘이 있는 JWT verifier builder 반환
-			return Optional.ofNullable(JWT.require(Algorithm.HMAC512(secretKey))
-				.build() // 반환된 빌더로 JWT verifier 생성
-				.verify(accessToken) // accessToken을 검증하고 유효하지 않다면 예외 발생
-				.getClaim(EMAIL_CLAIM) // claim(Emial) 가져오기
-				.asString());
+			return Optional.ofNullable(
+				JWT.require(Algorithm.HMAC512(secretKey)).build().verify(accessToken).getClaim(EMAIL_CLAIM).asString());
 		} catch (Exception e) {
-			// 예외로 출력 -> NotValidTokenException
 			log.error("액세스 토큰이 유효하지 않습니다.");
 			return Optional.empty();
 		}

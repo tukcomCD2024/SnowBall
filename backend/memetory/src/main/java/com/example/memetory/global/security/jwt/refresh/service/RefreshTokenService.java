@@ -30,9 +30,7 @@ public class RefreshTokenService {
 	}
 
 	public RefreshToken findByToken(String token) {
-		RefreshToken refreshToken = refreshTokenRepository.findByRefreshToken(token)
+		return refreshTokenRepository.findByRefreshToken(token)
 			.orElseThrow(NotFoundTokenException::new);
-
-		return refreshToken;
 	}
 }
