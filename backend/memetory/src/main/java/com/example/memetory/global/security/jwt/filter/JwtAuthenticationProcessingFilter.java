@@ -13,6 +13,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.repository.MemberRepository;
+import com.example.memetory.global.security.jwt.exception.InvalidTokenException;
 import com.example.memetory.global.security.jwt.refresh.domain.RefreshToken;
 import com.example.memetory.global.security.jwt.refresh.service.RefreshTokenService;
 import com.example.memetory.global.security.jwt.service.JwtService;
@@ -45,29 +46,40 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		String refreshToken = jwtService.extractRefreshToken(request).filter(jwtService::isTokenValid).orElse(null);
+		String refreshToken = jwtService.extractRefreshToken(request).orElse(null);
 
 		if (refreshToken != null) {
 			checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
-			return;
+			response.sendError(HttpServletResponse.SC_FORBIDDEN);
 		}
+
 		if (refreshToken == null) {
 			checkAccessTokenAndAuthentication(request, response, filterChain);
 		}
 	}
 
 	public void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken) {
-		RefreshToken refresh = refreshTokenService.findByToken(refreshToken);
-		jwtService.sendAccessAndRefreshToken(response, refresh.getEmail());
+		if (jwtService.isTokenValid(refreshToken)) {
+			RefreshToken refresh = refreshTokenService.findByToken(refreshToken);
+			jwtService.sendAccessAndRefreshToken(response, refresh.getEmail());
+		}
 	}
 
 	public void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
 		log.info("checkAccessTokenAndAuthentication() 호출");
-		jwtService.extractAccessToken(request)
-			.ifPresent(accessToken -> jwtService.extractEmail(accessToken)
-				.ifPresent(email -> memberRepository.findByEmail(email).ifPresent(this::saveAuthentication)));
-
+		try {
+			jwtService.extractAccessToken(request)
+				.ifPresent(accessToken -> jwtService.extractEmail(accessToken)
+					.ifPresentOrElse(email -> memberRepository.findByEmail(email).ifPresent(this::saveAuthentication),
+						() -> {
+							throw new InvalidTokenException("Invalid access token");
+						}
+					)
+				);
+		} catch (Exception e) {
+			response.sendError(HttpServletResponse.SC_FORBIDDEN);
+		}
 		filterChain.doFilter(request, response);
 	}
 
