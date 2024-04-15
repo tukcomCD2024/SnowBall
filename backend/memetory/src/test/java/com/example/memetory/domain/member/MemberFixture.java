@@ -5,9 +5,6 @@ import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.entity.Role;
 import com.example.memetory.domain.member.entity.SocialType;
 
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
 public class MemberFixture {
 	public final static Member MEMBER = Member.builder()
 		.email("junrain@ourservice.com")
@@ -18,7 +15,6 @@ public class MemberFixture {
 		.socialType(SocialType.GOOGLE)
 		.socialId("-1")
 		.build();
-
 
 	public final static MemberServiceDto MEMBER_SERVICE_DTO = MemberServiceDto.builder()
 		.imageUrl("imageUrl")
