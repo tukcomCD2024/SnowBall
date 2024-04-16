@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.memetory.domain.member.dto.MemberServiceDto;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.repository.MemberRepository;
 
@@ -26,7 +27,7 @@ public class MemberServiceTest {
 	@DisplayName("이메일을 통해서 멤버 가져오기")
 	void 이메일을_통해서_Member_불러오기() {
 		// given 멤버 저장
-		Member savedMember = memberRepository.save(MEMBER);
+		Member savedMember = memberRepository.save(MEMBER());
 
 		// when 실행
 		Member findMember = memberService.findByEmail(savedMember.getEmail());
@@ -40,7 +41,7 @@ public class MemberServiceTest {
 	@DisplayName("ID를 통해서 멤버 가져오기")
 	void ID를_통해서_Member_불러오기() {
 		// given 멤버 저장
-		Member savedMember = memberRepository.save(MEMBER);
+		Member savedMember = memberRepository.save(MEMBER());
 
 		// when 실행
 		Member findMember = memberService.findById(savedMember.getId());
@@ -53,25 +54,26 @@ public class MemberServiceTest {
 	@DisplayName("Member의 nickname 중복 여부 검사")
 	void nickname_중복검사() {
 		// given 멤버 저장
-		Member savedMember = memberRepository.save(MEMBER);
+		Member savedMember = memberRepository.save(MEMBER());
 
 		// then 실행
-		assertTrue(memberService.isDuplicatedNickname(MEMBER_SERVICE_DTO));
+		assertTrue(memberService.isDuplicatedNickname(MEMBER_SERVICE_DTO()));
 	}
 
 	@Test
 	@DisplayName("Member의 업데이트가 잘 이루어지는가")
 	void member_업데이트() {
 		// given 멤버 저장
-		Member savedMember = memberRepository.save(MEMBER);
+		Member savedMember = memberRepository.save(MEMBER());
+		MemberServiceDto memberServiceDto = UPDATE_MEMBER_SERVICE_DTO();
 
 		// when 멤버 업데이트
-		memberService.update(UPDATE_MEMBER_SERVICE_DTO);
+		memberService.update(UPDATE_MEMBER_SERVICE_DTO());
 
-		Member findMember = memberService.findByEmail(UPDATE_MEMBER_SERVICE_DTO.getEmail());
+		Member findMember = memberService.findByEmail(memberServiceDto.getEmail());
 		// then 업데이트 됐는지 확인
 
-		assertThat(findMember.getNickname()).isEqualTo(UPDATE_MEMBER_SERVICE_DTO.getNickname());
-		assertThat(findMember.getImageUrl()).isEqualTo(UPDATE_MEMBER_SERVICE_DTO.getImageUrl());
+		assertThat(findMember.getNickname()).isEqualTo(memberServiceDto.getNickname());
+		assertThat(findMember.getImageUrl()).isEqualTo(memberServiceDto.getImageUrl());
 	}
 }

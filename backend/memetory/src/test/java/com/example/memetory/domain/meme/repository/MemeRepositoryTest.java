@@ -33,7 +33,7 @@ public class MemeRepositoryTest {
 
 	@BeforeEach
 	void setUp() {
-		savedMember = memberRepository.save(MEMBER);
+		savedMember = memberRepository.save(MEMBER());
 	}
 
 	@Test
@@ -50,7 +50,7 @@ public class MemeRepositoryTest {
 	@DisplayName("Member를 통한 전체 Meme조회")
 	public void Member_전체_Meme_조회() {
 		// given DB에 밈과 유저를 저장
-		memberRepository.save(SECOND_MEMBER);
+		memberRepository.save(SECOND_MEMBER());
 
 		List<Meme> savedMemes = List.of(FIRST_MEME, SECOND_MEME, ANOTHER_MEMBER_MEME);
 		memeRepository.saveAll(savedMemes);

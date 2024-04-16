@@ -50,7 +50,7 @@ public class AuthTest extends LoginTest {
 		String accessToken = JWT.create()
 			.withSubject("AccessToken")
 			.withExpiresAt(new Date(now.getTime() - 1000))
-			.withClaim("email", MEMBER.getEmail())
+			.withClaim("email", MEMBER().getEmail())
 			.sign(Algorithm.HMAC512(secretKey));
 
 		// when
@@ -72,7 +72,7 @@ public class AuthTest extends LoginTest {
 			.withExpiresAt(new Date(now.getTime() + 18000))
 			.sign(Algorithm.HMAC512(secretKey));
 
-		RefreshToken token = new RefreshToken(MEMBER.getEmail());
+		RefreshToken token = new RefreshToken(MEMBER().getEmail());
 
 		given(refreshTokenService.findByToken(refreshToken)).willReturn(token);
 

@@ -28,7 +28,7 @@ public class MemberRepositoryTest {
 	@DisplayName("이메일로 멤버 찾기")
 	public void 이메일로_Member_찾기() {
 		// given -> 멤버 저장하기
-		Member savedMember = memberRepository.save(MEMBER);
+		Member savedMember = memberRepository.save(MEMBER());
 
 		// when 멤버 찾기
 		Optional<Member> findMember = memberRepository.findByEmail(savedMember.getEmail());
@@ -41,7 +41,7 @@ public class MemberRepositoryTest {
 	@DisplayName("SocialType과 SocialId로 멤버 찾기")
 	public void SocialType과_SocialId로_Member_찾기() {
 		// given -> 멤버 저장하기
-		Member savedMember = memberRepository.save(MEMBER);
+		Member savedMember = memberRepository.save(MEMBER());
 
 		// when 멤버 찾기
 		Optional<Member> findMember = memberRepository
@@ -55,9 +55,9 @@ public class MemberRepositoryTest {
 	@DisplayName("닉네임 존재하는지 확인하기")
 	public void 닉네임_존재_여부() {
 		// given -> 멤버 저장하기
-		Member savedMember = memberRepository.save(MEMBER);
+		Member savedMember = memberRepository.save(MEMBER());
 
 		// then 확인하기
-		assertTrue(memberRepository.existsMemberByNickname(MEMBER.getNickname()));
+		assertTrue(memberRepository.existsMemberByNickname(savedMember.getNickname()));
 	}
 }

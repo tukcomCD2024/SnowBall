@@ -55,7 +55,7 @@ public abstract class LoginTest {
 		accessToken = JWT.create()
 			.withSubject("AccessToken")
 			.withExpiresAt(new Date(now.getTime() + 18000))
-			.withClaim("email", MEMBER.getEmail())
+			.withClaim("email", MEMBER().getEmail())
 			.sign(Algorithm.HMAC512(secretKey));
 	}
 }
