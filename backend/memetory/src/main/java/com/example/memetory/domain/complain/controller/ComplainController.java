@@ -7,10 +7,7 @@ import com.example.memetory.global.annotation.LoginMemberEmail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,5 +22,14 @@ public class ComplainController implements ComplainApi{
         complainService.register(newComplainServiceDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @DeleteMapping("/{complainId}")
+    @Override
+    public ResponseEntity<HttpStatus> delete(@PathVariable Long complainId) {
+        ComplainServiceDto newComplainServiceDto = ComplainServiceDto.create(complainId);
+        complainService.delete(newComplainServiceDto);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
