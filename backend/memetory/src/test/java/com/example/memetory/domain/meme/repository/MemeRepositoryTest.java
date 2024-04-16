@@ -40,25 +40,28 @@ public class MemeRepositoryTest {
 	@DisplayName("Meme 저장 확인과 Meme Id를 통한 조회 확인")
 	public void Meme_저장() {
 		// when 밈 저장하기
-		Meme savedMeme = memeRepository.save(FIRST_MEME);
+		Meme savedMeme = memeRepository.save(FIRST_MEME(savedMember));
 
 		// then 밈이 저장됐는지 확인
 		assertThat(memeRepository.findById(savedMeme.getId()).get()).isEqualTo(savedMeme);
 	}
 
 	@Test
-	@DisplayName("Member를 통한 전체 Meme조회")
+	@DisplayName("Member를 통한 사용자 Meme 전체 조회")
 	public void Member_전체_Meme_조회() {
 		// given DB에 밈과 유저를 저장
-		memberRepository.save(SECOND_MEMBER());
+		Member anthorMember = memberRepository.save(SECOND_MEMBER());
+		Meme firstMeme = FIRST_MEME(savedMember);
+		Meme secondtMeme = SECOND_MEME(savedMember);
+		Meme anotherMemberMeme = FIRST_MEME(anthorMember);
 
-		List<Meme> savedMemes = List.of(FIRST_MEME, SECOND_MEME, ANOTHER_MEMBER_MEME);
+		List<Meme> savedMemes = List.of(firstMeme, secondtMeme, anotherMemberMeme);
 		memeRepository.saveAll(savedMemes);
 
 		// when MEMBER를 통해서 MEME을 조회
 		List<Meme> findMemes = memeRepository.findAllByMember(savedMember);
 
 		// then 일치하는지 조회
-		assertThat(findMemes).isEqualTo(List.of(FIRST_MEME, SECOND_MEME));
+		assertThat(findMemes).isEqualTo(List.of(firstMeme, secondtMeme));
 	}
 }
