@@ -1,6 +1,7 @@
 package com.example.memetory.domain.memes.controller;
 
 import com.example.memetory.domain.memes.dto.request.GenerateMemesRequest;
+import com.example.memetory.domain.memes.dto.response.MemesListResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,4 +29,17 @@ public interface MemesApi {
             @Parameter(hidden = true) String email,
             GenerateMemesRequest generateMemesRequest
     );
+
+    @Operation(
+            summary = "meme`s 인기차트 조회",
+            description = "좋아요 수 많은 순으로 10개 조회",
+            security = {@SecurityRequirement(name = "access_token")}
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "인기차트 조회!"
+            )
+    })
+    ResponseEntity<MemesListResponse> findTopTenMemesByLike();
 }
