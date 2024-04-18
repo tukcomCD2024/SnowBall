@@ -42,4 +42,17 @@ public interface MemesApi {
             )
     })
     ResponseEntity<MemesListResponse> findTopTenMemesByLike();
+
+    @Operation(
+            summary = "meme`s 이달의 인기차트 조회",
+            description = "최근 한 달 동안 좋아요 수 많은 순으로 10개 조회",
+            security = {@SecurityRequirement(name = "access_token")}
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "이달의 인기차트 조회!"
+            )
+    })
+    ResponseEntity<MemesListResponse> findTopTenMemesByLikeForMonth();
 }

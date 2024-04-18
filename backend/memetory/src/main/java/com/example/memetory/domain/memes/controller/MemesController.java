@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemesController implements MemesApi{
     private final MemesService memesService;
 
+    // 밈스 생성
     @PostMapping
     @Override
     public ResponseEntity<HttpStatus> register(@LoginMemberEmail String email, @RequestBody GenerateMemesRequest generateMemesRequest) {
@@ -25,10 +26,20 @@ public class MemesController implements MemesApi{
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    // 밈스 좋아요 순으로 상위 10개 조회
     @GetMapping("/likeAll")
     @Override
     public ResponseEntity<MemesListResponse> findTopTenMemesByLike() {
-        MemesListResponse newMemesListResponse = memesService.LikeTopTen();
+        MemesListResponse newMemesListResponse = memesService.findTopTenMemesByLike();
+
+        return ResponseEntity.status(HttpStatus.OK).body(newMemesListResponse);
+    }
+
+    // 최근 한 달 동안 생성된 밈스 중 좋아요 순으로 상위 10개 조회
+    @GetMapping("/likeMonth")
+    @Override
+    public ResponseEntity<MemesListResponse> findTopTenMemesByLikeForMonth() {
+        MemesListResponse newMemesListResponse = memesService.findTopTenMemesByLikeForMonth();
 
         return ResponseEntity.status(HttpStatus.OK).body(newMemesListResponse);
     }
