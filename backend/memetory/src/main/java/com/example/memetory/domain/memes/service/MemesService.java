@@ -33,8 +33,20 @@ public class MemesService {
     }
 
     @Transactional(readOnly = true)
-    public MemesListResponse LikeTopTen() {
+    public MemesListResponse findTopTenMemesByLike() {
         List<MemesInfo> memesList = memesRepository.findTopTenMemesByLikeCount()
+                .stream()
+                .map(MemesInfo::of)
+                .toList();
+
+        return MemesListResponse.builder()
+                .memesInfoList(memesList)
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public MemesListResponse findTopTenMemesByLikeForMonth() {
+        List<MemesInfo> memesList = memesRepository.findTopTenMemesByLikeCountForMonth()
                 .stream()
                 .map(MemesInfo::of)
                 .toList();
