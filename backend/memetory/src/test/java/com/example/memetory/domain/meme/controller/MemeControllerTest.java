@@ -89,3 +89,26 @@ public class MemeControllerTest extends LoginTest {
 		perform.andExpect(status().isNotFound());
 	}
 
+	@Test
+	@DisplayName("전체 밈 조회 성공")
+	void 전체_밈_조회_성공() throws Exception {
+		// given 예상될 MemeResponse 구현
+		List<MemeResponse> memeList = List.of(FIRST_MEME(loginMember), SECOND_MEME(loginMember)).stream()
+			.map(MemeResponse::of)
+			.toList();
+		MemeListResponse memeListResponse = MemeListResponse.builder().memeList(memeList).build();
+
+		given(memeService.getAllMeme(any())).willReturn(memeListResponse);
+
+		// when
+		final ResultActions perform = mockMvc.perform(
+			get("/meme")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + accessToken)
+		).andDo(print());
+
+		// then
+		perform.andExpect(status().isOk())
+			.andExpect(jsonPath("$.memeList").isArray());
+	}
+}
