@@ -69,3 +69,23 @@ public class MemeControllerTest extends LoginTest {
 		// then
 		perform.andExpect(status().isForbidden());
 	}
+
+	@Test
+	@DisplayName("단일 밈 조회 실패, 존재하지 않는 밈일 경우")
+	void 단일_밈_조회_실패_존재하지_않는_밈() throws Exception {
+		// given 예상될 MemeResponse 구현
+		Meme meme = FIRST_MEME(loginMember);
+		given(memeService.checkMember(any())).willReturn(false);
+		given(memeService.getMeme(any())).willThrow(NotFoundMemeException.class);
+
+		// when
+		final ResultActions perform = mockMvc.perform(
+			get("/meme/-1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + accessToken)
+		).andDo(print());
+
+		// then
+		perform.andExpect(status().isNotFound());
+	}
+
