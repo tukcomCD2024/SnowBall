@@ -29,8 +29,8 @@ public class MemesController implements MemesApi{
     // 밈스 좋아요 순으로 상위 10개 조회
     @GetMapping("/likeAll")
     @Override
-    public ResponseEntity<MemesListResponse> findTopTenMemesByLike() {
-        MemesListResponse newMemesListResponse = memesService.findTopTenMemesByLike();
+    public ResponseEntity<MemesListResponse> findTopMemesByLike() {
+        MemesListResponse newMemesListResponse = memesService.findTopMemesByLike();
 
         return ResponseEntity.status(HttpStatus.OK).body(newMemesListResponse);
     }
@@ -38,8 +38,8 @@ public class MemesController implements MemesApi{
     // 최근 한 달 동안 생성된 밈스 중 좋아요 순으로 상위 10개 조회
     @GetMapping("/likeMonth")
     @Override
-    public ResponseEntity<MemesListResponse> findTopTenMemesByLikeForMonth() {
-        MemesListResponse newMemesListResponse = memesService.findTopTenMemesByLikeForMonth();
+    public ResponseEntity<MemesListResponse> findTopMemesByLikeForMonth() {
+        MemesListResponse newMemesListResponse = memesService.findTopMemesByLikeForMonth();
 
         return ResponseEntity.status(HttpStatus.OK).body(newMemesListResponse);
     }
@@ -47,8 +47,8 @@ public class MemesController implements MemesApi{
     // 최근 한 주 동안 생성된 밈스 중 좋아요 순으로 상위 10개 조회
     @GetMapping("/likeWeek")
     @Override
-    public ResponseEntity<MemesListResponse> findTopTenMemesByLikeForWeek() {
-        MemesListResponse newMemesListResponse = memesService.findTopTenMemesByLikeForWeek();
+    public ResponseEntity<MemesListResponse> findTopMemesByLikeForWeek() {
+        MemesListResponse newMemesListResponse = memesService.findTopMemesByLikeForWeek();
 
         return ResponseEntity.status(HttpStatus.OK).body(newMemesListResponse);
     }

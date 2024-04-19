@@ -41,7 +41,7 @@ public interface MemesApi {
                     description = "인기차트 조회!"
             )
     })
-    ResponseEntity<MemesListResponse> findTopTenMemesByLike();
+    ResponseEntity<MemesListResponse> findTopMemesByLike();
 
     @Operation(
             summary = "meme`s 이달의 인기차트 조회",
@@ -54,7 +54,7 @@ public interface MemesApi {
                     description = "이달의 인기차트 조회!"
             )
     })
-    ResponseEntity<MemesListResponse> findTopTenMemesByLikeForMonth();
+    ResponseEntity<MemesListResponse> findTopMemesByLikeForMonth();
 
     @Operation(
             summary = "meme`s 이주의 인기차트 조회",
@@ -67,5 +67,5 @@ public interface MemesApi {
                     description = "이주의 인기차트 조회!"
             )
     })
-    ResponseEntity<MemesListResponse> findTopTenMemesByLikeForWeek();
+    ResponseEntity<MemesListResponse> findTopMemesByLikeForWeek();
 }
