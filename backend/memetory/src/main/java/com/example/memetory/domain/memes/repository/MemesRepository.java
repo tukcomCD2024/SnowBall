@@ -13,13 +13,9 @@ public interface MemesRepository extends JpaRepository<Memes, Long> {
 
     @Query("SELECT m FROM Memes m ORDER BY m.likeCount DESC")
     @EntityGraph(attributePaths = {"meme"})
-    List<Memes> findTopTenMemesByLikeCount(Pageable pageable);
+    List<Memes> findTopMemesByLikeCount(Pageable pageable);
 
     @Query("SELECT m FROM Memes m WHERE m.createdAt >= :oneMonthAgo ORDER BY m.likeCount DESC")
     @EntityGraph(attributePaths = {"meme"})
-    List<Memes> findTopTenMemesByLikeCountForMonth(Pageable pageable, LocalDateTime oneMonthAgo);
-
-    @Query("SELECT m FROM Memes m WHERE m.createdAt >= :oneWeekAgo ORDER BY m.likeCount DESC")
-    @EntityGraph(attributePaths = {"meme"})
-    List<Memes> findTopTenMemesByLikeCountForWeek(Pageable pageable, LocalDateTime oneWeekAgo);
+    List<Memes> findTopMemesByLikeCountForPeriod(Pageable pageable, LocalDateTime oneMonthAgo);
 }
