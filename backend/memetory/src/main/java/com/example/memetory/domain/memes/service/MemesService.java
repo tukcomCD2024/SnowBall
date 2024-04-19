@@ -49,11 +49,28 @@ public class MemesService {
     @Transactional(readOnly = true)
     public MemesListResponse findTopTenMemesByLikeForMonth() {
 
-        // 현재 시점부터 한달 전의 LocalDateTime
-        LocalDateTime monthAgo = LocalDateTime.now().minusMonths(1);
+        // 현재 시점부터 한 달 전의 LocalDateTime
+        LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
 
-        // 상위 10개만 가져오기 위해 pageable 적용
-        List<MemesInfo> memesList = memesRepository.findTopTenMemesByLikeCountForMonth(PageRequest.of(0,10), monthAgo)
+        // 상위 10개만 가져 오기 위해 pageable 적용
+        List<MemesInfo> memesList = memesRepository.findTopTenMemesByLikeCountForMonth(PageRequest.of(0,10), oneMonthAgo)
+                .stream()
+                .map(MemesInfo::of)
+                .toList();
+
+        return MemesListResponse.builder()
+                .memesInfoList(memesList)
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public MemesListResponse findTopTenMemesByLikeForWeek() {
+
+        // 현재 시점 부터 한 주 전의 LocalDateTime
+        LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
+
+        // 상위 10개만 가져 오기 위해 pageable 적용
+        List<MemesInfo> memesList = memesRepository.findTopTenMemesByLikeCountForMonth(PageRequest.of(0,10), oneWeekAgo)
                 .stream()
                 .map(MemesInfo::of)
                 .toList();
