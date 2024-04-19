@@ -43,4 +43,13 @@ public class MemesController implements MemesApi{
 
         return ResponseEntity.status(HttpStatus.OK).body(newMemesListResponse);
     }
+
+    // 최근 한 주 동안 생성된 밈스 중 좋아요 순으로 상위 10개 조회
+    @GetMapping("/likeWeek")
+    @Override
+    public ResponseEntity<MemesListResponse> findTopTenMemesByLikeForWeek() {
+        MemesListResponse newMemesListResponse = memesService.findTopTenMemesByLikeForWeek();
+
+        return ResponseEntity.status(HttpStatus.OK).body(newMemesListResponse);
+    }
 }
