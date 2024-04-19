@@ -52,4 +52,20 @@ public class MemeControllerTest extends LoginTest {
 		perform.andExpect(status().isOk())
 			.andExpect(jsonPath("$.s3Url").exists());
 	}
-}
+
+	@Test
+	@DisplayName("단일 밈 조회 실패, 로그인한 유저의 밈이 아닐 경우")
+	void 단일_밈_조회_실패_유저인증_실패() throws Exception {
+		// given 예상될 MemeResponse 구현
+		given(memeService.checkMember(any())).willReturn(true);
+
+		// when
+		final ResultActions perform = mockMvc.perform(
+			get("/meme/-1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + accessToken)
+		).andDo(print());
+
+		// then
+		perform.andExpect(status().isForbidden());
+	}
