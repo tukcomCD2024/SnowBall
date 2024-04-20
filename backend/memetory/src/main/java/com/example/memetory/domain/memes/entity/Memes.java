@@ -1,8 +1,5 @@
 package com.example.memetory.domain.memes.entity;
 
-import com.example.memetory.domain.comment.entity.Comment;
-import com.example.memetory.domain.complain.entity.Complain;
-import com.example.memetory.domain.like.entity.Like;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.global.entity.BaseEntity;
@@ -11,9 +8,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity
@@ -38,15 +32,6 @@ public class Memes extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-
-    @OneToMany(mappedBy = "memes", cascade = CascadeType.ALL)
-    private List<Like> likes = new ArrayList<>();
-
-    @OneToMany(mappedBy = "memes", cascade = CascadeType.ALL)
-    private List<Comment> comments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "memes", cascade = CascadeType.ALL)
-    private List<Complain> complains = new ArrayList<>();
 
     @Builder
     public Memes(String title, int likeCount, int commentCount, Meme meme, Member member) {
