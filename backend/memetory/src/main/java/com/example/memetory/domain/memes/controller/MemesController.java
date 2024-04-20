@@ -52,4 +52,14 @@ public class MemesController implements MemesApi{
 
         return ResponseEntity.status(HttpStatus.OK).body(newMemesListResponse);
     }
+
+    // 밈스 삭제
+    @DeleteMapping("/{memesId}")
+    @Override
+    public ResponseEntity<HttpStatus> delete(@PathVariable Long memesId) {
+        MemesServiceDto newMemesServiceDto = MemesServiceDto.create(memesId);
+        memesService.delete(newMemesServiceDto);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

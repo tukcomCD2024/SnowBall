@@ -4,6 +4,7 @@ import com.example.memetory.domain.memes.dto.request.GenerateMemesRequest;
 import com.example.memetory.domain.memes.dto.response.MemesListResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -68,4 +69,19 @@ public interface MemesApi {
             )
     })
     ResponseEntity<MemesListResponse> findTopMemesByLikeForWeek();
+
+    @Operation(
+            summary = "meme`s 삭제",
+            description = "meme`s 삭제",
+            security = {@SecurityRequirement(name = "access_token")}
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "밈스 삭제!"
+            )
+    })
+    ResponseEntity<HttpStatus> delete(
+            @Parameter(in = ParameterIn.PATH, description = "밈스 아이디", required = true) Long memesId
+    );
 }
