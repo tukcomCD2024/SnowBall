@@ -8,6 +8,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -15,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class Comment extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
     private Long id;
 
@@ -25,6 +27,7 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memes_id")
     private Memes memes;
