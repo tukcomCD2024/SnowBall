@@ -36,6 +36,12 @@ public class MemesService {
         memesRepository.save(newMemes);
     }
 
+    @Transactional
+    public void delete(MemesServiceDto memesServiceDto) {
+        Memes foundMemes = memesRepository.findById(memesServiceDto.getMemesId()).orElseThrow(NotFoundMemesException::new);
+        memesRepository.delete(foundMemes);
+    }
+
     // 인기차트 조회 (좋아요 순으로 상위 10개)
     @Transactional(readOnly = true)
     public MemesListResponse findTopMemesByLike() {
