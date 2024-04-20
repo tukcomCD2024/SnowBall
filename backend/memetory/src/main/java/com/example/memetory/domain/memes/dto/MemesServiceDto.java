@@ -13,10 +13,17 @@ import lombok.Getter;
 public class MemesServiceDto {
     private Long memberId;
     private Long memeId;
+    private Long memesId;
     private String email;
     private String title;
     private int likeCount;
     private int commentCount;
+
+    public static MemesServiceDto create(Long memesId) {
+        return MemesServiceDto.builder()
+                .memesId(memesId)
+                .build();
+    }
 
     public Memes toEntity(Member member, Meme meme) {
         return Memes.builder()
