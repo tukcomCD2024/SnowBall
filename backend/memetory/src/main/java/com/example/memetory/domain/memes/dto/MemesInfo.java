@@ -16,13 +16,13 @@ public class MemesInfo {
     @Schema(description = "밈스 아이디")
     private Long memesId;
 
-    @Schema(description = "멤버 아이디")
+    @Schema(description = "밈스를 생성한 멤버 아이디")
     private Long memberId;
 
     @Schema(description = "밈스로 보여줄 밈의 S3 주소")
     private String memeUrl;
 
-    @Schema(description = "제목")
+    @Schema(description = "밈스 제목")
     private String title;
 
     @Schema(description = "댓글 수")
@@ -31,7 +31,7 @@ public class MemesInfo {
     @Schema(description = "좋아요 수")
     private int likeCount;
 
-    @Schema(description = "생성 시각")
+    @Schema(description = "밈스 생성 시각")
     private LocalDateTime createdAt;
 
     @Builder
