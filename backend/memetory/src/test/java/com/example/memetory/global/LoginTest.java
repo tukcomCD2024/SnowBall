@@ -17,6 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.repository.MemberRepository;
 import com.example.memetory.global.security.jwt.filter.JwtAuthenticationProcessingFilter;
 import com.example.memetory.global.security.jwt.refresh.service.RefreshTokenService;
@@ -36,6 +37,7 @@ public abstract class LoginTest {
 	protected RefreshTokenService refreshTokenService;
 	@MockBean
 	protected MemberRepository memberRepository;
+	protected Member loginMember;
 	@Autowired
 	private ObjectMapper objectMapper;
 
@@ -51,11 +53,13 @@ public abstract class LoginTest {
 			.alwaysDo(print())
 			.build();
 
+		loginMember = MEMBER();
+
 		Date now = new Date();
 		accessToken = JWT.create()
 			.withSubject("AccessToken")
 			.withExpiresAt(new Date(now.getTime() + 18000))
-			.withClaim("email", MEMBER.getEmail())
+			.withClaim("email", loginMember.getEmail())
 			.sign(Algorithm.HMAC512(secretKey));
 	}
 }
