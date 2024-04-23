@@ -2,6 +2,7 @@ package com.example.memetory.domain.memes.controller;
 
 import com.example.memetory.domain.memes.dto.request.GenerateMemesRequest;
 import com.example.memetory.domain.memes.dto.response.MemesListResponse;
+import com.example.memetory.domain.memes.dto.response.MemesResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -82,6 +83,21 @@ public interface MemesApi {
             )
     })
     ResponseEntity<HttpStatus> delete(
+            @Parameter(in = ParameterIn.PATH, description = "밈스 아이디", required = true) Long memesId
+    );
+
+    @Operation(
+            summary = "meme`s 단일 조회",
+            description = "밈스의 상세정보 조회(밈스를 보기위해 클릭하면 나오는 페이지에 필요한 정보들)",
+            security = {@SecurityRequirement(name = "access_token")}
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "밈스 단일 조회!"
+            )
+    })
+    ResponseEntity<MemesResponse> findOne(
             @Parameter(in = ParameterIn.PATH, description = "밈스 아이디", required = true) Long memesId
     );
 }

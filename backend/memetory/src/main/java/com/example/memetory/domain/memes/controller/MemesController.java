@@ -3,6 +3,7 @@ package com.example.memetory.domain.memes.controller;
 import com.example.memetory.domain.memes.dto.MemesServiceDto;
 import com.example.memetory.domain.memes.dto.request.GenerateMemesRequest;
 import com.example.memetory.domain.memes.dto.response.MemesListResponse;
+import com.example.memetory.domain.memes.dto.response.MemesResponse;
 import com.example.memetory.domain.memes.service.MemesService;
 import com.example.memetory.global.annotation.LoginMemberEmail;
 import lombok.RequiredArgsConstructor;
@@ -61,5 +62,15 @@ public class MemesController implements MemesApi{
         memesService.delete(newMemesServiceDto);
 
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    // 밈스 단일 조회
+    @GetMapping("/{memesId}")
+    @Override
+    public ResponseEntity<MemesResponse> findOne(@PathVariable Long memesId) {
+        MemesServiceDto newMemesServiceDto = MemesServiceDto.create(memesId);
+        MemesResponse newMemesResponse = memesService.findOne(newMemesServiceDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(newMemesResponse);
     }
 }
