@@ -1,5 +1,6 @@
 package com.example.memetory.domain.memes.service;
 
+import com.example.memetory.domain.comment.dto.CommentInfo;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.meme.entity.Meme;
@@ -7,6 +8,7 @@ import com.example.memetory.domain.meme.service.MemeService;
 import com.example.memetory.domain.memes.dto.MemesInfo;
 import com.example.memetory.domain.memes.dto.MemesServiceDto;
 import com.example.memetory.domain.memes.dto.response.MemesListResponse;
+import com.example.memetory.domain.memes.dto.response.MemesResponse;
 import com.example.memetory.domain.memes.entity.Memes;
 import com.example.memetory.domain.memes.exception.NotFoundMemesException;
 import com.example.memetory.domain.memes.repository.MemesRepository;
@@ -38,8 +40,16 @@ public class MemesService {
 
     @Transactional
     public void delete(MemesServiceDto memesServiceDto) {
-        Memes foundMemes = memesRepository.findById(memesServiceDto.getMemesId()).orElseThrow(NotFoundMemesException::new);
+        Memes foundMemes = findById(memesServiceDto.getMemesId());
         memesRepository.delete(foundMemes);
+    }
+
+    // 밈스 단일 조회
+    @Transactional(readOnly = true)
+    public MemesResponse findOne(MemesServiceDto memesServiceDto) {
+        Memes foundMemes = findById(memesServiceDto.getMemesId());
+
+        return buildMemesResponse(foundMemes);
     }
 
     // 인기차트 조회 (좋아요 순으로 상위 10개)
@@ -68,8 +78,7 @@ public class MemesService {
     // 서비스 계층 간의 밈스 조회
     @Transactional(readOnly = true)
     public Memes getMemesBetweenService(Long memesId) {
-        Memes foundMemes = memesRepository.findById(memesId).orElseThrow(NotFoundMemesException::new);
-        return foundMemes;
+        return findById(memesId);
     }
 
     private List<MemesInfo> fetchTopMemesByLike() {
@@ -86,9 +95,27 @@ public class MemesService {
                 .toList();
     }
 
+    private MemesResponse buildMemesResponse(Memes memes) {
+        return MemesResponse.builder()
+                .memesId(memes.getId())
+                .memberId(memes.getMember().getId())
+                .memberName(memes.getMember().getName())
+                .memeUrl(memes.getMeme().getS3Url())
+                .title(memes.getTitle())
+                .commentCount(memes.getCommentCount())
+                .commentInfoList(memes.getComments().stream().map(CommentInfo::of).toList())
+                .likeCount(memes.getLikeCount())
+                .createdAt(memes.getCreatedAt())
+                .build();
+    }
+
     private MemesListResponse buildMemesListResponse(List<MemesInfo> memesList) {
         return MemesListResponse.builder()
                 .memesInfoList(memesList)
                 .build();
+    }
+
+    private Memes findById(Long memesId) {
+        return memesRepository.findByMemesId(memesId).orElseThrow(NotFoundMemesException::new);
     }
 }
