@@ -8,5 +8,6 @@ import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.meme.entity.Meme;
 
 public interface MemeRepository extends JpaRepository<Meme, Long> {
+
 	List<Meme> findAllByMember(Member member);
 }
