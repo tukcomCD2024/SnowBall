@@ -15,10 +15,11 @@ import org.springframework.context.annotation.Import;
 
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.global.config.JpaAuditingConfig;
+import com.example.memetory.global.config.QueryDslConfig;
 
 @DataJpaTest
 @DisplayName("member 레포지토리 테스트의 ")
-@Import(JpaAuditingConfig.class)
+@Import({JpaAuditingConfig.class, QueryDslConfig.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class MemberRepositoryTest {
 	@Autowired
