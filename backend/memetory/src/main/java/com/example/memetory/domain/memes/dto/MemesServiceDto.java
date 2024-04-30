@@ -23,8 +23,8 @@ public class MemesServiceDto {
                 .member(member)
                 .meme(meme)
                 .title(this.title)
-                .likeCount(0)
-                .commentCount(0)
+                .likeCount(0L)
+                .commentCount(0L)
                 .build();
     }
 }

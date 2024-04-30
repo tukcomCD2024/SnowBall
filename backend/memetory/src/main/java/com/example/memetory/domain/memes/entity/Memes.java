@@ -21,9 +21,9 @@ public class Memes extends BaseEntity {
 
     private String title;
 
-    private int likeCount;
+    private Long likeCount;
 
-    private int commentCount;
+    private Long commentCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "meme_id")
@@ -34,7 +34,7 @@ public class Memes extends BaseEntity {
     private Member member;
 
     @Builder
-    public Memes(String title, int likeCount, int commentCount, Meme meme, Member member) {
+    public Memes(String title, Long likeCount, Long commentCount, Meme meme, Member member) {
         this.title = title;
         this.likeCount = likeCount;
         this.commentCount = commentCount;
