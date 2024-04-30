@@ -9,18 +9,12 @@ import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 
 import com.example.memetory.domain.member.entity.Member;
-import com.example.memetory.global.config.JpaAuditingConfig;
-import com.example.memetory.global.config.QueryDslConfig;
+import com.example.memetory.global.RepositoryTest;
 
-@DataJpaTest
 @DisplayName("member 레포지토리 테스트의 ")
-@Import({JpaAuditingConfig.class, QueryDslConfig.class})
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@RepositoryTest
 public class MemberRepositoryTest {
 	@Autowired
 	private MemberRepository memberRepository;

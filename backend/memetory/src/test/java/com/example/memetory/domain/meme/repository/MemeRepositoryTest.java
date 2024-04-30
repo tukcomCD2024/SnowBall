@@ -10,9 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,13 +18,10 @@ import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.repository.MemberRepository;
 import com.example.memetory.domain.meme.dto.MemeResponse;
 import com.example.memetory.domain.meme.entity.Meme;
-import com.example.memetory.global.config.JpaAuditingConfig;
-import com.example.memetory.global.config.QueryDslConfig;
+import com.example.memetory.global.RepositoryTest;
 
-@DataJpaTest
 @DisplayName("meme 레포지토리 테스트의 ")
-@Import({JpaAuditingConfig.class, QueryDslConfig.class, MemeQDtoFactory.class})
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@RepositoryTest
 public class MemeRepositoryTest {
 	@Autowired
 	private MemeRepository memeRepository;
@@ -53,13 +47,13 @@ public class MemeRepositoryTest {
 
 	@Test
 	@DisplayName("Member를 통한 사용자 Meme 전체 조회")
-	public void Member_전체_Meme_조회() {
+	public void 전체_Meme_조회() {
 		// given DB에 밈과 유저를 저장
 		Member anthorMember = memberRepository.save(SECOND_MEMBER());
 		Meme firstMeme = FIRST_MEME(savedMember);
 		Meme secondtMeme = SECOND_MEME(savedMember);
 		Meme anotherMemberMeme = FIRST_MEME(anthorMember);
-		Pageable pageable = PageRequest.of(1, 10);
+		Pageable pageable = PageRequest.of(0, 10);
 
 		List<Meme> savedMemes = List.of(firstMeme, secondtMeme, anotherMemberMeme);
 		memeRepository.saveAll(savedMemes);
@@ -68,7 +62,7 @@ public class MemeRepositoryTest {
 		Page<MemeResponse> findMemes = memeRepository.findAllByMember(savedMember, pageable);
 
 		// then 일치하는지 조회
-		assertThat(findMemes).usingRecursiveComparison()
+		assertThat(findMemes.getContent()).usingRecursiveComparison()
 			.isEqualTo(List.of(firstMeme, secondtMeme).stream().map(MemeResponse::of).toList());
 	}
 }
