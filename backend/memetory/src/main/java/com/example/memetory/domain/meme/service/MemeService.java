@@ -65,10 +65,7 @@ public class MemeService {
 	public MemeListResponse getAllMeme(MemeServiceDto memeServiceDto) {
 		Member member = memberService.findByEmail(memeServiceDto.getEmail());
 
-		List<MemeResponse> memeList = memeRepository.findAllByMember(member)
-				.stream()
-				.map(MemeResponse::of)
-				.toList();
+		List<MemeResponse> memeList = memeRepository.findAllByMember(member);
 
 		return MemeListResponse.builder()
 				.memeList(memeList)
