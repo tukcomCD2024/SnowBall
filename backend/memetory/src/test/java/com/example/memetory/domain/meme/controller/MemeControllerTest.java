@@ -15,7 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.example.memetory.domain.meme.dto.MemeListResponse;
+import com.example.memetory.domain.meme.dto.MemePageResponse;
 import com.example.memetory.domain.meme.dto.MemeResponse;
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.exception.NotFoundMemeException;
@@ -96,13 +96,13 @@ public class MemeControllerTest extends LoginTest {
 		List<MemeResponse> memeList = List.of(FIRST_MEME(loginMember), SECOND_MEME(loginMember)).stream()
 			.map(MemeResponse::of)
 			.toList();
-		MemeListResponse memeListResponse = MemeListResponse.builder().memeList(memeList).build();
+		MemePageResponse memePageResponse = MemePageResponse.builder().memeList(memeList).build();
 
-		given(memeService.getAllMeme(any())).willReturn(memeListResponse);
+		given(memeService.getAllMeme(any(), any())).willReturn(memePageResponse);
 
 		// when
 		final ResultActions perform = mockMvc.perform(
-			get("/meme")
+			get("/meme?page=0&size=10")
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("Authorization", "Bearer " + accessToken)
 		).andDo(print());

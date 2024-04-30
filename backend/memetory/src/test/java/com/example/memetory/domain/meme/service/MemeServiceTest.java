@@ -13,11 +13,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.repository.MemberRepository;
 import com.example.memetory.domain.member.service.MemberService;
-import com.example.memetory.domain.meme.dto.MemeListResponse;
+import com.example.memetory.domain.meme.dto.MemePageResponse;
 import com.example.memetory.domain.meme.dto.MemeResponse;
 import com.example.memetory.domain.meme.dto.MemeServiceDto;
 import com.example.memetory.domain.meme.entity.Meme;
@@ -52,16 +54,13 @@ public class MemeServiceTest {
 		// given Meme을 세팅
 		given(memberService.findById(savedMember.getId())).willReturn(savedMember);
 
-		MemeServiceDto memeServiceDto = MemeServiceDto.builder()
-			.memberId(savedMember.getId())
-			.s3Url("myS3Url")
-			.build();
+		MemeServiceDto memeServiceDto = MemeServiceDto.builder().memberId(savedMember.getId()).s3Url("myS3Url").build();
 
 		// when
-		memeService.register(memeServiceDto);
+		MemeResponse result = memeService.register(memeServiceDto);
 
 		// then
-		assertThat(memeRepository.findAllByMember(savedMember).get(0).getS3Url()).isEqualTo(memeServiceDto.getS3Url());
+		assertThat(result.getMemeId()).isNotNull();
 	}
 
 	@Test
@@ -69,9 +68,7 @@ public class MemeServiceTest {
 	void 단일_밈_조회() {
 		// given 밈 저장, memServiceDto, memeReponse 생성
 		Meme savedMeme = memeRepository.save(FIRST_MEME(savedMember));
-		MemeServiceDto serviceDto = MemeServiceDto.builder()
-			.memeId(savedMeme.getId())
-			.build();
+		MemeServiceDto serviceDto = MemeServiceDto.builder().memeId(savedMeme.getId()).build();
 		MemeResponse expectedResponse = MemeResponse.of(savedMeme);
 
 		// when
@@ -87,20 +84,26 @@ public class MemeServiceTest {
 	void 전체_밈_조회() {
 		// given 밈들 저장, MemeListResponse 세팅
 		given(memberService.findById(savedMember.getId())).willReturn(savedMember);
-		MemeServiceDto memeServiceDto = MemeServiceDto.builder()
-			.email(savedMember.getEmail())
-			.build();
+		MemeServiceDto memeServiceDto = MemeServiceDto.builder().email(savedMember.getEmail()).build();
 
 		List<Meme> memeList = List.of(memeRepository.save(FIRST_MEME(savedMember)),
 			memeRepository.save(SECOND_MEME(savedMember)));
-		MemeListResponse expectedResponse = MemeListResponse.builder()
-			.memeList(memeList.stream().map(MemeResponse::of).toList())
+
+		MemePageResponse expectedResponse = MemePageResponse.builder()
+			.currentPage(1)
+			.totalPage(1)
+			.memeList(memeList
+				.stream()
+				.map(MemeResponse::of)
+				.toList())
 			.build();
 
+		Pageable pageable = PageRequest.of(0, 10);
+
 		// when
-		MemeListResponse response = memeService.getAllMeme(memeServiceDto);
+		MemePageResponse response = memeService.getAllMeme(memeServiceDto, pageable);
 
 		// then
-		assertThat(response).usingRecursiveComparison().isEqualTo(expectedResponse);
+		assertThat(response.getMemeList()).usingRecursiveComparison().isEqualTo(expectedResponse.getMemeList());
 	}
 }

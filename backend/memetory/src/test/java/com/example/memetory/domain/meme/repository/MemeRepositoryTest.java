@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.repository.MemberRepository;
@@ -56,12 +59,13 @@ public class MemeRepositoryTest {
 		Meme firstMeme = FIRST_MEME(savedMember);
 		Meme secondtMeme = SECOND_MEME(savedMember);
 		Meme anotherMemberMeme = FIRST_MEME(anthorMember);
+		Pageable pageable = PageRequest.of(1, 10);
 
 		List<Meme> savedMemes = List.of(firstMeme, secondtMeme, anotherMemberMeme);
 		memeRepository.saveAll(savedMemes);
 
 		// when MEMBER를 통해서 MEME을 조회
-		List<MemeResponse> findMemes = memeRepository.findAllByMember(savedMember);
+		Page<MemeResponse> findMemes = memeRepository.findAllByMember(savedMember, pageable);
 
 		// then 일치하는지 조회
 		assertThat(findMemes).usingRecursiveComparison()
