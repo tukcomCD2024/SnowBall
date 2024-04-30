@@ -16,12 +16,14 @@ import org.springframework.context.annotation.Import;
 
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.repository.MemberRepository;
+import com.example.memetory.domain.meme.dto.MemeResponse;
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.global.config.JpaAuditingConfig;
+import com.example.memetory.global.config.QueryDslConfig;
 
 @DataJpaTest
 @DisplayName("meme 레포지토리 테스트의 ")
-@Import(JpaAuditingConfig.class)
+@Import({JpaAuditingConfig.class, QueryDslConfig.class, MemeQDtoFactory.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class MemeRepositoryTest {
 	@Autowired
@@ -59,9 +61,10 @@ public class MemeRepositoryTest {
 		memeRepository.saveAll(savedMemes);
 
 		// when MEMBER를 통해서 MEME을 조회
-		List<Meme> findMemes = memeRepository.findAllByMember(savedMember);
+		List<MemeResponse> findMemes = memeRepository.findAllByMember(savedMember);
 
 		// then 일치하는지 조회
-		assertThat(findMemes).isEqualTo(List.of(firstMeme, secondtMeme));
+		assertThat(findMemes).usingRecursiveComparison()
+			.isEqualTo(List.of(firstMeme, secondtMeme).stream().map(MemeResponse::of).toList());
 	}
 }

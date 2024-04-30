@@ -61,7 +61,7 @@ public class MemeServiceTest {
 		memeService.register(memeServiceDto);
 
 		// then
-		assertThat(memeRepository.findAllByMember(savedMember).get(0).getMember()).isEqualTo(savedMember);
+		assertThat(memeRepository.findAllByMember(savedMember).get(0).getS3Url()).isEqualTo(memeServiceDto.getS3Url());
 	}
 
 	@Test
