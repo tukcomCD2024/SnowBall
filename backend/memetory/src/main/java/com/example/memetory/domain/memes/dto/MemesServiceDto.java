@@ -15,8 +15,8 @@ public class MemesServiceDto {
     private Long memeId;
     private String email;
     private String title;
-    private int likeCount;
-    private int commentCount;
+    private Long likeCount;
+    private Long commentCount;
 
     public Memes toEntity(Member member, Meme meme) {
         return Memes.builder()
