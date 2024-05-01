@@ -1,7 +1,5 @@
 package com.example.memetory.domain.meme.service;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -41,9 +39,9 @@ public class MemeService {
 		Member member = memberService.findByEmail(memeServiceDto.getEmail());
 
 		AIServerSendDto aiServerSendDto = AIServerSendDto.builder()
-				.memberId(member.getId())
-				.scene(memeServiceDto.getScene())
-				.build();
+			.memberId(member.getId())
+			.scene(memeServiceDto.getScene())
+			.build();
 
 		return gson.toJson(aiServerSendDto);
 	}
@@ -72,8 +70,8 @@ public class MemeService {
 		return MemePageResponse.builder()
 			.totalPage(memeList.getTotalPages())
 			.currentPage(pageable.getPageNumber())
-				.memeList(memeList.getContent())
-				.build();
+			.memeList(memeList.getContent())
+			.build();
 	}
 
 	// Service 계층 끼리의 밈 조회

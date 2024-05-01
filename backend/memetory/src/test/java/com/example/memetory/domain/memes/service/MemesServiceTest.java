@@ -3,7 +3,6 @@ package com.example.memetory.domain.memes.service;
 import static com.example.memetory.domain.member.MemberFixture.*;
 import static com.example.memetory.domain.meme.MemeFixture.*;
 import static com.example.memetory.domain.memes.MemesFixture.*;
-import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -18,21 +17,20 @@ import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.service.MemeService;
 import com.example.memetory.domain.memes.dto.MemesServiceDto;
-import com.example.memetory.domain.memes.entity.Memes;
 import com.example.memetory.domain.memes.repository.MemesRepository;
 
 @DisplayName("memesService 테스트의 ")
 @ExtendWith(MockitoExtension.class)
-public class memesServiceTest {
+public class MemesServiceTest {
+	@InjectMocks
+	private MemesService memesService;
+
+	@Mock
+	private MemberService memberService;
 	@Mock
 	private MemesRepository memesRepository;
 	@Mock
 	private MemeService memeService;
-	@Mock
-	private MemberService memberService;
-
-	@InjectMocks
-	private MemesService memesService;
 
 	@Test
 	@DisplayName("밈스 저장 성공")
@@ -40,17 +38,15 @@ public class memesServiceTest {
 		// given
 		Member member = MEMBER();
 		Meme meme = FIRST_MEME(member);
-		MemesServiceDto request = MEMES_SERVICE_DTO();
-		Memes memes = request.toEntity(member, meme);
+		MemesServiceDto memesServiceDto = MEMES_SERVICE_DTO();
 
 		// when
-		when(memberService.findByEmail(request.getEmail())).thenReturn(member);
-		when(memeService.getMemeBetweenService(request.getMemeId())).thenReturn(meme);
-		when(memesRepository.save(any())).thenReturn(memes);
+		when(memberService.findByEmail(memesServiceDto.getEmail())).thenReturn(member);
+		when(memeService.getMemeBetweenService(memesServiceDto.getMemeId())).thenReturn(meme);
 
-		Memes result = memesService.register(request);
+		memesService.register(memesServiceDto);
 
 		// then
-		assertThat(result).isEqualTo(memes);
+		verify(memesRepository).save(any());
 	}
 }
