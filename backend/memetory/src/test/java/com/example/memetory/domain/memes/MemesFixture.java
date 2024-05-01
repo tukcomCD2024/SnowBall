@@ -2,6 +2,7 @@ package com.example.memetory.domain.memes;
 
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.meme.entity.Meme;
+import com.example.memetory.domain.memes.dto.MemesServiceDto;
 import com.example.memetory.domain.memes.entity.Memes;
 
 public class MemesFixture {
@@ -12,6 +13,15 @@ public class MemesFixture {
 			.meme(meme)
 			.likeCount(0L)
 			.commentCount(0L)
+			.build();
+	}
+
+	public static MemesServiceDto MEMES_SERVICE_DTO(){
+		return MemesServiceDto.builder()
+			.memberId(-1L)
+			.memeId(-1L)
+			.email("junrain@ourservice.com")
+			.title("new Memes")
 			.build();
 	}
 }

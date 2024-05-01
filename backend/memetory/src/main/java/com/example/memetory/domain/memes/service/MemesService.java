@@ -22,12 +22,12 @@ public class MemesService {
 	private final MemesRepository memesRepository;
 
 	@Transactional
-	public void register(MemesServiceDto memesServiceDto) {
+	public Memes register(MemesServiceDto memesServiceDto) {
 		Member findMember = memberService.findByEmail(memesServiceDto.getEmail());
 		Meme findMeme = memeService.getMemeBetweenService(memesServiceDto.getMemeId());
 
 		Memes newMemes = memesServiceDto.toEntity(findMember, findMeme);
-		memesRepository.save(newMemes);
+		return memesRepository.save(newMemes);
 	}
 
 	@Transactional(readOnly = true)
