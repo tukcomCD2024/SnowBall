@@ -30,7 +30,7 @@ public class AuthService {
 
 	private Member findOrElseRegisterMember(OAuth2UserInfo userInfo, SocialType socialType) {
 		return memberRepository.findBySocialTypeAndSocialId(socialType, userInfo.getId())
-			.orElse(registerMember(socialType, userInfo));
+			.orElseGet(() -> registerMember(socialType, userInfo));
 	}
 
 	private Member registerMember(SocialType socialType, OAuth2UserInfo userInfo) {
