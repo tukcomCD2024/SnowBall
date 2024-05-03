@@ -18,6 +18,7 @@ public enum ErrorCode {
 
 	// Member
 	MEMBER_NOT_FOUND(400, "멤버를 찾기 실패"),
+	NICKNAME_IS_DUPLICATED(409, "닉네임 중복"),
 
 	// Meme
 	MEME_NOT_FOUND(400, "밈을 찾기 실패"),

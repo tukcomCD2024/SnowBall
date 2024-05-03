@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.memetory.domain.member.dto.MemberServiceDto;
 import com.example.memetory.domain.member.entity.Member;
+import com.example.memetory.domain.member.exception.DuplicatedMemberException;
 import com.example.memetory.domain.member.exception.NotFoundMemberException;
 import com.example.memetory.domain.member.repository.MemberRepository;
 
@@ -19,6 +20,9 @@ public class MemberService {
 
 	@Transactional
 	public void update(MemberServiceDto memberServiceDto) {
+		if (memberRepository.existsMemberByNickname(memberServiceDto.getNickname())) {
+			throw new DuplicatedMemberException();
+		}
 		findByEmail(memberServiceDto.getEmail()).update(memberServiceDto);
 	}
 
@@ -30,10 +34,5 @@ public class MemberService {
 	@Transactional(readOnly = true)
 	public Member findById(Long id) {
 		return memberRepository.findById(id).orElseThrow(NotFoundMemberException::new);
-	}
-
-	@Transactional(readOnly = true)
-	public boolean isDuplicatedNickname(MemberServiceDto memberServiceDto) {
-		return memberRepository.existsMemberByNickname(memberServiceDto.getNickname());
 	}
 }

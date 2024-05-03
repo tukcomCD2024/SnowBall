@@ -25,9 +25,6 @@ public class MemberController implements MemberApi {
 		@RequestBody MemberUpdateDto memberUpdateDto) {
 		MemberServiceDto memberServiceDto = memberUpdateDto.toServiceDto(email);
 
-		if (memberService.isDuplicatedNickname(memberServiceDto)) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
-		}
 		memberService.update(memberServiceDto);
 
 		return ResponseEntity.status(HttpStatus.OK).build();
