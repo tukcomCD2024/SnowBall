@@ -1,14 +1,10 @@
 package com.example.memetory.global.security.jwt.exception;
 
-public class NotFoundTokenException extends RuntimeException {
+import com.example.memetory.global.exception.BusinessException;
+import com.example.memetory.global.response.ErrorCode;
+
+public class NotFoundTokenException extends BusinessException {
 	public NotFoundTokenException() {
-	}
-
-	public NotFoundTokenException(String message) {
-		super(message);
-	}
-
-	public NotFoundTokenException(String message, Throwable cause) {
-		super(message, cause);
+		super(ErrorCode.TOKEN_NOT_FOUND);
 	}
 }

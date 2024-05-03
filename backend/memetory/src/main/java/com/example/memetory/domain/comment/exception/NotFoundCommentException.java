@@ -1,14 +1,10 @@
 package com.example.memetory.domain.comment.exception;
 
+import com.example.memetory.global.exception.BusinessException;
+import com.example.memetory.global.response.ErrorCode;
 
-public class NotFoundCommentException extends RuntimeException {
-    public NotFoundCommentException() {}
-
-    public NotFoundCommentException(String message) {
-        super(message);
-    }
-
-    public NotFoundCommentException(String message, Throwable cause) {
-        super(message, cause);
+public class NotFoundCommentException extends BusinessException {
+    public NotFoundCommentException() {
+        super(ErrorCode.COMMENT_NOT_FOUND);
     }
 }

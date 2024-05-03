@@ -1,14 +1,10 @@
 package com.example.memetory.global.security.jwt.exception;
 
-public class NotFoundEmailException extends RuntimeException{
+import com.example.memetory.global.exception.BusinessException;
+import com.example.memetory.global.response.ErrorCode;
+
+public class NotFoundEmailException extends BusinessException {
 	public NotFoundEmailException() {
-	}
-
-	public NotFoundEmailException(String message) {
-		super(message);
-	}
-
-	public NotFoundEmailException(String message, Throwable cause) {
-		super(message, cause);
+		super(ErrorCode.EMAIL_NOT_FOUND);
 	}
 }

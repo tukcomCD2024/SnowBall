@@ -12,7 +12,7 @@ public enum ErrorCode {
 	INPUT_INVALID_VALUE(400, "잘못된 입력"),
 
 	// Auth
-	LOGIN_FORBIDDEN(403, "토큰 인증 실패"),
+	TOKEN_IS_INVALID(403, "토큰 인증 실패"),
 	TOKEN_NOT_FOUND(403, "토큰 추출 실패"),
 	EMAIL_NOT_FOUND(403, "이메일 추출 실패"),
 

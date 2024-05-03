@@ -73,7 +73,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 				.ifPresent(accessToken -> jwtService.extractEmail(accessToken)
 					.ifPresentOrElse(email -> memberRepository.findByEmail(email).ifPresent(this::saveAuthentication),
 						() -> {
-							throw new InvalidTokenException("Invalid access token");
+							throw new InvalidTokenException();
 						}
 					)
 				);

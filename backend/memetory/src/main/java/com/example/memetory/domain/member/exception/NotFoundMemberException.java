@@ -1,14 +1,10 @@
 package com.example.memetory.domain.member.exception;
 
-public class NotFoundMemberException extends RuntimeException{
+import com.example.memetory.global.exception.BusinessException;
+import com.example.memetory.global.response.ErrorCode;
+
+public class NotFoundMemberException extends BusinessException {
 	public NotFoundMemberException() {
-	}
-
-	public NotFoundMemberException(String message) {
-		super(message);
-	}
-
-	public NotFoundMemberException(String message, Throwable cause) {
-		super(message, cause);
+		super(ErrorCode.MEMBER_NOT_FOUND);
 	}
 }
