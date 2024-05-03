@@ -7,7 +7,34 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
+	// Global
+	INTERNAL_SERVER_ERROR(500, "서버 오류"),
+	INPUT_INVALID_VALUE(400, "잘못된 입력"),
+
+	// Auth
+	LOGIN_FORBIDDEN(403, "토큰 인증 실패"),
+	TOKEN_NOT_FOUND(403, "토큰 추출 실패"),
+	EMAIL_NOT_FOUND(403, "이메일 추출 실패"),
+
+	// Member
+	MEMBER_NOT_FOUND(400, "멤버를 찾기 실패"),
+
+	// Meme
+	MEME_NOT_FOUND(400, "밈을 찾기 실패"),
+
+	// Memes
+	MEMES_NOT_FOUND(400, "밈스를 찾기 실패"),
+
+	// Like
+	LIKE_NOT_FOUND(400, "좋아요 찾기 실패"),
+
+	// Complain
+	COMPLAIN_NOT_FOUND(400, "신고 찾기 실패"),
+
+	// Comment
+	COMMENT_NOT_FOUND(400, "댓글 찾기 실패"),
 	;
+
 	private final int status;
 	private final String message;
 }
