@@ -1,5 +1,6 @@
 package com.example.memetory.global.security.jwt.service;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
 
@@ -10,9 +11,12 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.memetory.domain.member.repository.MemberRepository;
+import com.example.memetory.global.security.jwt.dto.TokenResponse;
 import com.example.memetory.global.security.jwt.exception.NotFoundEmailException;
 import com.example.memetory.global.security.jwt.exception.NotFoundTokenException;
 import com.example.memetory.global.security.jwt.refresh.service.RefreshTokenService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,6 +36,7 @@ public class JwtService {
 
 	private final MemberRepository memberRepository;
 	private final RefreshTokenService refreshTokenService;
+	private final ObjectMapper objectMapper;
 
 	@Value("${jwt.secretKey}")
 	private String secretKey;
@@ -45,12 +50,21 @@ public class JwtService {
 	private String refreshHeader;
 
 	public void sendAccessAndRefreshToken(HttpServletResponse response, String email) {
-		setTokenHeader(response, accessHeader, createAccessToken(email));
+		try {
 
 		String refreshToken = createRefreshToken();
-		setTokenHeader(response, refreshHeader, refreshToken);
+		String token = objectMapper.writeValueAsString(TokenResponse.builder()
+			.accessToken(createAccessToken(email))
+			.refreshToken(refreshToken)
+			.build());
+
+		response.getWriter().write(token);
 		refreshTokenService.updateToken(email, refreshToken);
-		log.info("Access Token, Refresh Token 헤더 설정 완료");
+		} catch (IOException e) {
+			// 해당 에러처리 부분에 대해서 고민 필요
+			throw new RuntimeException(e);
+		}
+
 	}
 
 	private String createAccessToken(String email) {
@@ -71,15 +85,11 @@ public class JwtService {
 	}
 
 	public Optional<String> extractRefreshToken(HttpServletRequest request) {
-		return Optional.ofNullable(request.getHeader(refreshHeader))
-			.filter(refreshToken -> refreshToken.startsWith(BEARER))
-			.map(refreshToken -> refreshToken.replace(BEARER, ""));
+		return Optional.ofNullable(request.getHeader(refreshHeader));
 	}
 
 	public Optional<String> extractAccessToken(HttpServletRequest request) {
-		return Optional.ofNullable(request.getHeader(accessHeader))
-			.filter(refreshToken -> refreshToken.startsWith(BEARER))
-			.map(refreshToken -> refreshToken.replace(BEARER, ""));
+		return Optional.ofNullable(request.getHeader(accessHeader));
 	}
 
 	public Optional<String> extractEmail(String accessToken) throws JWTVerificationException {
@@ -95,10 +105,6 @@ public class JwtService {
 	public String getEmail(HttpServletRequest request) {
 		String accessToken = this.extractAccessToken(request).orElseThrow(NotFoundTokenException::new);
 		return this.extractEmail(accessToken).orElseThrow(NotFoundEmailException::new);
-	}
-
-	private void setTokenHeader(HttpServletResponse response, String headerName, String token) {
-		response.setHeader(headerName, BEARER + token);
 	}
 
 	public boolean isTokenValid(String token) {
