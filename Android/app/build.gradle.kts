@@ -1,7 +1,13 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
+
+val properties = Properties()
+properties.load(FileInputStream(rootProject.file("local.properties")))
 
 android {
     namespace = "com.snowball.memetory"
@@ -15,6 +21,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "S3ACCESSKEY", properties.getProperty("s3_access_key"))
+        buildConfigField("String", "S3SECRETKEY", properties.getProperty("s3_secret_key"))
+        buildConfigField("String", "S3BUCKET", properties.getProperty("s3_bucket"))
     }
 
     buildTypes {
@@ -36,6 +46,7 @@ android {
     buildFeatures{
         dataBinding = true
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -65,7 +76,6 @@ dependencies {
     // ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
 
-
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.github.bumptech.glide:annotations:4.16.0")
@@ -82,5 +92,10 @@ dependencies {
 
     // circleIndicator : https://github.com/ongakuer/CircleIndicator
     implementation("me.relex:circleindicator:2.1.6")
+
+    // AWS S3: https://mvnrepository.com/artifact/com.amazonaws/aws-android-sdk-s3
+    implementation("com.amazonaws:aws-android-sdk-mobile-client:2.75.0")
+    implementation("com.amazonaws:aws-android-sdk-cognito:2.20.1")
+    implementation("com.amazonaws:aws-android-sdk-s3:2.75.0")
 
 }
