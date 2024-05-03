@@ -47,7 +47,7 @@ public class MemeServiceTest {
 	@BeforeEach
 	void setUp() {
 		member = MEMBER();
-		meme = FIRST_MEME(member);
+		meme = MEME(member);
 	}
 
 	@Test
@@ -103,7 +103,7 @@ public class MemeServiceTest {
 
 		Member otherMember = SECOND_MEMBER();
 		Meme secondtMeme = SECOND_MEME(member);
-		Meme anotherMemberMeme = FIRST_MEME(otherMember);
+		Meme anotherMemberMeme = MEME(otherMember);
 
 
 		List<MemeResponse> memeList = List.of(meme, secondtMeme, anotherMemberMeme)

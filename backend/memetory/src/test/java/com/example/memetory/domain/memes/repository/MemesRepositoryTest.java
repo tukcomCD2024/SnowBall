@@ -27,7 +27,7 @@ public class MemesRepositoryTest {
 	@BeforeEach
 	void setUp() {
 		member = MEMBER();
-		meme = FIRST_MEME(member);
+		meme = MEME(member);
 	}
 
 	@Test

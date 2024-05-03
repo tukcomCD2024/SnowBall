@@ -39,7 +39,7 @@ public class MemeRepositoryTest {
 	@DisplayName("Meme 저장 확인과 Meme Id를 통한 조회 확인")
 	public void Meme_저장() {
 		// when 밈 저장하기
-		Meme savedMeme = memeRepository.save(FIRST_MEME(savedMember));
+		Meme savedMeme = memeRepository.save(MEME(savedMember));
 
 		// then 밈이 저장됐는지 확인
 		assertThat(memeRepository.findById(savedMeme.getId()).get()).isEqualTo(savedMeme);
@@ -50,9 +50,9 @@ public class MemeRepositoryTest {
 	public void 전체_Meme_조회() {
 		// given DB에 밈과 유저를 저장
 		Member anthorMember = memberRepository.save(SECOND_MEMBER());
-		Meme firstMeme = FIRST_MEME(savedMember);
+		Meme firstMeme = MEME(savedMember);
 		Meme secondtMeme = SECOND_MEME(savedMember);
-		Meme anotherMemberMeme = FIRST_MEME(anthorMember);
+		Meme anotherMemberMeme = MEME(anthorMember);
 		Pageable pageable = PageRequest.of(0, 10);
 
 		List<Meme> savedMemes = List.of(firstMeme, secondtMeme, anotherMemberMeme);

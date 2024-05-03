@@ -11,7 +11,7 @@ public class MemesFixture {
 			.title("new Memes")
 			.member(member)
 			.meme(meme)
-			.likeCount(0L)
+			.likeCount(1L)
 			.commentCount(0L)
 			.build();
 	}

@@ -3,10 +3,9 @@ package com.example.memetory.domain.meme;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.meme.dto.MemeServiceDto;
 import com.example.memetory.domain.meme.entity.Meme;
-import com.example.memetory.domain.memes.dto.MemesServiceDto;
 
 public class MemeFixture {
-	public static Meme FIRST_MEME(Member member) {
+	public static Meme MEME(Member member) {
 		return Meme.builder().s3Url("s3Url").member(member).build();
 	}
 

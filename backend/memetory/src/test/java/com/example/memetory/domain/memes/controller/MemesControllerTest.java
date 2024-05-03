@@ -27,7 +27,7 @@ public class MemesControllerTest extends LoginTest {
 	@DisplayName("Memes 생성")
 	public void memes_생성() throws Exception {
 		// given
-		Meme meme = FIRST_MEME(loginMember);
+		Meme meme = MEME(loginMember);
 
 		// when
 		final ResultActions perform = mockMvc.perform(

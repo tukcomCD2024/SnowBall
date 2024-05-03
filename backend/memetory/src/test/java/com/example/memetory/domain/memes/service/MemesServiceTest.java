@@ -37,7 +37,7 @@ public class MemesServiceTest {
 	void 밈스_저장() {
 		// given
 		Member member = MEMBER();
-		Meme meme = FIRST_MEME(member);
+		Meme meme = MEME(member);
 		MemesServiceDto memesServiceDto = MEMES_SERVICE_DTO();
 
 		// when

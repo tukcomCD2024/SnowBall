@@ -42,7 +42,7 @@ public class LikeRepositoryTest {
 		// given
 		Member member = MEMBER();
 		memberRepository.save(member);
-		Meme meme = FIRST_MEME(member);
+		Meme meme = MEME(member);
 		memeRepository.save(meme);
 		Memes memes = MEMES(member, meme);
 		memesRepository.save(memes);
