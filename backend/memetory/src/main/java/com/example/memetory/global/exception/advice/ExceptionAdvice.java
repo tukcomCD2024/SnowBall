@@ -1,4 +1,4 @@
-package com.example.memetory.global.advice;
+package com.example.memetory.global.exception.advice;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
