@@ -22,22 +22,22 @@ public class LikeService {
 
     @Transactional
     public void register(LikeServiceDto likeServiceDto) {
-        Member foundMember = memberService.findByEmail(likeServiceDto.getEmail());
-        Memes foundMemes = memesService.getMemesBetweenService(likeServiceDto.getMemesId());
-        foundMemes.addLikeCount();
+        Member member = memberService.findByEmail(likeServiceDto.getEmail());
+        Memes memes = memesService.getMemesBetweenService(likeServiceDto.getMemesId());
+        memes.addLikeCount();
 
-        Like newLike = likeServiceDto.toEntity(foundMember, foundMemes);
+        Like newLike = likeServiceDto.toEntity(member, memes);
         likeRepository.save(newLike);
     }
 
     @Transactional
     public void cancel(LikeServiceDto likeServiceDto) {
-        Member foundMember = memberService.findByEmail(likeServiceDto.getEmail());
-        Memes foundMemes = memesService.getMemesBetweenService(likeServiceDto.getMemesId());
-        foundMemes.cancelLikeCount();
+        Member member = memberService.findByEmail(likeServiceDto.getEmail());
+        Memes memes = memesService.getMemesBetweenService(likeServiceDto.getMemesId());
+        memes.cancelLikeCount();
 
-        Like foundLike = likeRepository.findLikeByMemberAndMemes(foundMember, foundMemes).orElseThrow(NotFoundLikeException::new);
+        Like like = likeRepository.findLikeByMemberAndMemes(member, memes).orElseThrow(NotFoundLikeException::new);
 
-        likeRepository.delete(foundLike);
+        likeRepository.delete(like);
     }
 }
