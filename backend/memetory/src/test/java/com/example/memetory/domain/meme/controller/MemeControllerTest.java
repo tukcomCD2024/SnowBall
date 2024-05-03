@@ -15,7 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.example.memetory.domain.meme.dto.MemeListResponse;
+import com.example.memetory.domain.meme.dto.MemePageResponse;
 import com.example.memetory.domain.meme.dto.MemeResponse;
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.exception.NotFoundMemeException;
@@ -37,7 +37,7 @@ public class MemeControllerTest extends LoginTest {
 	@DisplayName("단일 밈 조회 성공")
 	void 단일_밈_조회_성공() throws Exception {
 		// given 예상될 MemeResponse 구현
-		Meme meme = FIRST_MEME(loginMember);
+		Meme meme = MEME(loginMember);
 		given(memeService.checkMember(any())).willReturn(false);
 		given(memeService.getMeme(any())).willReturn(MemeResponse.of(meme));
 
@@ -74,7 +74,7 @@ public class MemeControllerTest extends LoginTest {
 	@DisplayName("단일 밈 조회 실패, 존재하지 않는 밈일 경우")
 	void 단일_밈_조회_실패_존재하지_않는_밈() throws Exception {
 		// given 예상될 MemeResponse 구현
-		Meme meme = FIRST_MEME(loginMember);
+		Meme meme = MEME(loginMember);
 		given(memeService.checkMember(any())).willReturn(false);
 		given(memeService.getMeme(any())).willThrow(NotFoundMemeException.class);
 
@@ -93,16 +93,16 @@ public class MemeControllerTest extends LoginTest {
 	@DisplayName("전체 밈 조회 성공")
 	void 전체_밈_조회_성공() throws Exception {
 		// given 예상될 MemeResponse 구현
-		List<MemeResponse> memeList = List.of(FIRST_MEME(loginMember), SECOND_MEME(loginMember)).stream()
+		List<MemeResponse> memeList = List.of(MEME(loginMember), SECOND_MEME(loginMember)).stream()
 			.map(MemeResponse::of)
 			.toList();
-		MemeListResponse memeListResponse = MemeListResponse.builder().memeList(memeList).build();
+		MemePageResponse memePageResponse = MemePageResponse.builder().memeList(memeList).build();
 
-		given(memeService.getAllMeme(any())).willReturn(memeListResponse);
+		given(memeService.getAllMeme(any(), any())).willReturn(memePageResponse);
 
 		// when
 		final ResultActions perform = mockMvc.perform(
-			get("/meme")
+			get("/meme?page=0&size=10")
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("Authorization", "Bearer " + accessToken)
 		).andDo(print());

@@ -1,14 +1,14 @@
 package com.example.memetory.domain.meme.service;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.meme.dto.AIServerSendDto;
-import com.example.memetory.domain.meme.dto.MemeListResponse;
+import com.example.memetory.domain.meme.dto.MemePageResponse;
 import com.example.memetory.domain.meme.dto.MemeResponse;
 import com.example.memetory.domain.meme.dto.MemeServiceDto;
 import com.example.memetory.domain.meme.entity.Meme;
@@ -25,11 +25,11 @@ public class MemeService {
 	private final MemeRepository memeRepository;
 
 	@Transactional
-	public void register(MemeServiceDto memeServiceDto) {
+	public MemeResponse register(MemeServiceDto memeServiceDto) {
 		Member member = memberService.findById(memeServiceDto.getMemberId());
 		Meme meme = memeServiceDto.toEntity(member);
 
-		memeRepository.save(meme);
+		return MemeResponse.of(memeRepository.save(meme));
 	}
 
 	@Transactional(readOnly = true)
@@ -39,9 +39,9 @@ public class MemeService {
 		Member member = memberService.findByEmail(memeServiceDto.getEmail());
 
 		AIServerSendDto aiServerSendDto = AIServerSendDto.builder()
-				.memberId(member.getId())
-				.scene(memeServiceDto.getScene())
-				.build();
+			.memberId(member.getId())
+			.scene(memeServiceDto.getScene())
+			.build();
 
 		return gson.toJson(aiServerSendDto);
 	}
@@ -62,23 +62,21 @@ public class MemeService {
 	}
 
 	@Transactional
-	public MemeListResponse getAllMeme(MemeServiceDto memeServiceDto) {
+	public MemePageResponse getAllMeme(MemeServiceDto memeServiceDto, Pageable pageable) {
 		Member member = memberService.findByEmail(memeServiceDto.getEmail());
 
-		List<MemeResponse> memeList = memeRepository.findAllByMember(member)
-				.stream()
-				.map(MemeResponse::of)
-				.toList();
+		Page<MemeResponse> memeList = memeRepository.findAllByMember(member, pageable);
 
-		return MemeListResponse.builder()
-				.memeList(memeList)
-				.build();
+		return MemePageResponse.builder()
+			.totalPage(memeList.getTotalPages())
+			.currentPage(pageable.getPageNumber())
+			.memeList(memeList.getContent())
+			.build();
 	}
 
 	// Service 계층 끼리의 밈 조회
 	@Transactional(readOnly = true)
 	public Meme getMemeBetweenService(Long memeId) {
-		Meme foundMeme = memeRepository.findById(memeId).orElseThrow(NotFoundMemeException::new);
-		return foundMeme;
+		return memeRepository.findById(memeId).orElseThrow(NotFoundMemeException::new);
 	}
 }

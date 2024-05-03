@@ -27,17 +27,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest
 public abstract class LoginTest {
-	protected MockMvc mockMvc;
 	@Value("${jwt.secretKey}")
 	protected String secretKey;
+	protected MockMvc mockMvc;
 	protected String accessToken;
+	protected Member loginMember;
+
 	@SpyBean
 	protected JwtService jwtService;
 	@MockBean
 	protected RefreshTokenService refreshTokenService;
 	@MockBean
 	protected MemberRepository memberRepository;
-	protected Member loginMember;
 	@Autowired
 	private ObjectMapper objectMapper;
 
@@ -47,8 +48,7 @@ public abstract class LoginTest {
 
 	@BeforeEach
 	public void loginSetup(WebApplicationContext ctx) {
-		mockMvc = MockMvcBuilders
-			.webAppContextSetup(ctx)
+		mockMvc = MockMvcBuilders.webAppContextSetup(ctx)
 			.addFilter(new JwtAuthenticationProcessingFilter(jwtService, memberRepository, refreshTokenService))
 			.alwaysDo(print())
 			.build();
