@@ -20,9 +20,7 @@ public class LikeController implements LikeApi {
         LikeServiceDto likeServiceDto = LikeServiceDto.create(email, memesId);
         likeService.register(likeServiceDto);
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body("좋아요 등록!!");
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/{memesId}/like")
@@ -31,8 +29,6 @@ public class LikeController implements LikeApi {
         LikeServiceDto likeServiceDto = LikeServiceDto.create(email, memesId);
         likeService.cancel(likeServiceDto);
 
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body("좋아요 취소!");
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
