@@ -85,11 +85,13 @@ public class JwtService {
 	}
 
 	public Optional<String> extractRefreshToken(HttpServletRequest request) {
-		return Optional.ofNullable(request.getHeader(refreshHeader));
+		return Optional.ofNullable(request.getHeader(refreshHeader))
+			.map(token -> token.replace("Bearer ", ""));
 	}
 
 	public Optional<String> extractAccessToken(HttpServletRequest request) {
-		return Optional.ofNullable(request.getHeader(accessHeader));
+		return Optional.ofNullable(request.getHeader(accessHeader))
+			.map(token -> token.replace("Bearer ", ""));
 	}
 
 	public Optional<String> extractEmail(String accessToken) throws JWTVerificationException {

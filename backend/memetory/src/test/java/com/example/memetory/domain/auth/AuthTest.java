@@ -33,8 +33,20 @@ public class AuthTest extends LoginTest {
 	private MemberService memberService;
 
 	@Test
-	@DisplayName("Access Token을 이용한 정상 로그인")
-	public void accessToken_로그인_성공() throws Exception {
+	@DisplayName("Access Token을 이용한 정상 인가(Bearer)")
+	public void accessToken_인가_성공_with_Bearer() throws Exception {
+		// when
+		final ResultActions perform = mockMvc.perform(post("/member").contentType(MediaType.APPLICATION_JSON)
+			.content(toRequestBody(new MemberUpdateDto("junrain2", "imageUrl2")))
+			.header("Authorization", "Bearer " + accessToken));
+
+		// then
+		perform.andExpect(status().isOk());
+	}
+
+	@Test
+	@DisplayName("Access Token을 이용한 정상 인가")
+	public void accessToken_인가_성공() throws Exception {
 		// when
 		final ResultActions perform = mockMvc.perform(post("/member").contentType(MediaType.APPLICATION_JSON)
 			.content(toRequestBody(new MemberUpdateDto("junrain2", "imageUrl2")))
