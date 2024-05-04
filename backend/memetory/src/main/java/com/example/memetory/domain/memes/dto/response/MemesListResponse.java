@@ -1,23 +1,40 @@
 package com.example.memetory.domain.memes.dto.response;
 
-import com.example.memetory.domain.memes.dto.MemesInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
+
 @Getter
 @NoArgsConstructor
-@Schema(description = "밈 리스트 응답 형식")
+@Schema(description = "밈스 전체 조회 반환 포맷")
 public class MemesListResponse {
 
-    @Schema(description = "밈 리스트")
-    private List<MemesInfo> memesInfoList;
+    @Schema(description = "밈스 리스트")
+    private List<MemesResponse> memesResponseList;
+
+    private Sort sort;
+
+    private int currentPage;
+
+    private int size;
+
+    private boolean first;
+
+    private boolean last;
 
     @Builder
-    public MemesListResponse(List<MemesInfo> memesInfoList) {
-        this.memesInfoList = memesInfoList;
+    public MemesListResponse(Slice<MemesResponse> memesSlice) {
+        this.memesResponseList = memesSlice.getContent();
+        this.sort = memesSlice.getSort();
+        this.currentPage = memesSlice.getNumber();
+        this.size = memesSlice.getSize();
+        this.first = memesSlice.isFirst();
+        this.last = memesSlice.isLast();
     }
 }

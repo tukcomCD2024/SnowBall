@@ -1,6 +1,7 @@
 package com.example.memetory.domain.memes.dto.response;
 
 import com.example.memetory.domain.comment.dto.CommentInfo;
+import com.example.memetory.domain.memes.entity.Memes;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,5 +52,19 @@ public class MemesResponse {
         this.commentInfoList = commentInfoList;
         this.likeCount = likeCount;
         this.createdAt = createdAt;
+    }
+
+    public static MemesResponse of(Memes memes) {
+        return MemesResponse.builder()
+                .memesId(memes.getId())
+                .memberId(memes.getMember().getId())
+                .memberName(memes.getMember().getName())
+                .memeUrl(memes.getMeme().getS3Url())
+                .title(memes.getTitle())
+                .commentCount(memes.getCommentCount())
+                .commentInfoList(memes.getComments().stream().map(CommentInfo::of).toList())
+                .likeCount(memes.getLikeCount())
+                .createdAt(memes.getCreatedAt())
+                .build();
     }
 }
