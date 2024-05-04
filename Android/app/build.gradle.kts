@@ -27,6 +27,8 @@ android {
         buildConfigField("String", "S3SECRETKEY", properties.getProperty("s3_secret_key"))
         buildConfigField("String", "S3BUCKET", properties.getProperty("s3_bucket"))
         buildConfigField("String", "GOOGLE_LOGIN_CLIENT_ID", properties.getProperty("google_login_client_id"))
+        buildConfigField("String", "GOOGLE_LOGIN_CLIENT_SECURITY_PASSWORD", properties.getProperty("google_login_client_security_password"))
+        buildConfigField("String", "GOOGLE_API_URL", properties.getProperty("google_api_url"))
     }
 
     buildTypes {
