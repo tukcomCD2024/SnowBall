@@ -1,6 +1,7 @@
 package com.example.memetory.domain.memes.controller;
 
 import com.example.memetory.domain.memes.dto.request.GenerateMemesRequest;
+import com.example.memetory.domain.memes.dto.response.MemesInfoListResponse;
 import com.example.memetory.domain.memes.dto.response.MemesListResponse;
 import com.example.memetory.domain.memes.dto.response.MemesResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -43,7 +45,7 @@ public interface MemesApi {
                     description = "인기차트 조회!"
             )
     })
-    ResponseEntity<MemesListResponse> findTopMemesByLike();
+    ResponseEntity<MemesInfoListResponse> findTopMemesByLike();
 
     @Operation(
             summary = "meme`s 이달의 인기차트 조회",
@@ -56,7 +58,7 @@ public interface MemesApi {
                     description = "이달의 인기차트 조회!"
             )
     })
-    ResponseEntity<MemesListResponse> findTopMemesByLikeForMonth();
+    ResponseEntity<MemesInfoListResponse> findTopMemesByLikeForMonth();
 
     @Operation(
             summary = "meme`s 이주의 인기차트 조회",
@@ -69,7 +71,7 @@ public interface MemesApi {
                     description = "이주의 인기차트 조회!"
             )
     })
-    ResponseEntity<MemesListResponse> findTopMemesByLikeForWeek();
+    ResponseEntity<MemesInfoListResponse> findTopMemesByLikeForWeek();
 
     @Operation(
             summary = "meme`s 삭제",
@@ -100,4 +102,17 @@ public interface MemesApi {
     ResponseEntity<MemesResponse> findOne(
             @Parameter(in = ParameterIn.PATH, description = "밈스 아이디", required = true) Long memesId
     );
+
+    @Operation(
+            summary = "meme`s 전체 조회",
+            description = "밈스 전체 조회 (유튜브 홈 화면과 같은 무한 스크롤)",
+            security = {@SecurityRequirement(name = "access_token")}
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "밈스 전체 조회!"
+            )
+    })
+    ResponseEntity<MemesListResponse> findAll(Pageable pageable);
 }
