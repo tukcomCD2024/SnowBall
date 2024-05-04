@@ -17,23 +17,23 @@ public enum ErrorCode {
 	EMAIL_NOT_FOUND(403, "이메일 추출 실패"),
 
 	// Member
-	MEMBER_NOT_FOUND(400, "멤버를 찾기 실패"),
+	MEMBER_NOT_FOUND(404, "멤버를 찾기 실패"),
 	NICKNAME_IS_DUPLICATED(409, "닉네임 중복"),
 
 	// Meme
-	MEME_NOT_FOUND(400, "밈을 찾기 실패"),
+	MEME_NOT_FOUND(404, "밈을 찾기 실패"),
 
 	// Memes
-	MEMES_NOT_FOUND(400, "밈스를 찾기 실패"),
+	MEMES_NOT_FOUND(404, "밈스를 찾기 실패"),
 
 	// Like
-	LIKE_NOT_FOUND(400, "좋아요 찾기 실패"),
+	LIKE_NOT_FOUND(404, "좋아요 찾기 실패"),
 
 	// Complain
-	COMPLAIN_NOT_FOUND(400, "신고 찾기 실패"),
+	COMPLAIN_NOT_FOUND(404, "신고 찾기 실패"),
 
 	// Comment
-	COMMENT_NOT_FOUND(400, "댓글 찾기 실패"),
+	COMMENT_NOT_FOUND(404, "댓글 찾기 실패"),
 	;
 
 	private final int status;

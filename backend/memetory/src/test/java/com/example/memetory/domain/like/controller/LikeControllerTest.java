@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.example.memetory.domain.like.dto.LikeServiceDto;
+import com.example.memetory.domain.like.exception.NotFoundLikeException;
 import com.example.memetory.domain.like.service.LikeService;
 import com.example.memetory.domain.memes.exception.NotFoundMemesException;
 import com.example.memetory.global.LoginTest;
@@ -38,9 +39,9 @@ public class LikeControllerTest extends LoginTest {
 		perform.andExpect(status().isCreated());
 	}
 
-	@DisplayName("좋아요 제거 성공")
+	@DisplayName("좋아요 취소 성공")
 	@Test
-	void 좋아요_제거() throws Exception {
+	void 좋아요_취소() throws Exception {
 		// when
 		final ResultActions perform = mockMvc.perform(
 			delete("/memes/-1/like")
@@ -51,5 +52,21 @@ public class LikeControllerTest extends LoginTest {
 		// then
 		verify(likeService).cancel(any(LikeServiceDto.class));
 		perform.andExpect(status().isOk());
+	}
+
+	@DisplayName("좋아요 취소 실패")
+	@Test
+	void 좋아요_취소_실패() throws Exception {
+		// when
+		doThrow(new NotFoundLikeException()).when(likeService).cancel(any(LikeServiceDto.class));
+
+		final ResultActions perform = mockMvc.perform(
+			delete("/memes/-1/like")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + accessToken)
+		).andDo(print());
+
+		// then
+		perform.andExpect(status().isNotFound());
 	}
 }
