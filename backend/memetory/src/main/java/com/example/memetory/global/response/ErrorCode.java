@@ -22,6 +22,7 @@ public enum ErrorCode {
 
 	// Meme
 	MEME_NOT_FOUND(404, "밈을 찾기 실패"),
+	MEME_ACCESS_DENY(403, "밈 접근 실패"),
 
 	// Memes
 	MEMES_NOT_FOUND(404, "밈스를 찾기 실패"),

@@ -17,7 +17,9 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.example.memetory.domain.meme.dto.MemePageResponse;
 import com.example.memetory.domain.meme.dto.MemeResponse;
+import com.example.memetory.domain.meme.dto.MemeServiceDto;
 import com.example.memetory.domain.meme.entity.Meme;
+import com.example.memetory.domain.meme.exception.AccessDeniedMemeException;
 import com.example.memetory.domain.meme.exception.NotFoundMemeException;
 import com.example.memetory.domain.meme.service.MemeService;
 import com.example.memetory.global.LoginTest;
@@ -38,7 +40,6 @@ public class MemeControllerTest extends LoginTest {
 	void 단일_밈_조회_성공() throws Exception {
 		// given 예상될 MemeResponse 구현
 		Meme meme = MEME(loginMember);
-		given(memeService.checkMember(any())).willReturn(false);
 		given(memeService.getMeme(any())).willReturn(MemeResponse.of(meme));
 
 		// when
@@ -57,7 +58,7 @@ public class MemeControllerTest extends LoginTest {
 	@DisplayName("단일 밈 조회 실패, 로그인한 유저의 밈이 아닐 경우")
 	void 단일_밈_조회_실패_유저인증_실패() throws Exception {
 		// given 예상될 MemeResponse 구현
-		given(memeService.checkMember(any())).willReturn(true);
+		given(memeService.getMeme(any(MemeServiceDto.class))).willThrow(new AccessDeniedMemeException());
 
 		// when
 		final ResultActions perform = mockMvc.perform(
@@ -75,8 +76,7 @@ public class MemeControllerTest extends LoginTest {
 	void 단일_밈_조회_실패_존재하지_않는_밈() throws Exception {
 		// given 예상될 MemeResponse 구현
 		Meme meme = MEME(loginMember);
-		given(memeService.checkMember(any())).willReturn(false);
-		given(memeService.getMeme(any())).willThrow(NotFoundMemeException.class);
+		given(memeService.getMeme(any())).willThrow(new NotFoundMemeException());
 
 		// when
 		final ResultActions perform = mockMvc.perform(

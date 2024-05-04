@@ -50,7 +50,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
 		if (refreshToken != null) {
 			checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
-			response.sendError(HttpServletResponse.SC_FORBIDDEN);
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 		}
 
 		if (refreshToken == null) {

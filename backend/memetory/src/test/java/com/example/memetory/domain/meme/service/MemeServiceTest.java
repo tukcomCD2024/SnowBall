@@ -75,6 +75,7 @@ public class MemeServiceTest {
 
 		// when
 		when(memeRepository.findById(memeServiceDto.getMemeId())).thenReturn(Optional.ofNullable(meme));
+		when(memberService.findById(memeServiceDto.getMemberId())).thenReturn(member);
 		MemeResponse result = memeService.getMeme(memeServiceDto);
 
 		// given

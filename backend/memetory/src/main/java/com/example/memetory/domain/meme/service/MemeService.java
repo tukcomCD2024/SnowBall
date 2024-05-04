@@ -12,6 +12,7 @@ import com.example.memetory.domain.meme.dto.MemePageResponse;
 import com.example.memetory.domain.meme.dto.MemeResponse;
 import com.example.memetory.domain.meme.dto.MemeServiceDto;
 import com.example.memetory.domain.meme.entity.Meme;
+import com.example.memetory.domain.meme.exception.AccessDeniedMemeException;
 import com.example.memetory.domain.meme.exception.NotFoundMemeException;
 import com.example.memetory.domain.meme.repository.MemeRepository;
 import com.google.gson.Gson;
@@ -48,17 +49,14 @@ public class MemeService {
 
 	@Transactional(readOnly = true)
 	public MemeResponse getMeme(MemeServiceDto memeServiceDto) {
+		Member member = memberService.findById(memeServiceDto.getMemberId());
 		Meme meme = memeRepository.findById(memeServiceDto.getMemeId()).orElseThrow(NotFoundMemeException::new);
+
+		if (meme.getMember() != member) {
+			throw new AccessDeniedMemeException();
+		}
 
 		return MemeResponse.of(meme);
-	}
-
-	@Transactional(readOnly = true)
-	public boolean checkMember(MemeServiceDto memeServiceDto) {
-		Meme meme = memeRepository.findById(memeServiceDto.getMemeId()).orElseThrow(NotFoundMemeException::new);
-		Member member = memberService.findById(memeServiceDto.getMemberId());
-
-		return meme.getMember() != member;
 	}
 
 	@Transactional
