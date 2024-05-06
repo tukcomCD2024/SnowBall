@@ -36,10 +36,10 @@ public class MemesService {
 
     @Transactional
     public void register(MemesServiceDto memesServiceDto) {
-        Member foundMember = memberService.findByEmail(memesServiceDto.getEmail());
-        Meme foundMeme = memeService.getMemeBetweenService(memesServiceDto.getMemeId());
+        Member member = memberService.findByEmail(memesServiceDto.getEmail());
+        Meme meme = memeService.getMemeBetweenService(memesServiceDto.getMemeId());
 
-		    Memes newMemes = memesServiceDto.toEntity(findMember, findMeme);
+		    Memes newMemes = memesServiceDto.toEntity(member, meme);
 		    memesRepository.save(newMemes);
 	  }
 
