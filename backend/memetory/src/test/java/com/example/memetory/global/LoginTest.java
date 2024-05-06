@@ -17,6 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.repository.MemberRepository;
 import com.example.memetory.global.security.jwt.filter.JwtAuthenticationProcessingFilter;
 import com.example.memetory.global.security.jwt.refresh.service.RefreshTokenService;
@@ -26,10 +27,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest
 public abstract class LoginTest {
-	protected MockMvc mockMvc;
 	@Value("${jwt.secretKey}")
 	protected String secretKey;
+	protected MockMvc mockMvc;
 	protected String accessToken;
+	protected Member loginMember;
+
 	@SpyBean
 	protected JwtService jwtService;
 	@MockBean
@@ -45,17 +48,18 @@ public abstract class LoginTest {
 
 	@BeforeEach
 	public void loginSetup(WebApplicationContext ctx) {
-		mockMvc = MockMvcBuilders
-			.webAppContextSetup(ctx)
+		mockMvc = MockMvcBuilders.webAppContextSetup(ctx)
 			.addFilter(new JwtAuthenticationProcessingFilter(jwtService, memberRepository, refreshTokenService))
 			.alwaysDo(print())
 			.build();
+
+		loginMember = MEMBER();
 
 		Date now = new Date();
 		accessToken = JWT.create()
 			.withSubject("AccessToken")
 			.withExpiresAt(new Date(now.getTime() + 18000))
-			.withClaim("email", MEMBER.getEmail())
+			.withClaim("email", loginMember.getEmail())
 			.sign(Algorithm.HMAC512(secretKey));
 	}
 }

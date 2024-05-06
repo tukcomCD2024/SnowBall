@@ -13,7 +13,9 @@ import com.example.memetory.domain.memes.dto.response.MemesResponse;
 import com.example.memetory.domain.memes.entity.Memes;
 import com.example.memetory.domain.memes.exception.NotFoundMemesException;
 import com.example.memetory.domain.memes.repository.MemesRepository;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -26,9 +28,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class MemesService {
-    private final MemberService memberService;
-    private final MemeService memeService;
-    private final MemesRepository memesRepository;
+	private final MemberService memberService;
+	private final MemeService memeService;
+	private final MemesRepository memesRepository;
 
     private static final int LIMIT = 10;    // 데이터 베이스에서 가져올 데이터의 개수
 
@@ -37,9 +39,9 @@ public class MemesService {
         Member foundMember = memberService.findByEmail(memesServiceDto.getEmail());
         Meme foundMeme = memeService.getMemeBetweenService(memesServiceDto.getMemeId());
 
-        Memes newMemes = memesServiceDto.toEntity(foundMember, foundMeme);
-        memesRepository.save(newMemes);
-    }
+		    Memes newMemes = memesServiceDto.toEntity(findMember, findMeme);
+		    memesRepository.save(newMemes);
+	  }
 
     @Transactional
     public void delete(MemesServiceDto memesServiceDto) {

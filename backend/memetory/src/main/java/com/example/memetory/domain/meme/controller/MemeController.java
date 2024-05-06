@@ -1,6 +1,7 @@
 package com.example.memetory.domain.meme.controller;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.example.memetory.domain.meme.dto.GenerateMemeListRequest;
-import com.example.memetory.domain.meme.dto.MemeListResponse;
+import com.example.memetory.domain.meme.dto.MemePageResponse;
 import com.example.memetory.domain.meme.dto.MemeResponse;
 import com.example.memetory.domain.meme.dto.MemeServiceDto;
 import com.example.memetory.domain.meme.dto.ShotStackCallBackRequest;
@@ -80,13 +81,13 @@ public class MemeController implements MemeApi{
 
     @GetMapping
     @Override
-    public ResponseEntity<MemeListResponse> findMemeList(@LoginMemberEmail String email) {
+    public ResponseEntity<MemePageResponse> findMemeList(@LoginMemberEmail String email, Pageable pageable) {
         MemeServiceDto memeServiceDto = MemeServiceDto.create(email);
 
-        MemeListResponse memeListResponse = memeService.getAllMeme(memeServiceDto);
+        MemePageResponse memePageResponse = memeService.getAllMeme(memeServiceDto, pageable);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(memeListResponse);
+                .body(memePageResponse);
     }
 }

@@ -3,6 +3,7 @@ package com.example.memetory.domain.meme.dto;
 import java.time.LocalDateTime;
 
 import com.example.memetory.domain.meme.entity.Meme;
+import com.querydsl.core.annotations.QueryProjection;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
@@ -28,7 +29,8 @@ public class MemeResponse {
     private LocalDateTime updateAt;
 
     @Builder
-    public MemeResponse(Long memeId, String s3Url, LocalDateTime createAt, LocalDateTime updateAt) {
+    @QueryProjection
+    public MemeResponse(final Long memeId, final String s3Url, final LocalDateTime createAt, final LocalDateTime updateAt) {
         this.memeId = memeId;
         this.s3Url = s3Url;
         this.createAt = createAt;

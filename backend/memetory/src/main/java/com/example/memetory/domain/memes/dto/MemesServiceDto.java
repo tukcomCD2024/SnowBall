@@ -16,8 +16,8 @@ public class MemesServiceDto {
     private Long memesId;
     private String email;
     private String title;
-    private int likeCount;
-    private int commentCount;
+    private Long likeCount;
+    private Long commentCount;
 
     public static MemesServiceDto create(Long memesId) {
         return MemesServiceDto.builder()
@@ -30,8 +30,8 @@ public class MemesServiceDto {
                 .member(member)
                 .meme(meme)
                 .title(this.title)
-                .likeCount(0)
-                .commentCount(0)
+                .likeCount(0L)
+                .commentCount(0L)
                 .build();
     }
 }
