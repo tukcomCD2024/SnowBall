@@ -100,7 +100,7 @@ public class AuthTest extends LoginTest {
 			.header("Authorization-refresh", refreshToken)).andDo(print());
 
 		// then
-		perform.andExpect(status().isForbidden())
+		perform.andExpect(status().isUnauthorized())
 			.andExpect(jsonPath("accessToken", is(accessToken)).exists())
 			.andExpect(jsonPath("refreshToken", is(refreshToken)).exists());
 	}
@@ -121,6 +121,6 @@ public class AuthTest extends LoginTest {
 			.header("Authorization-refresh", refreshToken)).andDo(print());
 
 		// then
-		perform.andExpect(status().isForbidden());
+		perform.andExpect(status().isUnauthorized());
 	}
 }

@@ -27,6 +27,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest
 public abstract class LoginTest {
+	protected final String MESSAGE = "message";
+	protected final String ERROR_MESSAGE = "errorMessage";
+
 	@Value("${jwt.secretKey}")
 	protected String secretKey;
 	protected MockMvc mockMvc;

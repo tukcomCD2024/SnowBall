@@ -1,5 +1,7 @@
 package com.example.memetory.domain.member.controller;
 
+import static com.example.memetory.global.response.ErrorCode.*;
+import static com.example.memetory.global.response.ResultCode.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -32,7 +34,7 @@ public class MemberControllerTest extends LoginTest {
 			.header("Authorization", "Bearer " + accessToken)).andDo(print());
 
 		// then
-		perform.andExpect(status().isOk());
+		perform.andExpect(status().isOk()).andExpect(jsonPath(MESSAGE).value(UPDATE_MEMBER_SUCCESS.getMessage()));
 	}
 
 	@Test
@@ -47,6 +49,7 @@ public class MemberControllerTest extends LoginTest {
 			.header("Authorization", "Bearer " + accessToken)).andDo(print());
 
 		// then
-		perform.andExpect(status().isConflict());
+		perform.andExpect(status().isConflict())
+			.andExpect(jsonPath(ERROR_MESSAGE).value(NICKNAME_IS_DUPLICATED.getMessage()));
 	}
 }
