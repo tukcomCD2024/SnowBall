@@ -1,13 +1,10 @@
 package com.example.memetory.domain.complain.exception;
 
-public class NotFoundComplainException extends RuntimeException{
-    public NotFoundComplainException() {}
+import com.example.memetory.global.exception.BusinessException;
+import com.example.memetory.global.response.ErrorCode;
 
-    public NotFoundComplainException(String message) {
-        super(message);
-    }
-
-    public NotFoundComplainException(String message, Throwable cause) {
-        super(message, cause);
+public class NotFoundComplainException extends BusinessException {
+    public NotFoundComplainException() {
+        super(ErrorCode.COMPLAIN_NOT_FOUND);
     }
 }

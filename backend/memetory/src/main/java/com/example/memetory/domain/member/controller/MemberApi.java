@@ -1,9 +1,9 @@
 package com.example.memetory.domain.member.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.example.memetory.domain.member.dto.MemberUpdateDto;
+import com.example.memetory.global.response.ResultResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,5 +30,5 @@ public interface MemberApi {
 			description = "닉네임 중복"
 		)}
 	)
-	ResponseEntity<HttpStatus> updateMember(@Parameter(hidden = true) String email, MemberUpdateDto memberUpdateDto);
+	ResponseEntity<ResultResponse> updateMember(@Parameter(hidden = true) String email, MemberUpdateDto memberUpdateDto);
 }

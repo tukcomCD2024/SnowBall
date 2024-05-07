@@ -5,9 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.example.memetory.domain.meme.dto.GenerateMemeListRequest;
-import com.example.memetory.domain.meme.dto.MemePageResponse;
-import com.example.memetory.domain.meme.dto.MemeResponse;
 import com.example.memetory.domain.meme.dto.ShotStackCallBackRequest;
+import com.example.memetory.global.response.ResultResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -46,7 +45,7 @@ public interface MemeApi {
 			description = "밈 생성"
 		)
 	})
-	ResponseEntity<HttpStatus> register(
+	ResponseEntity<ResultResponse> register(
 		@Parameter(hidden = true) String email,
 		GenerateMemeListRequest generateMemeListRequest
 	);
@@ -62,7 +61,7 @@ public interface MemeApi {
 			description = "밈 단일 조회"
 		)
 	})
-	ResponseEntity<MemeResponse> findMeme(
+	ResponseEntity<ResultResponse> findMeme(
 		@Parameter(hidden = true) String email,
 		@Parameter(in = ParameterIn.PATH, description = "밈 아이디", required = true) Long memeId
 	);
@@ -78,7 +77,7 @@ public interface MemeApi {
 			description = "밈 전체 조회"
 		)
 	})
-	ResponseEntity<MemePageResponse> findMemeList(
+	ResponseEntity<ResultResponse> findMemePage(
 		@Parameter(hidden = true) String email,
 		@Parameter Pageable pageable
 	);

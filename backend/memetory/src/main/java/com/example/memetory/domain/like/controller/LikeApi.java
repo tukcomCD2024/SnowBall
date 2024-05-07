@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
+import com.example.memetory.global.response.ResultResponse;
+
 @Tag(name = "Like")
 public interface LikeApi {
 
@@ -23,7 +25,7 @@ public interface LikeApi {
                     description = "좋아요 등록!"
             )
     })
-    ResponseEntity<String> register(
+	ResponseEntity<ResultResponse> register(
             @Parameter(hidden = true) String email,
             @Parameter(in = ParameterIn.PATH, description = "밈스 아이디", required = true)
             Long memesId
@@ -40,7 +42,7 @@ public interface LikeApi {
                     description = "좋아요 취소!"
             )
     })
-    ResponseEntity<String> cancel(
+    ResponseEntity<ResultResponse> cancel(
             @Parameter(hidden = true) String email,
             @Parameter(in = ParameterIn.PATH, description = "밈스 아이디", required = true)
             Long memesId

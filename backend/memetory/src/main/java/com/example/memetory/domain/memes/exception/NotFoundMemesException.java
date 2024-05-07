@@ -1,13 +1,10 @@
 package com.example.memetory.domain.memes.exception;
 
-public class NotFoundMemesException extends RuntimeException {
-    public NotFoundMemesException() {}
+import com.example.memetory.global.exception.BusinessException;
+import com.example.memetory.global.response.ErrorCode;
 
-    public NotFoundMemesException(String message) {
-        super(message);
-    }
-
-    public NotFoundMemesException(String message, Throwable cause) {
-        super(message, cause);
+public class NotFoundMemesException extends BusinessException {
+    public NotFoundMemesException() {
+        super(ErrorCode.MEMES_NOT_FOUND);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.memetory.domain.memes.controller;
 
 import static com.example.memetory.domain.meme.MemeFixture.*;
+import static com.example.memetory.global.response.ResultCode.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -38,7 +39,7 @@ public class MemesControllerTest extends LoginTest {
 		).andDo(print());
 
 		// then
-		perform.andExpect(status().isCreated());
-
+		perform.andExpect(status().isCreated())
+			.andExpect(jsonPath(MESSAGE).value(CREATE_MEMES_SUCCESS.getMessage()));
 	}
 }

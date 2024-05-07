@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.memetory.domain.member.dto.MemberServiceDto;
 import com.example.memetory.domain.member.entity.Member;
+import com.example.memetory.domain.member.exception.DuplicatedMemberException;
 import com.example.memetory.domain.member.exception.NotFoundMemberException;
 import com.example.memetory.domain.member.repository.MemberRepository;
 
@@ -86,26 +87,28 @@ public class MemberServiceTest {
 	}
 
 	@Test
-	@DisplayName("Member의 nickname 중복 여부 검사 true 반환")
-	void nickname_중복검사_True() {
-		// given
-		final MemberServiceDto memberServiceDto = MEMBER_SERVICE_DTO();
-		given(memberRepository.existsMemberByNickname(memberServiceDto.getNickname())).willReturn(true);
-
-		// then 실행
-		assertTrue(memberService.isDuplicatedNickname(MEMBER_SERVICE_DTO()));
-	}
-
-	@Test
-	@DisplayName("Member의 업데이트가 잘 이루어지는가")
+	@DisplayName("Member의 업데이트 성공")
 	void member_업데이트() {
 		MemberServiceDto memberServiceDto = UPDATE_MEMBER_SERVICE_DTO();
 
 		// when 멤버 업데이트
+		when(memberRepository.existsMemberByNickname(anyString())).thenReturn(false);
 		when(memberRepository.findByEmail(memberServiceDto.getEmail())).thenReturn(Optional.ofNullable(member));
 		memberService.update(memberServiceDto);
 
 		// then
 		assertThat(member.getNickname()).isEqualTo(memberServiceDto.getNickname());
+	}
+
+	@Test
+	@DisplayName("Member의 업데이트 실패")
+	void member_업데이트_실패() {
+		MemberServiceDto memberServiceDto = UPDATE_MEMBER_SERVICE_DTO();
+
+		// when 멤버 업데이트
+		when(memberRepository.existsMemberByNickname(anyString())).thenReturn(true);
+
+		// then
+		assertThrows(DuplicatedMemberException.class, () -> memberService.update(memberServiceDto));
 	}
 }

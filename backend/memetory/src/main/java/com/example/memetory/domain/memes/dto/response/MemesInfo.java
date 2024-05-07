@@ -1,4 +1,4 @@
-package com.example.memetory.domain.memes.dto;
+package com.example.memetory.domain.memes.dto.response;
 
 import java.time.LocalDateTime;
 

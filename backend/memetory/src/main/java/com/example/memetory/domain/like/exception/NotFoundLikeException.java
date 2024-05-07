@@ -1,13 +1,10 @@
 package com.example.memetory.domain.like.exception;
 
-public class NotFoundLikeException extends RuntimeException {
-    public NotFoundLikeException(){}
+import com.example.memetory.global.exception.BusinessException;
+import com.example.memetory.global.response.ErrorCode;
 
-    public NotFoundLikeException(String message) {
-        super(message);
-    }
-
-    public NotFoundLikeException(String message, Throwable cause) {
-        super(message, cause);
-    }
+public class NotFoundLikeException extends BusinessException {
+	public NotFoundLikeException() {
+		super(ErrorCode.LIKE_NOT_FOUND);
+	}
 }

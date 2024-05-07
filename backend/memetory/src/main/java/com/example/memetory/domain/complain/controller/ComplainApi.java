@@ -1,6 +1,8 @@
 package com.example.memetory.domain.complain.controller;
 
 import com.example.memetory.domain.complain.dto.request.GenerateComplainRequest;
+import com.example.memetory.global.response.ResultResponse;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -8,7 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 
 @Tag(name = "Complain")
@@ -24,7 +26,7 @@ public interface ComplainApi {
                     description = "신고 생성!"
             )
     })
-    ResponseEntity<HttpStatus> register(
+	ResponseEntity<ResultResponse> register(
             @Parameter(hidden = true) String email,
             GenerateComplainRequest generateComplainRequest
     );
@@ -40,7 +42,7 @@ public interface ComplainApi {
                     description = "신고 삭제!"
             )
     })
-    ResponseEntity<HttpStatus> delete(
+    ResponseEntity<ResultResponse> delete(
             @Parameter(in = ParameterIn.PATH, description = "신고 아이디", required = true) Long complainId
     );
 }

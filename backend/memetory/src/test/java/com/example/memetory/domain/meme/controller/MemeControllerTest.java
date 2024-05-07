@@ -1,6 +1,8 @@
 package com.example.memetory.domain.meme.controller;
 
 import static com.example.memetory.domain.meme.MemeFixture.*;
+import static com.example.memetory.global.response.ErrorCode.*;
+import static com.example.memetory.global.response.ResultCode.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -17,7 +19,9 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.example.memetory.domain.meme.dto.MemePageResponse;
 import com.example.memetory.domain.meme.dto.MemeResponse;
+import com.example.memetory.domain.meme.dto.MemeServiceDto;
 import com.example.memetory.domain.meme.entity.Meme;
+import com.example.memetory.domain.meme.exception.AccessDeniedMemeException;
 import com.example.memetory.domain.meme.exception.NotFoundMemeException;
 import com.example.memetory.domain.meme.service.MemeService;
 import com.example.memetory.global.LoginTest;
@@ -38,36 +42,33 @@ public class MemeControllerTest extends LoginTest {
 	void 단일_밈_조회_성공() throws Exception {
 		// given 예상될 MemeResponse 구현
 		Meme meme = MEME(loginMember);
-		given(memeService.checkMember(any())).willReturn(false);
 		given(memeService.getMeme(any())).willReturn(MemeResponse.of(meme));
 
 		// when
 		final ResultActions perform = mockMvc.perform(
-			get("/meme/-1")
-				.contentType(MediaType.APPLICATION_JSON)
-				.header("Authorization", "Bearer " + accessToken)
-		).andDo(print());
+				get("/meme/-1").contentType(MediaType.APPLICATION_JSON).header("Authorization", "Bearer " + accessToken))
+			.andDo(print());
 
 		// then
 		perform.andExpect(status().isOk())
-			.andExpect(jsonPath("$.s3Url").exists());
+			.andExpect(jsonPath(MESSAGE, GET_ONE_MEME_SUCCESS.getMessage()).exists())
+			.andExpect(jsonPath("$.data.s3Url").exists());
 	}
 
 	@Test
 	@DisplayName("단일 밈 조회 실패, 로그인한 유저의 밈이 아닐 경우")
 	void 단일_밈_조회_실패_유저인증_실패() throws Exception {
 		// given 예상될 MemeResponse 구현
-		given(memeService.checkMember(any())).willReturn(true);
+		given(memeService.getMeme(any(MemeServiceDto.class))).willThrow(new AccessDeniedMemeException());
 
 		// when
 		final ResultActions perform = mockMvc.perform(
-			get("/meme/-1")
-				.contentType(MediaType.APPLICATION_JSON)
-				.header("Authorization", "Bearer " + accessToken)
-		).andDo(print());
+				get("/meme/-1").contentType(MediaType.APPLICATION_JSON).header("Authorization", "Bearer " + accessToken))
+			.andDo(print());
 
 		// then
-		perform.andExpect(status().isForbidden());
+		perform.andExpect(status().isForbidden())
+			.andExpect(jsonPath(ERROR_MESSAGE, MEME_ACCESS_DENY.getMessage()).exists());
 	}
 
 	@Test
@@ -75,25 +76,24 @@ public class MemeControllerTest extends LoginTest {
 	void 단일_밈_조회_실패_존재하지_않는_밈() throws Exception {
 		// given 예상될 MemeResponse 구현
 		Meme meme = MEME(loginMember);
-		given(memeService.checkMember(any())).willReturn(false);
-		given(memeService.getMeme(any())).willThrow(NotFoundMemeException.class);
+		given(memeService.getMeme(any())).willThrow(new NotFoundMemeException());
 
 		// when
 		final ResultActions perform = mockMvc.perform(
-			get("/meme/-1")
-				.contentType(MediaType.APPLICATION_JSON)
-				.header("Authorization", "Bearer " + accessToken)
-		).andDo(print());
+				get("/meme/-1").contentType(MediaType.APPLICATION_JSON).header("Authorization", "Bearer " + accessToken))
+			.andDo(print());
 
 		// then
-		perform.andExpect(status().isNotFound());
+		perform.andExpect(status().isNotFound())
+			.andExpect(jsonPath(ERROR_MESSAGE, MEME_NOT_FOUND.getMessage()).exists());
 	}
 
 	@Test
 	@DisplayName("전체 밈 조회 성공")
 	void 전체_밈_조회_성공() throws Exception {
 		// given 예상될 MemeResponse 구현
-		List<MemeResponse> memeList = List.of(MEME(loginMember), SECOND_MEME(loginMember)).stream()
+		List<MemeResponse> memeList = List.of(MEME(loginMember), SECOND_MEME(loginMember))
+			.stream()
 			.map(MemeResponse::of)
 			.toList();
 		MemePageResponse memePageResponse = MemePageResponse.builder().memeList(memeList).build();
@@ -102,13 +102,12 @@ public class MemeControllerTest extends LoginTest {
 
 		// when
 		final ResultActions perform = mockMvc.perform(
-			get("/meme?page=0&size=10")
-				.contentType(MediaType.APPLICATION_JSON)
-				.header("Authorization", "Bearer " + accessToken)
-		).andDo(print());
+			get("/meme?page=0&size=10").contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + accessToken)).andDo(print());
 
 		// then
 		perform.andExpect(status().isOk())
-			.andExpect(jsonPath("$.memeList").isArray());
+			.andExpect(jsonPath(MESSAGE).value(GET_MEMBER_MEME_SUCCESS.getMessage()))
+			.andExpect(jsonPath("$.data.memeList").isArray());
 	}
 }

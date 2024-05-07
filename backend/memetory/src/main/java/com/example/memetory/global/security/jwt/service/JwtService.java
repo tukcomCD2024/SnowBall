@@ -61,7 +61,7 @@ public class JwtService {
 		response.getWriter().write(token);
 		refreshTokenService.updateToken(email, refreshToken);
 		} catch (IOException e) {
-			// 해당 에러처리 부분에 대해서 고민 필요
+			log.error("sendAccessAndRefreshToken 오류 발생 : {}", e.getMessage());
 			throw new RuntimeException(e);
 		}
 
