@@ -34,7 +34,7 @@ public class MemesController implements MemesApi{
     }
 
     // 밈스 좋아요 순으로 상위 10개 조회
-    @GetMapping("/likeAll")
+    @GetMapping("/like/all")
     @Override
     public ResponseEntity<MemesInfoListResponse> findTopMemesByLike() {
         MemesInfoListResponse newMemesInfoListResponse = memesService.findTopMemesByLike();
@@ -43,7 +43,7 @@ public class MemesController implements MemesApi{
     }
 
     // 최근 한 달 동안 생성된 밈스 중 좋아요 순으로 상위 10개 조회
-    @GetMapping("/likeMonth")
+    @GetMapping("/like/month")
     @Override
     public ResponseEntity<MemesInfoListResponse> findTopMemesByLikeForMonth() {
         MemesInfoListResponse newMemesInfoListResponse = memesService.findTopMemesByLikeForMonth();
@@ -52,7 +52,7 @@ public class MemesController implements MemesApi{
     }
 
     // 최근 한 주 동안 생성된 밈스 중 좋아요 순으로 상위 10개 조회
-    @GetMapping("/likeWeek")
+    @GetMapping("/like/week")
     @Override
     public ResponseEntity<MemesInfoListResponse> findTopMemesByLikeForWeek() {
         MemesInfoListResponse newMemesInfoListResponse = memesService.findTopMemesByLikeForWeek();
@@ -63,7 +63,7 @@ public class MemesController implements MemesApi{
     // 밈스 삭제
     @DeleteMapping("/{memesId}")
     @Override
-    public ResponseEntity<HttpStatus> delete(@PathVariable Long memesId) {
+    public ResponseEntity<HttpStatus> deleteMemes(@PathVariable Long memesId) {
         MemesServiceDto newMemesServiceDto = MemesServiceDto.create(memesId);
         memesService.delete(newMemesServiceDto);
 
@@ -73,7 +73,7 @@ public class MemesController implements MemesApi{
     // 밈스 단일 조회
     @GetMapping("/{memesId}")
     @Override
-    public ResponseEntity<MemesResponse> findOne(@PathVariable Long memesId) {
+    public ResponseEntity<MemesResponse> findMemes(@PathVariable Long memesId) {
         MemesServiceDto newMemesServiceDto = MemesServiceDto.create(memesId);
         MemesResponse newMemesResponse = memesService.findOne(newMemesServiceDto);
 
@@ -83,7 +83,7 @@ public class MemesController implements MemesApi{
     // 밈스 전체 조회
     @GetMapping
     @Override
-    public ResponseEntity<MemesListResponse> findAll(Pageable pageable) {
+    public ResponseEntity<MemesListResponse> findAllMemes(Pageable pageable) {
         MemesListResponse memesListResponse = memesService.findAll(pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(memesListResponse);

@@ -87,7 +87,7 @@ public interface MemesApi {
 			description = "밈스 삭제"
 		)
 	})
-	ResponseEntity<HttpStatus> delete(
+	ResponseEntity<HttpStatus> deleteMemes(
 		@Parameter(in = ParameterIn.PATH, description = "밈스 아이디", required = true) Long memesId
 	);
 
@@ -102,7 +102,7 @@ public interface MemesApi {
 			description = "밈스 단일 조회"
 		)
 	})
-	ResponseEntity<MemesResponse> findOne(
+	ResponseEntity<MemesResponse> findMemes(
 		@Parameter(in = ParameterIn.PATH, description = "밈스 아이디", required = true) Long memesId
 	);
 
@@ -117,5 +117,5 @@ public interface MemesApi {
 			description = "밈스 전체 조회"
 		)
 	})
-	ResponseEntity<MemesListResponse> findAll(Pageable pageable);
+	ResponseEntity<MemesListResponse> findAllMemes(Pageable pageable);
 }
