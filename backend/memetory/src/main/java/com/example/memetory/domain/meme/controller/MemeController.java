@@ -1,5 +1,7 @@
 package com.example.memetory.domain.meme.controller;
 
+import static com.example.memetory.global.response.ResultCode.*;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -15,12 +17,11 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.example.memetory.domain.meme.dto.GenerateMemeListRequest;
-import com.example.memetory.domain.meme.dto.MemePageResponse;
-import com.example.memetory.domain.meme.dto.MemeResponse;
 import com.example.memetory.domain.meme.dto.MemeServiceDto;
 import com.example.memetory.domain.meme.dto.ShotStackCallBackRequest;
 import com.example.memetory.domain.meme.service.MemeService;
 import com.example.memetory.global.annotation.LoginMemberEmail;
+import com.example.memetory.global.response.ResultResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -47,14 +48,13 @@ public class MemeController implements MemeApi {
 
 	@PostMapping
 	@Override
-	public ResponseEntity<HttpStatus> register(@LoginMemberEmail String email,
+	public ResponseEntity<ResultResponse> register(@LoginMemberEmail String email,
 		@RequestBody GenerateMemeListRequest generateMemeListRequest) {
 
 		MemeServiceDto memeServiceDto = generateMemeListRequest.toServiceDto(email);
 		String aiServerSendJson = memeService.getAIServerSendJson(memeServiceDto);
 
-		WebClient
-			.create(AI_SERVER_URL)
+		WebClient.create(AI_SERVER_URL)
 			.post()
 			.contentType(MediaType.APPLICATION_JSON)
 			.body(BodyInserters.fromValue(aiServerSendJson))
@@ -62,28 +62,24 @@ public class MemeController implements MemeApi {
 			.bodyToMono(Void.class)
 			.subscribe();
 
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		return ResponseEntity.status(HttpStatus.CREATED).body(ResultResponse.of(CREATE_MEME_SUCCESS));
 	}
 
 	@GetMapping("/{memeId}")
 	@Override
-	public ResponseEntity<MemeResponse> findMeme(@LoginMemberEmail String email, @PathVariable Long memeId) {
+	public ResponseEntity<ResultResponse> findMeme(@LoginMemberEmail String email, @PathVariable Long memeId) {
 		MemeServiceDto memeServiceDto = MemeServiceDto.create(email, memeId);
 
-		return ResponseEntity
-			.status(HttpStatus.OK)
-			.body(memeService.getMeme(memeServiceDto));
+		return ResponseEntity.ok(
+			ResultResponse.of(GET_ONE_MEME_SUCCESS, memeService.getMeme(memeServiceDto)));
 	}
 
 	@GetMapping
 	@Override
-	public ResponseEntity<MemePageResponse> findMemeList(@LoginMemberEmail String email, Pageable pageable) {
+	public ResponseEntity<ResultResponse> findMemePage(@LoginMemberEmail String email, Pageable pageable) {
 		MemeServiceDto memeServiceDto = MemeServiceDto.create(email);
 
-		MemePageResponse memePageResponse = memeService.getAllMeme(memeServiceDto, pageable);
-
-		return ResponseEntity
-			.status(HttpStatus.OK)
-			.body(memePageResponse);
+		return ResponseEntity.ok(
+			ResultResponse.of(GET_MEMBER_MEME_SUCCESS, memeService.getAllMeme(memeServiceDto, pageable)));
 	}
 }

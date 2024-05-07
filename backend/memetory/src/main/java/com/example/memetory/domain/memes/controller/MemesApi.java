@@ -1,13 +1,15 @@
 package com.example.memetory.domain.memes.controller;
 
 import com.example.memetory.domain.memes.dto.request.GenerateMemesRequest;
+import com.example.memetory.global.response.ResultResponse;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 
 @Tag(name = "Meme`s")
@@ -24,7 +26,7 @@ public interface MemesApi {
                     description = "밈스 생성!"
             )
     })
-    ResponseEntity<HttpStatus> register(
+	ResponseEntity<ResultResponse> register(
             @Parameter(hidden = true) String email,
             GenerateMemesRequest generateMemesRequest
     );

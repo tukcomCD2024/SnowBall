@@ -1,6 +1,7 @@
 package com.example.memetory.domain.member.controller;
 
-import org.springframework.http.HttpStatus;
+import static com.example.memetory.global.response.ResultCode.*;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +12,7 @@ import com.example.memetory.domain.member.dto.MemberServiceDto;
 import com.example.memetory.domain.member.dto.MemberUpdateDto;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.global.annotation.LoginMemberEmail;
+import com.example.memetory.global.response.ResultResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,12 +23,12 @@ public class MemberController implements MemberApi {
 	private final MemberService memberService;
 
 	@PostMapping
-	public ResponseEntity<HttpStatus> updateMember(@LoginMemberEmail String email,
+	public ResponseEntity<ResultResponse> updateMember(@LoginMemberEmail String email,
 		@RequestBody MemberUpdateDto memberUpdateDto) {
 		MemberServiceDto memberServiceDto = memberUpdateDto.toServiceDto(email);
 
 		memberService.update(memberServiceDto);
 
-		return ResponseEntity.status(HttpStatus.OK).build();
+		return ResponseEntity.ok(ResultResponse.of(UPDATE_MEMBER_SUCCESS));
 	}
 }
