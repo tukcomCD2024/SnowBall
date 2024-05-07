@@ -17,6 +17,12 @@ public enum ResultCode {
 
 	// memes
 	CREATE_MEMES_SUCCESS(201, "밈스 생성 성공"),
+	GET_ONE_MEMES_SUCCESS(200, "단일 밈스 조회 성공"),
+	GET_TOP_TEN_MEMES_SUCCESS(200, "Top 10 밈스 조회 성공"),
+	GET_MONTH_TOP_TEN_MEMES_SUCCESS(200, "월별 Top 10 밈스 조회 성공"),
+	GET_WEEK_TOP_TEN_MEMES_SUCCESS(200, "주별 Top 10 밈스 조회 성공"),
+	GET_ALL_MEMES_SUCCESS(200, "전체 밈스 조회 성공"),
+	DELETE_MEMES_SUCCESS(200, "밈스 삭제 성공"),
 
 	// like
 	CREATE_LIKE_SUCCESS(201, "좋아요 생성 성공"),

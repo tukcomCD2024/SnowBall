@@ -14,7 +14,7 @@ import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.service.MemeService;
-import com.example.memetory.domain.memes.dto.MemesInfo;
+import com.example.memetory.domain.memes.dto.response.MemesInfo;
 import com.example.memetory.domain.memes.dto.MemesServiceDto;
 import com.example.memetory.domain.memes.dto.response.MemesInfoListResponse;
 import com.example.memetory.domain.memes.dto.response.MemesListResponse;

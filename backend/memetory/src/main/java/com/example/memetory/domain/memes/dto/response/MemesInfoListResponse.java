@@ -1,6 +1,5 @@
 package com.example.memetory.domain.memes.dto.response;
 
-import com.example.memetory.domain.memes.dto.MemesInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;

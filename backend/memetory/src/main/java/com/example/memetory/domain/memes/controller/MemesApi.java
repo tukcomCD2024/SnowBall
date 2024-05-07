@@ -1,13 +1,9 @@
 package com.example.memetory.domain.memes.controller;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.example.memetory.domain.memes.dto.request.GenerateMemesRequest;
-import com.example.memetory.domain.memes.dto.response.MemesInfoListResponse;
-import com.example.memetory.domain.memes.dto.response.MemesListResponse;
-import com.example.memetory.domain.memes.dto.response.MemesResponse;
 import com.example.memetory.global.response.ResultResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,7 +44,7 @@ public interface MemesApi {
 			description = "인기차트 조회"
 		)
 	})
-	ResponseEntity<MemesInfoListResponse> findTopMemesByLike();
+	ResponseEntity<ResultResponse> findTopMemesByLike();
 
 	@Operation(
 		summary = "meme`s 이달의 인기차트 조회",
@@ -61,7 +57,7 @@ public interface MemesApi {
 			description = "이달의 인기차트 조회"
 		)
 	})
-	ResponseEntity<MemesInfoListResponse> findTopMemesByLikeForMonth();
+	ResponseEntity<ResultResponse> findTopMemesByLikeForMonth();
 
 	@Operation(
 		summary = "meme`s 이주의 인기차트 조회",
@@ -74,7 +70,7 @@ public interface MemesApi {
 			description = "이주의 인기차트 조회"
 		)
 	})
-	ResponseEntity<MemesInfoListResponse> findTopMemesByLikeForWeek();
+	ResponseEntity<ResultResponse> findTopMemesByLikeForWeek();
 
 	@Operation(
 		summary = "meme`s 삭제",
@@ -87,7 +83,7 @@ public interface MemesApi {
 			description = "밈스 삭제"
 		)
 	})
-	ResponseEntity<HttpStatus> deleteMemes(
+	ResponseEntity<ResultResponse> deleteMemes(
 		@Parameter(in = ParameterIn.PATH, description = "밈스 아이디", required = true) Long memesId
 	);
 
@@ -102,7 +98,7 @@ public interface MemesApi {
 			description = "밈스 단일 조회"
 		)
 	})
-	ResponseEntity<MemesResponse> findMemes(
+	ResponseEntity<ResultResponse> findMemes(
 		@Parameter(in = ParameterIn.PATH, description = "밈스 아이디", required = true) Long memesId
 	);
 
@@ -117,5 +113,5 @@ public interface MemesApi {
 			description = "밈스 전체 조회"
 		)
 	})
-	ResponseEntity<MemesListResponse> findAllMemes(Pageable pageable);
+	ResponseEntity<ResultResponse> findAllMemes(Pageable pageable);
 }
