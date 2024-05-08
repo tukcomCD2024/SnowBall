@@ -1,6 +1,5 @@
 package com.example.memetory.domain.memes.repository;
 
-import com.example.memetory.domain.memes.dto.response.MemesResponse;
 import com.example.memetory.domain.memes.entity.Memes;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -19,13 +18,13 @@ public interface MemesRepository extends JpaRepository<Memes, Long> {
     Optional<Memes> findByMemesId(Long memesId);
 
     @EntityGraph(attributePaths = {"meme", "member"})
-    Slice<Memes> findAllBy(Pageable pageable);
+    Slice<Memes> findMemesBy(Pageable pageable);
 
     @Query("SELECT ms FROM Memes ms ORDER BY ms.likeCount DESC")
     @EntityGraph(attributePaths = {"meme"})
     List<Memes> findTopMemesByLikeCount(Pageable pageable);
 
-    @Query("SELECT ms FROM Memes ms WHERE ms.createdAt >= :oneMonthAgo ORDER BY ms.likeCount DESC")
+    @Query("SELECT ms FROM Memes ms WHERE ms.createdAt >= :time ORDER BY ms.likeCount DESC")
     @EntityGraph(attributePaths = {"meme"})
-    List<Memes> findTopMemesByLikeCountForPeriod(Pageable pageable, LocalDateTime oneMonthAgo);
+    List<Memes> findTopMemesByLikeCountForPeriod(Pageable pageable, LocalDateTime time);
 }

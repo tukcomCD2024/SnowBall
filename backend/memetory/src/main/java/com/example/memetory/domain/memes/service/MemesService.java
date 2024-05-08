@@ -42,6 +42,7 @@ public class MemesService {
 		memesRepository.save(newMemes);
 	}
 
+	// 굳이 조회를 할 필요가 있나? 그냥 ID로 바로 삭제하면 되는거 아닌가?
 	@Transactional
 	public void delete(MemesServiceDto memesServiceDto) {
 		Memes foundMemes = findById(memesServiceDto.getMemesId());
@@ -57,7 +58,7 @@ public class MemesService {
 	// 밈스 전체 조회
 	@Transactional(readOnly = true)
 	public MemesListResponse findAll(Pageable pageable) {
-		Slice<Memes> memesSlice = memesRepository.findAllBy(pageable);
+		Slice<Memes> memesSlice = memesRepository.findMemesBy(pageable);
 
 		Slice<MemesResponse> memesResponseSlice = memesSlice.map(MemesResponse::of);
 
@@ -93,6 +94,7 @@ public class MemesService {
 		return findById(memesId);
 	}
 
+	// 굳이 왜 빼둔건지 이해가 안되는 코드
 	private List<MemesInfo> fetchTopMemesByLike() {
 		return memesRepository.findTopMemesByLikeCount(PageRequest.of(0, LIMIT))
 			.stream()
@@ -100,6 +102,7 @@ public class MemesService {
 			.toList();
 	}
 
+	// 주간, 월간으로 이해할 수 있는 코드
 	private List<MemesInfo> fetchTopMemesByLikeForPeriod(LocalDateTime fromDateTime) {
 		return memesRepository.findTopMemesByLikeCountForPeriod(PageRequest.of(0, LIMIT), fromDateTime)
 			.stream()
@@ -107,6 +110,7 @@ public class MemesService {
 			.toList();
 	}
 
+	// MemesResponse.of 가 있는데 왜 있는 코드인거지?
 	private MemesResponse buildMemesResponse(Memes memes) {
 		return MemesResponse.builder()
 			.memesId(memes.getId())
@@ -121,12 +125,14 @@ public class MemesService {
 			.build();
 	}
 
+	// 이 코드의 용도는 뭐지?
 	private MemesInfoListResponse buildMemesListResponse(List<MemesInfo> memesList) {
 		return MemesInfoListResponse.builder()
 			.memesInfoList(memesList)
 			.build();
 	}
 
+	// memesRepository.findByMemesId로 대체하면 되는데
 	private Memes findById(Long memesId) {
 		return memesRepository.findByMemesId(memesId).orElseThrow(NotFoundMemesException::new);
 	}
