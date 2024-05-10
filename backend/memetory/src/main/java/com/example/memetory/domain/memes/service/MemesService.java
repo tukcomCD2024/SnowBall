@@ -17,7 +17,7 @@ import com.example.memetory.domain.meme.service.MemeService;
 import com.example.memetory.domain.memes.dto.response.MemesInfo;
 import com.example.memetory.domain.memes.dto.MemesServiceDto;
 import com.example.memetory.domain.memes.dto.response.MemesInfoListResponse;
-import com.example.memetory.domain.memes.dto.response.MemesListResponse;
+import com.example.memetory.domain.memes.dto.response.MemesInfoSliceResponse;
 import com.example.memetory.domain.memes.dto.response.MemesResponse;
 import com.example.memetory.domain.memes.entity.Memes;
 import com.example.memetory.domain.memes.exception.NotFoundMemesException;
@@ -57,12 +57,12 @@ public class MemesService {
 
 	// 밈스 전체 조회
 	@Transactional(readOnly = true)
-	public MemesListResponse findAll(Pageable pageable) {
+	public MemesInfoSliceResponse findAll(Pageable pageable) {
 		Slice<Memes> memesSlice = memesRepository.findMemesBy(pageable);
 
 		Slice<MemesResponse> memesResponseSlice = memesSlice.map(MemesResponse::of);
 
-		return MemesListResponse.builder().memesSlice(memesResponseSlice).build();
+		return MemesInfoSliceResponse.builder().memesSlice(memesResponseSlice).build();
 	}
 
 	// 인기차트 조회 (좋아요 순으로 상위 10개)

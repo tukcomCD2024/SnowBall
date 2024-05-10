@@ -9,10 +9,9 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-@Schema(description = "밈 리스트 응답 형식")
+@Schema(description = "밈스 리스트 응답 형식")
 public class MemesInfoListResponse {
-
-    @Schema(description = "밈 리스트")
+    @Schema(description = "밈스 리스트")
     private List<MemesInfo> memesInfoList;
 
     @Builder

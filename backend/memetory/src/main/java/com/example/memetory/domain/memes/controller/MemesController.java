@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.memetory.domain.memes.dto.MemesServiceDto;
 import com.example.memetory.domain.memes.dto.request.GenerateMemesRequest;
 import com.example.memetory.domain.memes.dto.response.MemesInfoListResponse;
-import com.example.memetory.domain.memes.dto.response.MemesListResponse;
+import com.example.memetory.domain.memes.dto.response.MemesInfoSliceResponse;
 import com.example.memetory.domain.memes.dto.response.MemesResponse;
 import com.example.memetory.domain.memes.service.MemesService;
 import com.example.memetory.global.annotation.LoginMemberEmail;
@@ -89,7 +89,7 @@ public class MemesController implements MemesApi {
 	@GetMapping
 	@Override
 	public ResponseEntity<ResultResponse> findAllMemes(Pageable pageable) {
-		MemesListResponse response = memesService.findAll(pageable);
+		MemesInfoSliceResponse response = memesService.findAll(pageable);
 
 		return ResponseEntity.ok(ResultResponse.of(GET_ALL_MEMES_SUCCESS, response));
 	}
