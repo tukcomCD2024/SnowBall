@@ -3,6 +3,7 @@ package com.example.memetory.domain.memes.dto.response;
 import java.time.LocalDateTime;
 
 import com.example.memetory.domain.memes.entity.Memes;
+import com.querydsl.core.annotations.QueryProjection;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -32,6 +33,7 @@ public class MemesInfo {
 	@Schema(description = "밈스 생성 시각")
 	private LocalDateTime createdAt;
 
+	@QueryProjection
 	@Builder
 	public MemesInfo(Long memesId, String memberNickname, String title, Long commentCount, Long likeCount,
 		LocalDateTime createdAt) {
@@ -53,5 +55,4 @@ public class MemesInfo {
 			.createdAt(memes.getCreatedAt())
 			.build();
 	}
-
 }
