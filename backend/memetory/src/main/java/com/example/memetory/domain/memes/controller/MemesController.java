@@ -2,6 +2,8 @@ package com.example.memetory.domain.memes.controller;
 
 import static com.example.memetory.global.response.ResultCode.*;
 
+import java.util.List;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.memetory.domain.memes.dto.MemesServiceDto;
 import com.example.memetory.domain.memes.dto.request.GenerateMemesRequest;
-import com.example.memetory.domain.memes.dto.response.MemesInfoListResponse;
-import com.example.memetory.domain.memes.dto.response.MemesListResponse;
+import com.example.memetory.domain.memes.dto.response.MemesInfo;
+import com.example.memetory.domain.memes.dto.response.MemesInfoSliceResponse;
 import com.example.memetory.domain.memes.dto.response.MemesResponse;
 import com.example.memetory.domain.memes.service.MemesService;
 import com.example.memetory.global.annotation.LoginMemberEmail;
@@ -30,7 +32,6 @@ import lombok.RequiredArgsConstructor;
 public class MemesController implements MemesApi {
 	private final MemesService memesService;
 
-	// 밈스 생성
 	@PostMapping
 	@Override
 	public ResponseEntity<ResultResponse> register(@LoginMemberEmail String email,
@@ -40,56 +41,47 @@ public class MemesController implements MemesApi {
 		return ResponseEntity.status(HttpStatus.CREATED).body(ResultResponse.of(CREATE_MEMES_SUCCESS));
 	}
 
-	// 밈스 좋아요 순으로 상위 10개 조회
 	@GetMapping("/like/all")
 	@Override
 	public ResponseEntity<ResultResponse> findTopMemesByLike() {
-		MemesInfoListResponse response = memesService.findTopMemesByLike();
-
-		return ResponseEntity.ok(ResultResponse.of(GET_TOP_TEN_MEMES_SUCCESS, response));
+		return ResponseEntity.ok(ResultResponse.of(GET_TOP_TEN_MEMES_SUCCESS, memesService.getTopMemesByLike()));
 	}
 
-	// 최근 한 달 동안 생성된 밈스 중 좋아요 순으로 상위 10개 조회
 	@GetMapping("/like/month")
 	@Override
 	public ResponseEntity<ResultResponse> findTopMemesByLikeForMonth() {
-		MemesInfoListResponse response = memesService.findTopMemesByLikeForMonth();
+		List<MemesInfo> response = memesService.getTopMemesByLikeForMonth();
 
 		return ResponseEntity.ok(ResultResponse.of(GET_MONTH_TOP_TEN_MEMES_SUCCESS, response));
 	}
 
-	// 최근 한 주 동안 생성된 밈스 중 좋아요 순으로 상위 10개 조회
 	@GetMapping("/like/week")
 	@Override
 	public ResponseEntity<ResultResponse> findTopMemesByLikeForWeek() {
-		MemesInfoListResponse response = memesService.findTopMemesByLikeForWeek();
+		List<MemesInfo> response = memesService.getTopMemesByLikeForWeek();
 
 		return ResponseEntity.ok(ResultResponse.of(GET_WEEK_TOP_TEN_MEMES_SUCCESS, response));
 	}
 
-	// 밈스 삭제 -> 다른 유저가 삭제할 수 있음
 	@DeleteMapping("/{memesId}")
 	@Override
-	public ResponseEntity<ResultResponse> deleteMemes(@PathVariable Long memesId) {
-		memesService.delete(MemesServiceDto.create(memesId));
-
+	public ResponseEntity<ResultResponse> deleteMemes(@LoginMemberEmail String email, @PathVariable Long memesId) {
+		memesService.delete(MemesServiceDto.create(memesId, email));
 		return ResponseEntity.ok(ResultResponse.of(DELETE_MEMES_SUCCESS));
 	}
 
-	// 밈스 단일 조회? 밈스 상세 조회?
 	@GetMapping("/{memesId}")
 	@Override
 	public ResponseEntity<ResultResponse> findMemes(@PathVariable Long memesId) {
-		MemesResponse response = memesService.findOne(MemesServiceDto.create(memesId));
+		MemesResponse response = memesService.getMemesResponse(MemesServiceDto.create(memesId));
 
 		return ResponseEntity.ok(ResultResponse.of(GET_ONE_MEMES_SUCCESS, response));
 	}
 
-	// 밈스 전체 조회
 	@GetMapping
 	@Override
 	public ResponseEntity<ResultResponse> findAllMemes(Pageable pageable) {
-		MemesListResponse response = memesService.findAll(pageable);
+		MemesInfoSliceResponse response = memesService.getMemesInfoSliceResponse(pageable);
 
 		return ResponseEntity.ok(ResultResponse.of(GET_ALL_MEMES_SUCCESS, response));
 	}

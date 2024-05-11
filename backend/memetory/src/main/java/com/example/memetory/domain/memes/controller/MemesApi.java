@@ -84,6 +84,7 @@ public interface MemesApi {
 		)
 	})
 	ResponseEntity<ResultResponse> deleteMemes(
+		@Parameter(hidden = true) String email,
 		@Parameter(in = ParameterIn.PATH, description = "밈스 아이디", required = true) Long memesId
 	);
 

@@ -16,6 +16,16 @@ public class MemesFixture {
 			.build();
 	}
 
+	public static Memes MEMES_SET_LIKE(Member member, Meme meme, Long likeCount){
+		return Memes.builder()
+			.title("new Memes")
+			.member(member)
+			.meme(meme)
+			.likeCount(likeCount)
+			.commentCount(0L)
+			.build();
+	}
+
 	public static MemesServiceDto MEMES_SERVICE_DTO(){
 		return MemesServiceDto.builder()
 			.memberId(-1L)

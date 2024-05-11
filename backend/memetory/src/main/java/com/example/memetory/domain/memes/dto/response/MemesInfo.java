@@ -3,6 +3,7 @@ package com.example.memetory.domain.memes.dto.response;
 import java.time.LocalDateTime;
 
 import com.example.memetory.domain.memes.entity.Memes;
+import com.querydsl.core.annotations.QueryProjection;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -11,17 +12,14 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@Schema(description = "밈스 정보")
+@Schema(description = "밈스 미리보기 정보")
 public class MemesInfo {
 
 	@Schema(description = "밈스 아이디")
 	private Long memesId;
 
-	@Schema(description = "밈스를 생성한 멤버 아이디")
-	private Long memberId;
-
-	@Schema(description = "밈스로 보여줄 밈의 S3 주소")
-	private String memeUrl;
+	@Schema(description = "밈스를 생성한 멤버 닉네임")
+	private String memberNickname;
 
 	@Schema(description = "밈스 제목")
 	private String title;
@@ -35,12 +33,12 @@ public class MemesInfo {
 	@Schema(description = "밈스 생성 시각")
 	private LocalDateTime createdAt;
 
+	@QueryProjection
 	@Builder
-	public MemesInfo(Long memesId, Long memberId, String memeUrl, String title, Long commentCount, Long likeCount,
+	public MemesInfo(Long memesId, String memberNickname, String title, Long commentCount, Long likeCount,
 		LocalDateTime createdAt) {
 		this.memesId = memesId;
-		this.memberId = memberId;
-		this.memeUrl = memeUrl;
+		this.memberNickname = memberNickname;
 		this.title = title;
 		this.commentCount = commentCount;
 		this.likeCount = likeCount;
@@ -50,8 +48,7 @@ public class MemesInfo {
 	public static MemesInfo of(Memes memes) {
 		return MemesInfo.builder()
 			.memesId(memes.getId())
-			.memberId(memes.getMember().getId())
-			.memeUrl(memes.getMeme().getS3Url())
+			.memberNickname(memes.getMember().getNickname())
 			.title(memes.getTitle())
 			.commentCount(memes.getCommentCount())
 			.likeCount(memes.getLikeCount())

@@ -1,67 +1,76 @@
 package com.example.memetory.domain.memes.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.example.memetory.domain.comment.entity.Comment;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.global.entity.BaseEntity;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Memes extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "memes_id")
-    private Long Id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "memes_id")
+	private Long id;
 
-    private String title;
+	private String title;
 
-    private Long likeCount;
+	private Long likeCount;
 
-    private Long commentCount;
+	private Long commentCount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "meme_id")
-    private Meme meme;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "meme_id")
+	private Meme meme;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "member_id")
+	private Member member;
 
-    @OneToMany(mappedBy = "memes")
-    private List<Comment> comments = new ArrayList<>();
+	@OneToMany(mappedBy = "memes")
+	private List<Comment> comments = new ArrayList<>();
 
-    @Builder
-    public Memes(String title, Long likeCount, Long commentCount, Meme meme, Member member) {
-        this.title = title;
-        this.likeCount = likeCount;
-        this.commentCount = commentCount;
-        this.meme = meme;
-        this.member = member;
-    }
+	@Builder
+	public Memes(String title, Long likeCount, Long commentCount, Meme meme, Member member) {
+		this.title = title;
+		this.likeCount = likeCount;
+		this.commentCount = commentCount;
+		this.meme = meme;
+		this.member = member;
+	}
 
-    public void addLikeCount() {
-        this.likeCount++;
-    }
+	public void addLikeCount() {
+		this.likeCount++;
+	}
 
-    public void cancelLikeCount() {
-        this.likeCount--;
-    }
+	public void cancelLikeCount() {
+		this.likeCount--;
+	}
 
-    public void addCommentCount() {
-        this.commentCount++;
-    }
+	public void addCommentCount() {
+		this.commentCount++;
+	}
 
-    public void cancelCommentCount() {
-        this.commentCount--;
-    }
+	public void cancelCommentCount() {
+		this.commentCount--;
+	}
 }
