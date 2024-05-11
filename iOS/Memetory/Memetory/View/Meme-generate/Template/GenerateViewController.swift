@@ -7,18 +7,32 @@
 
 import UIKit
 import SnapKit
+import RxSwift
 
 final class GenerateViewController: UIViewController {
     
-    private let tableView = UITableView()
+    private let templateTitle = Scene.templateTitle
+    
+    var disposeBag = DisposeBag()
     
     let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "템플릿 선택"
         label.textColor = .black
         label.font = UIFont(name: "Pretendard-Bold", size: 25)
-//        label.font = .boldSystemFont(ofSize: 25)
         return label
+    }()
+    
+    lazy var gridView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width / 2 - 20, height: 225)
+        layout.minimumInteritemSpacing = 10
+        
+        let grid = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        grid.register(MainTemplateCollectionViewCell.self, forCellWithReuseIdentifier: MainTemplateCollectionViewCell.cellId)
+        grid.showsVerticalScrollIndicator = false
+        return grid
     }()
 
     override func viewDidLoad() {
@@ -33,20 +47,13 @@ final class GenerateViewController: UIViewController {
     
     func setupTableView() {
         // 델리게이트 패턴 대리자 설정
-        tableView.dataSource = self
-        tableView.delegate = self
-        // 셀의 높이 설정
-        tableView.rowHeight = 300
-        
-        // 셀의 등록 과정(스토리보드 사용시에는 스토리보드에서 자동 등록)
-        tableView.register(TemplateTableViewCell.self, forCellReuseIdentifier: "TemplateCell")
-        
-//        tableView.backgroundColor = .gray
+        gridView.delegate = self
+        gridView.dataSource = self
     }
     
     private func setViews() {
         view.addSubview(titleLabel)
-        view.addSubview(tableView)
+        view.addSubview(gridView)
     }
     
     private func setConstrainsts() {
@@ -55,29 +62,32 @@ final class GenerateViewController: UIViewController {
             make.leading.equalToSuperview().offset(15)
         }
         
-        tableView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(20)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
+        gridView.snp.makeConstraints{
+            $0.leading.equalToSuperview().offset(15)
+            $0.trailing.equalToSuperview().offset(-15)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(30)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
 }
 
-extension GenerateViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+extension GenerateViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        self.items.count
+        return templateTitle.count
     }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TemplateCell", for: indexPath) as! TemplateTableViewCell
-        cell.selectionStyle = .none
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainTemplateCollectionViewCell.cellId, for: indexPath) as! MainTemplateCollectionViewCell
+//        cell.prepare(color: self.items[indexPath.item])
+        cell.titleLabel.text = templateTitle[indexPath.item]
         return cell
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let detailVC = TemSelectViewController()
-//        detailVC.movieData = moviesArray[indexPath.row]
-        show(detailVC, sender: nil)
+//        settingVC.delegate = self
+        
+//        let array = memberListManager.getMemberList()
+//        detailVC.member = array[indexPath.row]
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }

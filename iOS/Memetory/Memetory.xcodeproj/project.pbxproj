@@ -21,7 +21,6 @@
 		5C4BB46E2B7B55540045FB28 /* MemesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4BB46D2B7B55540045FB28 /* MemesViewController.swift */; };
 		5C4BB4702B7B55720045FB28 /* StorageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4BB46F2B7B55720045FB28 /* StorageViewController.swift */; };
 		5C4BB4722B7B58AF0045FB28 /* GenerateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4BB4712B7B58AF0045FB28 /* GenerateViewController.swift */; };
-		5C4BB4742B7B5E300045FB28 /* TemplateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4BB4732B7B5E300045FB28 /* TemplateTableViewCell.swift */; };
 		5C4BB4762B7B62D30045FB28 /* TemSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4BB4752B7B62D30045FB28 /* TemSelectViewController.swift */; };
 		5C4BB47D2B7BD1B40045FB28 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5C4BB47C2B7BD1B40045FB28 /* Pretendard-Bold.otf */; };
 		5C5536322B8B2967004A3E67 /* SelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5536312B8B2967004A3E67 /* SelectViewController.swift */; };
@@ -38,6 +37,7 @@
 		5CAB5B6C2B6112A800B2AF59 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 5CAB5B6B2B6112A800B2AF59 /* RxRelay */; };
 		5CAB5B6E2B6112A800B2AF59 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 5CAB5B6D2B6112A800B2AF59 /* RxSwift */; };
 		5CC4BADD2B68E3DD00A2D259 /* NickNameSetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC4BADC2B68E3DD00A2D259 /* NickNameSetViewController.swift */; };
+		5CE3A0F62BEF3540001BF120 /* MainTemplateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE3A0F52BEF3540001BF120 /* MainTemplateCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,7 +55,6 @@
 		5C4BB46D2B7B55540045FB28 /* MemesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemesViewController.swift; sourceTree = "<group>"; };
 		5C4BB46F2B7B55720045FB28 /* StorageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageViewController.swift; sourceTree = "<group>"; };
 		5C4BB4712B7B58AF0045FB28 /* GenerateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateViewController.swift; sourceTree = "<group>"; };
-		5C4BB4732B7B5E300045FB28 /* TemplateTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateTableViewCell.swift; sourceTree = "<group>"; };
 		5C4BB4752B7B62D30045FB28 /* TemSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemSelectViewController.swift; sourceTree = "<group>"; };
 		5C4BB47C2B7BD1B40045FB28 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
 		5C5536312B8B2967004A3E67 /* SelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectViewController.swift; sourceTree = "<group>"; };
@@ -69,6 +68,7 @@
 		5CAB5B5A2B610EA800B2AF59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5CAB5B5C2B610EA800B2AF59 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5CC4BADC2B68E3DD00A2D259 /* NickNameSetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NickNameSetViewController.swift; sourceTree = "<group>"; };
+		5CE3A0F52BEF3540001BF120 /* MainTemplateCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTemplateCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,7 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				5C4BB4712B7B58AF0045FB28 /* GenerateViewController.swift */,
-				5C4BB4732B7B5E300045FB28 /* TemplateTableViewCell.swift */,
+				5CE3A0F52BEF3540001BF120 /* MainTemplateCollectionViewCell.swift */,
 			);
 			path = Template;
 			sourceTree = "<group>";
@@ -311,8 +311,8 @@
 				5C382FD42B95E49D003DD4C6 /* CheckViewController.swift in Sources */,
 				5CAB5B512B610EA600B2AF59 /* SceneDelegate.swift in Sources */,
 				5C4BB46E2B7B55540045FB28 /* MemesViewController.swift in Sources */,
-				5C4BB4742B7B5E300045FB28 /* TemplateTableViewCell.swift in Sources */,
 				5C4BB4762B7B62D30045FB28 /* TemSelectViewController.swift in Sources */,
+				5CE3A0F62BEF3540001BF120 /* MainTemplateCollectionViewCell.swift in Sources */,
 				5C382FDE2B96EF8E003DD4C6 /* Scene.swift in Sources */,
 				5C5536322B8B2967004A3E67 /* SelectViewController.swift in Sources */,
 			);
