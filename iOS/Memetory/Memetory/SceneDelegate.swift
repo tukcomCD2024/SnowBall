@@ -6,19 +6,51 @@
 //
 
 import UIKit
+import GoogleSignIn
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+//        guard let windowScene = (scene as? UIWindowScene) else { return }
+//        window = .init(windowScene: windowScene)
+//        let rootViewController = LoginViewController() // 자신이 원하는 View 넣기
+//        let navigationController = UINavigationController(rootViewController: rootViewController)
+//        window?.rootViewController = navigationController
+//        window?.makeKeyAndVisible()
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = .init(windowScene: windowScene)
-        let rootViewController = LoginViewController() // 자신이 원하는 View 넣기
-        let navigationController = UINavigationController(rootViewController: rootViewController)
-        window?.rootViewController = navigationController
+        print("SD: isFirstTime : \(DataManager.shared.getIsFirstTime())")
+        
+        if DataManager.shared.getIsLogin() {
+            //로그인 기록 있을 시
+            //Tabbar는 NavigationView로 할당하면 안됌
+            window?.rootViewController = TabBarViewController()
+            window?.makeKeyAndVisible()
+        } else {
+            //로그인 기록 없을 시
+            if !DataManager.shared.getIsFirstTime() {
+                //앱 처음 실행시
+                changeRootViewController(newVC: LoginViewController())
+            } else {
+                changeRootViewController(newVC: LoginViewController())
+            }
+        }
+        
+//        changeRootViewController(newVC: LoginViewController())
+        
+    }
+    
+    func changeRootViewController(newVC: UIViewController) {
+        let newVC = UINavigationController(rootViewController: newVC)
+        window?.rootViewController = newVC
         window?.makeKeyAndVisible()
+    }
+    
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let url = URLContexts.first?.url else { return }
+        let _ = GIDSignIn.sharedInstance.handle(url)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
