@@ -2,7 +2,6 @@ package com.example.memetory.domain.memes.service;
 
 import static java.time.LocalDateTime.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;

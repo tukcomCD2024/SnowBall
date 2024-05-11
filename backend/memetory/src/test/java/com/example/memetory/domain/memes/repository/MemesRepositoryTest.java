@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 
@@ -27,12 +26,8 @@ import com.example.memetory.domain.memes.dto.response.MemesInfo;
 import com.example.memetory.domain.memes.entity.Memes;
 import com.example.memetory.global.RepositoryTest;
 
-import lombok.extern.slf4j.Slf4j;
-
 @DisplayName("memes 레포지토리 테스트의 ")
 @RepositoryTest
-@Slf4j
-@Import(MemesQDtoFactory.class)
 public class MemesRepositoryTest {
 	@Autowired
 	private MemesRepository memesRepository;
@@ -90,7 +85,7 @@ public class MemesRepositoryTest {
 	void MEMES_TOP_10() {
 		// given Memes 100 세팅
 		for (int i = 0; i < 100; i++) {
-			memesRepository.save(MEMES_SET_LIKE(member, meme, (long)i));
+			memesRepository.save(MEMES_SET_LIKE(memberRepository.save(MEMBER()), meme, (long)i));
 		}
 		// when 실행
 		List<MemesInfo> result = memesRepository.findTopMemesOrderByLikeCount();
@@ -110,7 +105,7 @@ public class MemesRepositoryTest {
 			for (int j = 0; j < i * 2; j++) {
 				likeRepository.save(Like.builder()
 					.memes(savedMemes)
-					.member(member)
+					.member(memberRepository.save(MEMBER()))
 					.build());
 			}
 		}
