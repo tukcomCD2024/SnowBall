@@ -104,7 +104,7 @@ class LoginViewController: UIViewController {
                     _ = oauthToken
                     AuthService.shared.authWithKakao(oauthToken?.accessToken ?? "error"){ response in
                         print(response)
-                        self.judgeNextStep(token: response as! AuthModelResponse)
+                        self.judgeNextStep(token: response)
                     }
                 }
             }
@@ -119,7 +119,7 @@ class LoginViewController: UIViewController {
             AuthService.shared.authWithGoogle(result.user.accessToken.tokenString){ response in
                 print(response)
                 //로그인 이후 로직
-                self.judgeNextStep(token: response as! AuthModelResponse)
+                self.judgeNextStep(token: response)
             }
         }
     }
