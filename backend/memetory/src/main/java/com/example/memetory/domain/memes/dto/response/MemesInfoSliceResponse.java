@@ -19,6 +19,7 @@ public class MemesInfoSliceResponse {
 	@Schema(description = "밈스 리스트")
 	private List<MemesInfo> memesInfoList;
 
+	@Builder
 	public MemesInfoSliceResponse(int currentPage, boolean hasNext, List<MemesInfo> memesInfoList) {
 		this.currentPage = currentPage;
 		this.hasNext = hasNext;

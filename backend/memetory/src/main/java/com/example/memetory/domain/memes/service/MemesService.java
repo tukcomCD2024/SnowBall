@@ -1,25 +1,25 @@
 package com.example.memetory.domain.memes.service;
 
+import static java.time.LocalDateTime.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.memetory.domain.comment.dto.CommentInfo;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.service.MemeService;
-import com.example.memetory.domain.memes.dto.response.MemesInfo;
 import com.example.memetory.domain.memes.dto.MemesServiceDto;
-import com.example.memetory.domain.memes.dto.response.MemesInfoListResponse;
+import com.example.memetory.domain.memes.dto.response.MemesInfo;
 import com.example.memetory.domain.memes.dto.response.MemesInfoSliceResponse;
 import com.example.memetory.domain.memes.dto.response.MemesResponse;
 import com.example.memetory.domain.memes.entity.Memes;
+import com.example.memetory.domain.memes.exception.NotDeleteMemesException;
 import com.example.memetory.domain.memes.exception.NotFoundMemesException;
 import com.example.memetory.domain.memes.repository.MemesRepository;
 
@@ -28,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class MemesService {
-	private static final int LIMIT = 10;    // 데이터 베이스에서 가져올 데이터의 개수
 	private final MemberService memberService;
 	private final MemeService memeService;
 	private final MemesRepository memesRepository;
@@ -42,97 +41,51 @@ public class MemesService {
 		memesRepository.save(newMemes);
 	}
 
-	// 굳이 조회를 할 필요가 있나? 그냥 ID로 바로 삭제하면 되는거 아닌가?
 	@Transactional
 	public void delete(MemesServiceDto memesServiceDto) {
-		Memes foundMemes = findById(memesServiceDto.getMemesId());
-		memesRepository.delete(foundMemes);
+		Memes memes = findById(memesServiceDto.getMemesId());
+		if (memes.getMember() != memberService.findByEmail(memesServiceDto.getEmail())) {
+			throw new NotDeleteMemesException();
+		}
+		memesRepository.delete(memes);
 	}
 
-	public MemesResponse findOne(MemesServiceDto memesServiceDto) {
-		Memes foundMemes = findById(memesServiceDto.getMemesId());
-
-		return buildMemesResponse(foundMemes);
-	}
-
-	// 밈스 전체 조회
 	@Transactional(readOnly = true)
-	public MemesInfoSliceResponse findAll(Pageable pageable) {
-		Slice<Memes> memesSlice = memesRepository.findMemesBy(pageable);
-
-		Slice<MemesResponse> memesResponseSlice = memesSlice.map(MemesResponse::of);
-
-		return MemesInfoSliceResponse.builder().memesSlice(memesResponseSlice).build();
+	public MemesResponse getMemesResponse(MemesServiceDto memesServiceDto) {
+		return MemesResponse.of(findById(memesServiceDto.getMemeId()));
 	}
 
-	// 인기차트 조회 (좋아요 순으로 상위 10개)
 	@Transactional(readOnly = true)
-	public MemesInfoListResponse findTopMemesByLike() {
-		List<MemesInfo> memesList = fetchTopMemesByLike();
-		return buildMemesListResponse(memesList);
+	public MemesInfoSliceResponse getMemesInfoSliceResponse(Pageable pageable) {
+		Slice<MemesInfo> memesSlice = memesRepository.findAllMemesSlice(pageable);
+
+		return MemesInfoSliceResponse.builder()
+			.currentPage(pageable.getPageNumber())
+			.hasNext(memesSlice.hasNext())
+			.memesInfoList(memesSlice.getContent())
+			.build();
 	}
 
-	// 이달의 인기차트 조회 (한 달전 이후 부터 생성된 밈스 중에서 좋아요 순으로 상위 10개)
 	@Transactional(readOnly = true)
-	public MemesInfoListResponse findTopMemesByLikeForMonth() {
-		LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
-		List<MemesInfo> memesList = fetchTopMemesByLikeForPeriod(oneMonthAgo);
-		return buildMemesListResponse(memesList);
+	public List<MemesInfo> getTopMemesByLike() {
+		return memesRepository.findTopMemesOrderByLikeCount();
 	}
 
-	// 이주의 인기차트 조회 (한 주전 이후 부터 생성된 밈스 중에서 좋아요 순으로 상위 10개)
 	@Transactional(readOnly = true)
-	public MemesInfoListResponse findTopMemesByLikeForWeek() {
-		LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
-		List<MemesInfo> memesList = fetchTopMemesByLikeForPeriod(oneWeekAgo);
-		return buildMemesListResponse(memesList);
+	public List<MemesInfo> findTopMemesByLikeForMonth() {
+		return memesRepository.findTopMemesByLikeCountForPeriod(now().minusMonths(1));
 	}
 
-	// 서비스 계층 간의 밈스 조회
+	@Transactional(readOnly = true)
+	public List<MemesInfo> findTopMemesByLikeForWeek() {
+		return memesRepository.findTopMemesByLikeCountForPeriod(now().minusWeeks(1));
+	}
+
 	@Transactional(readOnly = true)
 	public Memes getMemesBetweenService(Long memesId) {
 		return findById(memesId);
 	}
 
-	// 굳이 왜 빼둔건지 이해가 안되는 코드
-	private List<MemesInfo> fetchTopMemesByLike() {
-		return memesRepository.findTopMemesByLikeCount(PageRequest.of(0, LIMIT))
-			.stream()
-			.map(MemesInfo::of)
-			.toList();
-	}
-
-	// 주간, 월간으로 이해할 수 있는 코드
-	private List<MemesInfo> fetchTopMemesByLikeForPeriod(LocalDateTime fromDateTime) {
-		return memesRepository.findTopMemesByLikeCountForPeriod(PageRequest.of(0, LIMIT), fromDateTime)
-			.stream()
-			.map(MemesInfo::of)
-			.toList();
-	}
-
-	// MemesResponse.of 가 있는데 왜 있는 코드인거지?
-	private MemesResponse buildMemesResponse(Memes memes) {
-		return MemesResponse.builder()
-			.memesId(memes.getId())
-			.memberId(memes.getMember().getId())
-			.memberName(memes.getMember().getName())
-			.memeUrl(memes.getMeme().getS3Url())
-			.title(memes.getTitle())
-			.commentCount(memes.getCommentCount())
-			.commentInfoList(memes.getComments().stream().map(CommentInfo::of).toList())
-			.likeCount(memes.getLikeCount())
-			.createdAt(memes.getCreatedAt())
-			.build();
-	}
-
-	// 이 코드의 용도는 뭐지?
-	private MemesInfoListResponse buildMemesListResponse(List<MemesInfo> memesList) {
-		return MemesInfoListResponse.builder()
-			.memesInfoList(memesList)
-			.build();
-	}
-
-	// memesRepository.findByMemesId로 대체하면 되는데
 	private Memes findById(Long memesId) {
 		return memesRepository.findByMemesId(memesId).orElseThrow(NotFoundMemesException::new);
 	}

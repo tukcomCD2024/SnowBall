@@ -20,7 +20,7 @@ public class MemesResponse {
 	private Long memesId;
 
 	@Schema(description = "밈스를 생성한 멤버 정보")
-	private MemberResponse memberId;
+	private MemberResponse member;
 
 	@Schema(description = "밈스로 보여줄 밈의 S3 주소")
 	private String memeUrl;
@@ -38,14 +38,26 @@ public class MemesResponse {
 	private LocalDateTime createdAt;
 
 	@Builder
-	public MemesResponse(Long memesId, MemberResponse memberId, String memeUrl, String title, Long commentCount,
+	public MemesResponse(Long memesId, MemberResponse member, String memeUrl, String title, Long commentCount,
 		Long likeCount, LocalDateTime createdAt) {
 		this.memesId = memesId;
-		this.memberId = memberId;
+		this.member = member;
 		this.memeUrl = memeUrl;
 		this.title = title;
 		this.commentCount = commentCount;
 		this.likeCount = likeCount;
 		this.createdAt = createdAt;
+	}
+
+	public static MemesResponse of(Memes memes) {
+		return MemesResponse.builder()
+			.memesId(memes.getId())
+			.member(MemberResponse.of(memes.getMember()))
+			.memeUrl(memes.getMeme().getS3Url())
+			.title(memes.getTitle())
+			.commentCount(memes.getCommentCount())
+			.likeCount(memes.getLikeCount())
+			.createdAt(memes.getCreatedAt())
+			.build();
 	}
 }
