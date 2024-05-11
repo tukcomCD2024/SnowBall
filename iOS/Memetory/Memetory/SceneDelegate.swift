@@ -32,7 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             //로그인 기록 없을 시
             if !DataManager.shared.getIsFirstTime() {
                 //앱 처음 실행시
-                changeRootViewController(newVC: OnboardingViewController())
+                changeRootViewController(newVC: LoginViewController())
             } else {
                 changeRootViewController(newVC: LoginViewController())
             }
