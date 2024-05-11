@@ -25,6 +25,14 @@ public class MemesServiceDto {
                 .build();
     }
 
+
+    public static MemesServiceDto create(Long memesId, String email) {
+        return MemesServiceDto.builder()
+            .memesId(memesId)
+            .email(email)
+            .build();
+    }
+
     public Memes toEntity(Member member, Meme meme) {
         return Memes.builder()
                 .member(member)

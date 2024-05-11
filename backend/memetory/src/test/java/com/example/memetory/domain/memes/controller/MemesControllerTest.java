@@ -1,10 +1,15 @@
 package com.example.memetory.domain.memes.controller;
 
 import static com.example.memetory.domain.meme.MemeFixture.*;
+import static com.example.memetory.domain.memes.MemesFixture.*;
+import static com.example.memetory.global.response.ErrorCode.*;
 import static com.example.memetory.global.response.ResultCode.*;
+import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +20,10 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.memes.dto.request.GenerateMemesRequest;
+import com.example.memetory.domain.memes.dto.response.MemesInfo;
+import com.example.memetory.domain.memes.dto.response.MemesInfoSliceResponse;
+import com.example.memetory.domain.memes.dto.response.MemesResponse;
+import com.example.memetory.domain.memes.exception.NotDeleteMemesException;
 import com.example.memetory.domain.memes.service.MemesService;
 import com.example.memetory.global.LoginTest;
 
@@ -26,7 +35,7 @@ public class MemesControllerTest extends LoginTest {
 
 	@Test
 	@DisplayName("Memes 생성")
-	public void memes_생성() throws Exception {
+	public void 밈스_생성() throws Exception {
 		// given
 		Meme meme = MEME(loginMember);
 
@@ -41,5 +50,115 @@ public class MemesControllerTest extends LoginTest {
 		// then
 		perform.andExpect(status().isCreated())
 			.andExpect(jsonPath(MESSAGE).value(CREATE_MEMES_SUCCESS.getMessage()));
+	}
+
+	@Test
+	@DisplayName("밈스 삭제")
+	public void 밈스_삭제() throws Exception {
+		// when
+		final ResultActions perform = mockMvc.perform(
+			delete("/memes/-1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + accessToken)
+		).andDo(print());
+
+		// then
+		perform.andExpect(status().isOk())
+			.andExpect(jsonPath(MESSAGE).value(DELETE_MEMES_SUCCESS.getMessage()));
+	}
+
+	@Test
+	@DisplayName("밈스 삭제 실패")
+	public void 밈스_삭제_실패() throws Exception {
+		// given
+		doThrow(new NotDeleteMemesException()).when(memesService).delete(any());
+
+		// when
+		final ResultActions perform = mockMvc.perform(
+			delete("/memes/-1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + accessToken)
+		).andDo(print());
+
+		// then
+		perform.andExpect(status().isForbidden())
+			.andExpect(jsonPath(ERROR_MESSAGE).value(MEMES_NOT_DELETE.getMessage()));
+	}
+
+	@Test
+	@DisplayName("좋아요 Top 10 밈스 조회")
+	public void TOP10_조회() throws Exception {
+		// when
+		final ResultActions perform = mockMvc.perform(
+			get("/memes/like/all")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + accessToken)
+		).andDo(print());
+
+		// then
+		perform.andExpect(status().isOk())
+			.andExpect(jsonPath(MESSAGE).value(GET_TOP_TEN_MEMES_SUCCESS.getMessage()));
+	}
+
+	@Test
+	@DisplayName("주간 좋아요 Top 10 밈스 조회")
+	public void 주간_TOP10_조회() throws Exception {
+		// when
+		final ResultActions perform = mockMvc.perform(
+			get("/memes/like/week")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + accessToken)
+		).andDo(print());
+
+		// then
+		perform.andExpect(status().isOk())
+			.andExpect(jsonPath(MESSAGE).value(GET_WEEK_TOP_TEN_MEMES_SUCCESS.getMessage()));
+	}
+
+	@Test
+	@DisplayName("밈스 단일 조회 성공")
+	public void 밈스_단일_조회_성공() throws Exception {
+		Meme meme = MEME(loginMember);
+		MemesResponse result = MemesResponse.of(MEMES(loginMember, meme));
+		given(memesService.getMemesResponse(any())).willReturn(result);
+
+		// when
+		final ResultActions perform = mockMvc.perform(
+			get("/memes/-1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + accessToken)
+		).andDo(print());
+
+		// then
+		perform.andExpect(status().isOk())
+			.andExpectAll(
+				jsonPath(MESSAGE).value(GET_ONE_MEMES_SUCCESS.getMessage()),
+				jsonPath("$.data.likeCount").value("1"));
+	}
+
+	@Test
+	@DisplayName("전체 밈스 슬라이스 조회 성공")
+	public void 전체_밈스_슬라이스_조회_성공() throws Exception {
+		Meme meme = MEME(loginMember);
+
+		MemesInfoSliceResponse response = MemesInfoSliceResponse.builder()
+			.memesInfoList(List.of(MemesInfo.of(MEMES(loginMember, meme))))
+			.currentPage(0)
+			.hasNext(false)
+			.build();
+
+		given(memesService.getMemesInfoSliceResponse(any())).willReturn(response);
+
+		// when
+		final ResultActions perform = mockMvc.perform(
+			get("/memes?page=0&size=10")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + accessToken)
+		).andDo(print());
+
+		// then
+		perform.andExpect(status().isOk()).andExpectAll(
+			jsonPath(MESSAGE).value(GET_ALL_MEMES_SUCCESS.getMessage()),
+			jsonPath("$.data.memesInfoList[0].title").value(response.getMemesInfoList().get(0).getTitle()));
 	}
 }

@@ -51,7 +51,7 @@ public class MemesService {
 
 	@Transactional(readOnly = true)
 	public MemesResponse getMemesResponse(MemesServiceDto memesServiceDto) {
-		return MemesResponse.of(findById(memesServiceDto.getMemeId()));
+		return MemesResponse.of(findById(memesServiceDto.getMemesId()));
 	}
 
 	@Transactional(readOnly = true)
@@ -71,12 +71,12 @@ public class MemesService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<MemesInfo> findTopMemesByLikeForMonth() {
+	public List<MemesInfo> getTopMemesByLikeForMonth() {
 		return memesRepository.findTopMemesByLikeCountForPeriod(now().minusMonths(1));
 	}
 
 	@Transactional(readOnly = true)
-	public List<MemesInfo> findTopMemesByLikeForWeek() {
+	public List<MemesInfo> getTopMemesByLikeForWeek() {
 		return memesRepository.findTopMemesByLikeCountForPeriod(now().minusWeeks(1));
 	}
 
