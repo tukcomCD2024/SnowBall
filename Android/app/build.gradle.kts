@@ -22,9 +22,13 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        buildConfigField("String", "BASE_URL", properties.getProperty("base_url"))
         buildConfigField("String", "S3ACCESSKEY", properties.getProperty("s3_access_key"))
         buildConfigField("String", "S3SECRETKEY", properties.getProperty("s3_secret_key"))
         buildConfigField("String", "S3BUCKET", properties.getProperty("s3_bucket"))
+        buildConfigField("String", "GOOGLE_LOGIN_CLIENT_ID", properties.getProperty("google_login_client_id"))
+        buildConfigField("String", "GOOGLE_LOGIN_CLIENT_SECURITY_PASSWORD", properties.getProperty("google_login_client_security_password"))
+        buildConfigField("String", "GOOGLE_API_URL", properties.getProperty("google_api_url"))
     }
 
     buildTypes {
@@ -98,4 +102,9 @@ dependencies {
     implementation("com.amazonaws:aws-android-sdk-cognito:2.20.1")
     implementation("com.amazonaws:aws-android-sdk-s3:2.75.0")
 
+    // Google Login
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+    implementation("com.google.gms:google-services:4.3.15")
+    implementation("com.google.firebase:firebase-auth:22.0.0")
+    implementation("com.google.firebase:firebase-bom:32.0.0")
 }
