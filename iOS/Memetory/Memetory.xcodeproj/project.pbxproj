@@ -62,6 +62,7 @@
 		5CC4BADD2B68E3DD00A2D259 /* NickNameSetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC4BADC2B68E3DD00A2D259 /* NickNameSetViewController.swift */; };
 		5CC889BF2BCD0EDB0074FFA2 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC889BE2BCD0EDB0074FFA2 /* DataManager.swift */; };
 		5CC889C12BCD0F060074FFA2 /* SecureDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC889C02BCD0F060074FFA2 /* SecureDataManager.swift */; };
+		5CE3A12E2BEFD453001BF120 /* MainTemplateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE3A12D2BEFD453001BF120 /* MainTemplateCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -106,6 +107,7 @@
 		5CC4BADC2B68E3DD00A2D259 /* NickNameSetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NickNameSetViewController.swift; sourceTree = "<group>"; };
 		5CC889BE2BCD0EDB0074FFA2 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		5CC889C02BCD0F060074FFA2 /* SecureDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureDataManager.swift; sourceTree = "<group>"; };
+		5CE3A12D2BEFD453001BF120 /* MainTemplateCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTemplateCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +162,7 @@
 			children = (
 				5C4BB4712B7B58AF0045FB28 /* GenerateViewController.swift */,
 				5C4BB4732B7B5E300045FB28 /* TemplateTableViewCell.swift */,
+				5CE3A12D2BEFD453001BF120 /* MainTemplateCollectionViewCell.swift */,
 			);
 			path = Template;
 			sourceTree = "<group>";
@@ -423,6 +426,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CE3A12E2BEFD453001BF120 /* MainTemplateCollectionViewCell.swift in Sources */,
 				5C4BB4722B7B58AF0045FB28 /* GenerateViewController.swift in Sources */,
 				5CC889BF2BCD0EDB0074FFA2 /* DataManager.swift in Sources */,
 				5CC889C12BCD0F060074FFA2 /* SecureDataManager.swift in Sources */,
