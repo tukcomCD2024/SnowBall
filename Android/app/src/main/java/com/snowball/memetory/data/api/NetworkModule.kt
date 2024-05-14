@@ -34,8 +34,11 @@ object NetworkModule {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    // 서비스 인터페이스 제공
+    ///////////////// 서비스 인터페이스 제공 //////////////////
+    // 로그인
     val authService: AuthService = retrofitApp.create(AuthService::class.java)
     val googleAuthService: AuthService = retrofitGoogle.create(AuthService::class.java)
+    // 밈 생성
+    val generateMemeService: GenerateMemeService = retrofitApp.create(GenerateMemeService::class.java)
 
 }
