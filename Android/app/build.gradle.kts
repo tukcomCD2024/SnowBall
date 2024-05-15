@@ -107,4 +107,9 @@ dependencies {
     implementation("com.google.gms:google-services:4.3.15")
     implementation("com.google.firebase:firebase-auth:22.0.0")
     implementation("com.google.firebase:firebase-bom:32.0.0")
+
+    // Jetpack Security
+    implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
+    
+    implementation("com.google.android.gms:play-services-basement:18.3.0")
 }
