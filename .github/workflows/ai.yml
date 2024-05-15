@@ -28,6 +28,8 @@ jobs:
           username: ${{ secrets.DOCKER_ID }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - run : echo "${{ secrets.AI_ENV }}" > .
+
       - name: Run scripts in server
         uses: appleboy/ssh-action@master
         with:
