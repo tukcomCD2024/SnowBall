@@ -1,6 +1,7 @@
 package com.snowball.memetory.presentation.ui.generatememe.voice
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import com.snowball.memetory.data.api.GenerateMemeService
 import com.snowball.memetory.data.api.NetworkModule
 import com.snowball.memetory.data.repository.VoiceRepository
 import com.snowball.memetory.databinding.FragmentChooseVoiceBinding
+import com.snowball.memetory.domain.model.voice.Voice
 import com.snowball.memetory.presentation.ui.generatememe.adapter.VoiceRVAdapter
 import com.snowball.memetory.util.FileUtil
 import com.snowball.memetory.util.S3Util
@@ -28,7 +30,6 @@ class ChooseVoiceFragment : Fragment(), VoiceRVAdapter.OnItemClickListener  {
 
     lateinit var navController: NavController
     lateinit var binding: FragmentChooseVoiceBinding
-    lateinit var rvAdapter: VoiceRVAdapter
 
     private lateinit var viewModel: VoiceViewModel
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
@@ -36,7 +37,7 @@ class ChooseVoiceFragment : Fragment(), VoiceRVAdapter.OnItemClickListener  {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Repository 초기화 (예시)
+        // Repository 초기화
         val generateMemeService = NetworkModule.generateMemeService
         val voiceRepository = VoiceRepository(generateMemeService) // 이 부분은 구현에 따라 달라집니다.
         val viewModelFactory = VoiceViewModelFactory(voiceRepository)
@@ -54,14 +55,15 @@ class ChooseVoiceFragment : Fragment(), VoiceRVAdapter.OnItemClickListener  {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val arryList = arrayListOf<String>(
-            "hello",
-            "맨유",
-            "손",
-            "겜스트",
-        )
+
+        viewModel.voices.observe(viewLifecycleOwner) { voices ->
+            setupRecyclerView(voices)  // 리사이클러뷰를 설정하는 함수
+        }
+        viewModel.getVoiceIdList()  // 서버에서 목소리 목록 가져오기
+
+        // 목소리 가져오기 버튼 클릭시 파일 권한 검사
         binding.chooseVoiceBtn.setOnClickListener {
-                // Check if permission is granted
+            // Check if permission is granted
             if (FileUtil.hasStoragePermission(requireContext())) {
                 FileUtil.openAudioPicker(audioPickerLauncher)
             } else {
@@ -69,11 +71,12 @@ class ChooseVoiceFragment : Fragment(), VoiceRVAdapter.OnItemClickListener  {
             }
         }
 
-        rvAdapter = VoiceRVAdapter(arryList, this)
-        binding.voiceRecyclerView.adapter = rvAdapter
-
+        // 확인하기 버튼 클릭시 리사이클러뷰에서 선택한 라디오버튼에 대해서 voiceId값 가져옴.
         navController = Navigation.findNavController(view)
         binding.confirmBtn.setOnClickListener {
+            val selectedVoiceId = viewModel.selectedVoiceId.value
+            Log.d("ChooseVoiceFragment", "$selectedVoiceId")
+            // 선택된 VoiceId로 필요한 작업 수행
             navController.navigate(R.id.action_chooseVoiceFragment_to_sceneDetailFragment)
         }
     }
@@ -97,6 +100,12 @@ class ChooseVoiceFragment : Fragment(), VoiceRVAdapter.OnItemClickListener  {
                 viewModel.uploadFileAndHandle(requireContext(), it)
             }
         }
+    }
+    private fun setupRecyclerView(voices: List<Voice>) {
+        val rvAdapter = VoiceRVAdapter(voices) { voice ->
+            viewModel.selectVoice(voice)
+        }
+        binding.voiceRecyclerView.adapter = rvAdapter
     }
 
 }
