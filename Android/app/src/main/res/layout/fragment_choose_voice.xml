@@ -39,8 +39,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/voiceRecyclerView"
             android:layout_width="0dp"
-            android:layout_height="500dp"
-            android:layout_marginTop="40sp"
+            android:layout_height="400dp"
+            android:layout_marginTop="20dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
