@@ -23,12 +23,12 @@ import com.snowball.memetory.data.dto.auth.request.SignInRequestDto
 import com.snowball.memetory.data.repository.AuthRepository
 import com.snowball.memetory.databinding.FragmentSignInBinding
 import com.snowball.memetory.util.SocialLoginUtil
+import com.snowball.memetory.util.TokenManager
 
 class SignInFragment : Fragment() {
 
     private var _binding: FragmentSignInBinding? = null
     private val binding get() = _binding!!
-//    private lateinit var authService: AuthService
     private lateinit var authViewModel: AuthViewModel
 
     private lateinit var socialLoginUtil: SocialLoginUtil
@@ -41,11 +41,8 @@ class SignInFragment : Fragment() {
         try {
             val account = task.getResult(ApiException::class.java)
             // 로그인 성공, 서버로 로그인 정보 전송
-            Toast.makeText(context, "${account.idToken}", Toast.LENGTH_LONG).show()
-            Log.d("SocialLoginUtil","email =${account.email}, id=${account.id}\n token =${account.idToken}" +
+            Log.d("SignInFragment","email =${account.email}, id=${account.id}\n token =${account.idToken}" +
                     "\nserverAuthCode=${account.serverAuthCode}")
-//            Log.e("AuthService", "${GoogleTokenRequestDto("authorization_code", BuildConfig.GOOGLE_LOGIN_CLIENT_ID,
-//                clientSecPwd,"", account.serverAuthCode!!)}")
             authViewModel.requestAccessToken(GoogleTokenRequestDto("authorization_code", BuildConfig.GOOGLE_LOGIN_CLIENT_ID,
                 clientSecPwd,"", account.serverAuthCode!!))
 
@@ -56,25 +53,14 @@ class SignInFragment : Fragment() {
 //            googleSignOut()
         } catch (e: ApiException) {
             // 로그인 실패 콜백 호출
-            Toast.makeText(context, "${e.message}", Toast.LENGTH_LONG).show()
-            Log.e("SocialLoginUtil", "google login fail = ${e.message}")
+            Log.e("SignInFragment", "google login fail = ${e.message}")
         }
-//
-//        if (result.resultCode == Activity.RESULT_OK) {
-//            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-//            Log.d("SignInFragment", "${result.data} // $task")
-//            socialLoginUtil.handleGoogleSignInResult(task)
-//
-//        } else if (result.resultCode == Activity.RESULT_CANCELED) {
-//
-//            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-//            Log.d("SignInFragment", "GoogleSignIn.getSignedInAccountFromIntent(result.data): $task")
-//            result.data?.extras?.let { bundle ->
-//                for (key in bundle.keySet()) {
-//                    Log.d("SignInFragment", "Extra [$key]: ${bundle.get(key)}")
-//                }
-//            } ?: Log.d("SignInFragment", "Login canceled with no extras")
-//        }
+
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        TokenManager.init(requireContext())
+        super.onCreate(savedInstanceState)
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -98,6 +84,8 @@ class SignInFragment : Fragment() {
         authViewModel.loginResult.observe(viewLifecycleOwner) {
             it.onSuccess {
                 Log.d("AUTH", "AccessToken = ${it.accessToken}, RefreshToken = ${it.refreshToken}")
+                TokenManager.saveTokens(it.accessToken, it.refreshToken)
+
                 findNavController().navigate(R.id.signUpFragment)
 
             }
@@ -106,14 +94,6 @@ class SignInFragment : Fragment() {
                 Toast.makeText(context, "Login failed: ${it.message}", Toast.LENGTH_LONG).show()
             }
         }
-
-        // AuthService와 AuthRepository 초기화
-//        authService = NetworkModule.retrofit.create(AuthService::class.java)
-//        val authRepository = AuthRepository(authService)
-//
-//        // ViewModelProvider를 사용하여 AuthViewModel 초기화
-//        val factory = AuthViewModelFactory(authRepository)
-//        authViewModel = ViewModelProvider(this, factory).get(AuthViewModel::class.java)
 
         // SocialLoginUtil 초기화
         socialLoginUtil = SocialLoginUtil(requireContext(), object : SocialLoginUtil.LoginCallback {
@@ -128,9 +108,7 @@ class SignInFragment : Fragment() {
             socialLoginUtil.googleSignOut()
             val signInIntent = socialLoginUtil.getGoogleSignInIntent()
             googleLoginLauncher.launch(signInIntent)
-
 //            socialLoginUtil.loginGoogle(requireActivity())
-//            findNavController().navigate(R.id.signUpFragment) // Navigate to another fragment
         }
     }
 
