@@ -35,7 +35,7 @@
 
     <fragment
         android:id="@+id/chooseVoiceFragment"
-        android:name="com.snowball.memetory.presentation.ui.generatememe.ChooseVoiceFragment"
+        android:name="com.snowball.memetory.presentation.ui.generatememe.voice.ChooseVoiceFragment"
         android:label="fragment_choose_voice"
         tools:layout="@layout/fragment_choose_voice" >
 
