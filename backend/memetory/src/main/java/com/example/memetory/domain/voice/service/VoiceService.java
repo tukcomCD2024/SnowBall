@@ -6,6 +6,7 @@ import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.voice.dto.VoiceServiceDto;
 import com.example.memetory.domain.voice.entity.Voice;
+import com.example.memetory.domain.voice.exception.NotFoundVoiceException;
 import com.example.memetory.domain.voice.repository.VoiceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +36,14 @@ public class VoiceService {
         Voice newVoice = voiceServiceDto.toEntity(foundMember);
 
         voiceRepository.save(newVoice);
+    }
+
+    @Transactional(readOnly = true)
+    public String findVoiceByMemberId(VoiceServiceDto voiceServiceDto) {
+        Member foundMember = memberService.findByEmail(voiceServiceDto.getEmail());
+        Voice foundVoice = voiceRepository.findByMemberId(foundMember.getId()).orElseThrow(NotFoundVoiceException::new);
+
+        return foundVoice.getElevenlabsVoiceId();
     }
 
     // 목소리 생성
