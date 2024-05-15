@@ -17,6 +17,12 @@ public class VoiceServiceDto {
     private String description;
     private String elevenlabsVoiceId;
 
+    public static VoiceServiceDto create(String email) {
+        return VoiceServiceDto.builder()
+                .email(email)
+                .build();
+    }
+
     public Voice toEntity(Member member) {
         return Voice.builder()
                 .member(member)

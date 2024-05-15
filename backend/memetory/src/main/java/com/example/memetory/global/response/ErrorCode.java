@@ -36,6 +36,9 @@ public enum ErrorCode {
 
 	// Comment
 	COMMENT_NOT_FOUND(404, "댓글 찾기 실패"),
+
+	// Voice
+	VOICE_NOT_FOUND(404, "보이스 찾기 실패")
 	;
 
 	private final int status;
