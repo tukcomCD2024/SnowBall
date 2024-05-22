@@ -29,9 +29,9 @@ public class MemberController implements MemberApi {
 		@RequestBody MemberUpdateRequest memberUpdateRequest) {
 		MemberServiceDto memberServiceDto = memberUpdateRequest.toServiceDtoFromEmail(email);
 
-		memberService.updateMember(memberServiceDto);
+		MemberResponse response = memberService.updateMember(memberServiceDto);
 
-		return ResponseEntity.ok(ResultResponse.of(UPDATE_MEMBER_SUCCESS));
+		return ResponseEntity.ok(ResultResponse.of(UPDATE_MEMBER_SUCCESS, response));
 	}
 
 	@GetMapping
