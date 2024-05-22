@@ -35,7 +35,7 @@ public class MemberController implements MemberApi {
 	}
 
 	@GetMapping
-	public ResponseEntity<ResultResponse> getMember(@LoginMemberEmail String email) {
+	public ResponseEntity<ResultResponse> findMember(@LoginMemberEmail String email) {
 		MemberServiceDto memberServiceDto = MemberServiceDto.createFromEmail(email);
 
 		MemberResponse response = memberService.findMemberResponse(memberServiceDto);

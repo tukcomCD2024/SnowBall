@@ -38,5 +38,5 @@ public interface MemberApi {
 		description = "로그인한 멤버의 프로필을 조회하기 위한 용도",
 		security = {@SecurityRequirement(name = "access_token")}
 	)
-	ResponseEntity<ResultResponse> getMember(@Parameter(hidden = true) String email);
+	ResponseEntity<ResultResponse> findMember(@Parameter(hidden = true) String email);
 }
