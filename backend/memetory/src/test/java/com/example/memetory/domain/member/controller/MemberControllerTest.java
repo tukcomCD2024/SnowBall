@@ -52,4 +52,18 @@ public class MemberControllerTest extends LoginTest {
 		perform.andExpect(status().isConflict())
 			.andExpect(jsonPath(ERROR_MESSAGE).value(NICKNAME_IS_DUPLICATED.getMessage()));
 	}
+
+	@Test
+	@DisplayName("단일 멤버 조회 성공")
+	public void 단일_멤버_조회_성공() throws Exception {
+		// given
+		given(memberService.findMemberFromEmail(anyString())).willReturn(loginMember);
+
+		// when
+		final ResultActions perform = mockMvc.perform(get("/member").contentType(MediaType.APPLICATION_JSON)
+			.header("Authorization", "Bearer " + accessToken)).andDo(print());
+
+		// then
+		perform.andExpect(status().isOk()).andExpect(jsonPath(MESSAGE).value(GET_MEMBER_SUCCESS.getMessage()));
+	}
 }

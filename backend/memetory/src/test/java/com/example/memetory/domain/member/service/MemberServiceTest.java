@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.memetory.domain.member.dto.MemberServiceDto;
+import com.example.memetory.domain.member.dto.response.MemberResponse;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.exception.DuplicatedMemberException;
 import com.example.memetory.domain.member.exception.NotFoundMemberException;
@@ -110,5 +111,20 @@ public class MemberServiceTest {
 
 		// then
 		assertThrows(DuplicatedMemberException.class, () -> memberService.updateMember(memberServiceDto));
+	}
+
+	@Test
+	@DisplayName("단일 멤버 조회 성공")
+	void member_조회_성공() {
+		// given
+		MemberServiceDto memberServiceDto = MEMBER_SERVICE_DTO();
+		MemberResponse expectation = MemberResponse.of(member);
+
+		// when
+		when(memberRepository.findByEmail(anyString())).thenReturn(Optional.ofNullable(member));
+		MemberResponse result = memberService.findMemberResponse(memberServiceDto);
+
+		// then
+		assertThat(expectation).usingRecursiveComparison().isEqualTo(result);
 	}
 }
