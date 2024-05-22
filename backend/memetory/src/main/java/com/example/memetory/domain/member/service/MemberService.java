@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.memetory.domain.member.dto.MemberServiceDto;
+import com.example.memetory.domain.member.dto.response.MemberResponse;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.exception.DuplicatedMemberException;
 import com.example.memetory.domain.member.exception.NotFoundMemberException;
@@ -19,20 +20,27 @@ public class MemberService {
 	private final MemberRepository memberRepository;
 
 	@Transactional
-	public void update(MemberServiceDto memberServiceDto) {
-		if (memberRepository.existsMemberByNickname(memberServiceDto.getNickname())) {
+	public void updateMember(MemberServiceDto memberServiceDto) {
+		if (memberRepository.existMemberByNickname(memberServiceDto.getNickname())) {
 			throw new DuplicatedMemberException();
 		}
-		findByEmail(memberServiceDto.getEmail()).update(memberServiceDto);
+		findMemberFromEmail(memberServiceDto.getEmail()).update(memberServiceDto);
 	}
 
 	@Transactional(readOnly = true)
-	public Member findByEmail(String email) {
-		return memberRepository.findByEmail(email).orElseThrow(NotFoundMemberException::new);
-	}
-
-	@Transactional(readOnly = true)
-	public Member findById(Long id) {
+	public Member findMemberFromId(Long id) {
 		return memberRepository.findById(id).orElseThrow(NotFoundMemberException::new);
+	}
+
+	@Transactional(readOnly = true)
+	public MemberResponse findMemberResponse(MemberServiceDto memberServiceDto) {
+		Member member = findMemberFromEmail(memberServiceDto.getEmail());
+
+		return MemberResponse.of(member);
+	}
+
+	@Transactional(readOnly = true)
+	public Member findMemberFromEmail(String email) {
+		return memberRepository.findByEmail(email).orElseThrow(NotFoundMemberException::new);
 	}
 }

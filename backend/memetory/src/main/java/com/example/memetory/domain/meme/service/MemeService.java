@@ -27,7 +27,7 @@ public class MemeService {
 
 	@Transactional
 	public MemeResponse register(MemeServiceDto memeServiceDto) {
-		Member member = memberService.findById(memeServiceDto.getMemberId());
+		Member member = memberService.findMemberFromId(memeServiceDto.getMemberId());
 		Meme meme = memeServiceDto.toEntity(member);
 
 		return MemeResponse.of(memeRepository.save(meme));
@@ -37,7 +37,7 @@ public class MemeService {
 	public String getAIServerSendJson(MemeServiceDto memeServiceDto) {
 		Gson gson = new Gson();
 
-		Member member = memberService.findByEmail(memeServiceDto.getEmail());
+		Member member = memberService.findMemberFromEmail(memeServiceDto.getEmail());
 
 		AIServerSendDto aiServerSendDto = AIServerSendDto.builder()
 			.memberId(member.getId())
@@ -49,7 +49,7 @@ public class MemeService {
 
 	@Transactional(readOnly = true)
 	public MemeResponse getMeme(MemeServiceDto memeServiceDto) {
-		Member member = memberService.findById(memeServiceDto.getMemberId());
+		Member member = memberService.findMemberFromId(memeServiceDto.getMemberId());
 		Meme meme = memeRepository.findById(memeServiceDto.getMemeId()).orElseThrow(NotFoundMemeException::new);
 
 		if (meme.getMember() != member) {
@@ -61,7 +61,7 @@ public class MemeService {
 
 	@Transactional
 	public MemePageResponse getAllMeme(MemeServiceDto memeServiceDto, Pageable pageable) {
-		Member member = memberService.findByEmail(memeServiceDto.getEmail());
+		Member member = memberService.findMemberFromEmail(memeServiceDto.getEmail());
 
 		Page<MemeResponse> memeList = memeRepository.findAllByMember(member, pageable);
 

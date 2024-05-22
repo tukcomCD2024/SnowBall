@@ -10,5 +10,5 @@ public interface MemberQueryRepository {
 
 	Optional<Member> findByEmail(String email);
 
-	boolean existsMemberByNickname(String email);
+	boolean existMemberByNickname(String email);
 }

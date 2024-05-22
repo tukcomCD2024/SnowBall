@@ -44,7 +44,7 @@ public class MemberServiceTest {
 
 		// when 실행
 		when(memberRepository.findByEmail(email)).thenReturn(Optional.ofNullable(member));
-		Member result = memberService.findByEmail(email);
+		Member result = memberService.findMemberFromEmail(email);
 
 		// then
 		assertThat(result).isEqualTo(member);
@@ -58,7 +58,7 @@ public class MemberServiceTest {
 		given(memberRepository.findByEmail(any())).willReturn(Optional.empty());
 
 		// then
-		assertThrows(NotFoundMemberException.class, () -> memberService.findByEmail(email));
+		assertThrows(NotFoundMemberException.class, () -> memberService.findMemberFromEmail(email));
 	}
 
 	@Test
@@ -69,7 +69,7 @@ public class MemberServiceTest {
 
 		// when 실행
 		when(memberRepository.findById(id)).thenReturn(Optional.ofNullable(member));
-		Member result = memberService.findById(id);
+		Member result = memberService.findMemberFromId(id);
 
 		// then
 		assertThat(result).isEqualTo(member);
@@ -83,7 +83,7 @@ public class MemberServiceTest {
 		given(memberRepository.findById(id)).willReturn(Optional.empty());
 
 		// then
-		assertThrows(NotFoundMemberException.class, () -> memberService.findById(id));
+		assertThrows(NotFoundMemberException.class, () -> memberService.findMemberFromId(id));
 	}
 
 	@Test
@@ -92,9 +92,9 @@ public class MemberServiceTest {
 		MemberServiceDto memberServiceDto = UPDATE_MEMBER_SERVICE_DTO();
 
 		// when 멤버 업데이트
-		when(memberRepository.existsMemberByNickname(anyString())).thenReturn(false);
+		when(memberRepository.existMemberByNickname(anyString())).thenReturn(false);
 		when(memberRepository.findByEmail(memberServiceDto.getEmail())).thenReturn(Optional.ofNullable(member));
-		memberService.update(memberServiceDto);
+		memberService.updateMember(memberServiceDto);
 
 		// then
 		assertThat(member.getNickname()).isEqualTo(memberServiceDto.getNickname());
@@ -106,9 +106,9 @@ public class MemberServiceTest {
 		MemberServiceDto memberServiceDto = UPDATE_MEMBER_SERVICE_DTO();
 
 		// when 멤버 업데이트
-		when(memberRepository.existsMemberByNickname(anyString())).thenReturn(true);
+		when(memberRepository.existMemberByNickname(anyString())).thenReturn(true);
 
 		// then
-		assertThrows(DuplicatedMemberException.class, () -> memberService.update(memberServiceDto));
+		assertThrows(DuplicatedMemberException.class, () -> memberService.updateMember(memberServiceDto));
 	}
 }

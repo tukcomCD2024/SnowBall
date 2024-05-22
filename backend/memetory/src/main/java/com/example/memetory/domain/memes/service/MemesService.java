@@ -33,7 +33,7 @@ public class MemesService {
 
 	@Transactional
 	public void register(MemesServiceDto memesServiceDto) {
-		Member member = memberService.findByEmail(memesServiceDto.getEmail());
+		Member member = memberService.findMemberFromEmail(memesServiceDto.getEmail());
 		Meme meme = memeService.getMemeBetweenService(memesServiceDto.getMemeId());
 
 		Memes newMemes = memesServiceDto.toEntity(member, meme);
@@ -43,7 +43,7 @@ public class MemesService {
 	@Transactional
 	public void delete(MemesServiceDto memesServiceDto) {
 		Memes memes = findById(memesServiceDto.getMemesId());
-		if (memes.getMember() != memberService.findByEmail(memesServiceDto.getEmail())) {
+		if (memes.getMember() != memberService.findMemberFromEmail(memesServiceDto.getEmail())) {
 			throw new NotDeleteMemesException();
 		}
 		memesRepository.delete(memes);

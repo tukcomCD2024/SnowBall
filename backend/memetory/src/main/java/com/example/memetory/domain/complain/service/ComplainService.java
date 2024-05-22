@@ -22,7 +22,7 @@ public class ComplainService {
 
     @Transactional
     public void register(ComplainServiceDto complainServiceDto) {
-        Member foundMember = memberService.findByEmail(complainServiceDto.getEmail());
+        Member foundMember = memberService.findMemberFromEmail(complainServiceDto.getEmail());
         Memes foundMemes = memesService.getMemesBetweenService(complainServiceDto.getMemesId());
 
         Complain newComplain = complainServiceDto.toEntity(foundMember, foundMemes);

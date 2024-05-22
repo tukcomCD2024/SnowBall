@@ -22,7 +22,7 @@ public class LikeService {
 
     @Transactional
     public void register(LikeServiceDto likeServiceDto) {
-        Member member = memberService.findByEmail(likeServiceDto.getEmail());
+        Member member = memberService.findMemberFromEmail(likeServiceDto.getEmail());
         Memes memes = memesService.getMemesBetweenService(likeServiceDto.getMemesId());
         memes.addLikeCount();
 
@@ -32,7 +32,7 @@ public class LikeService {
 
     @Transactional
     public void cancel(LikeServiceDto likeServiceDto) {
-        Member member = memberService.findByEmail(likeServiceDto.getEmail());
+        Member member = memberService.findMemberFromEmail(likeServiceDto.getEmail());
         Memes memes = memesService.getMemesBetweenService(likeServiceDto.getMemesId());
         memes.cancelLikeCount();
 

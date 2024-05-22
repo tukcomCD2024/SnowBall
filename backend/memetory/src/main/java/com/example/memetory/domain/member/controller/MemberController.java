@@ -29,7 +29,7 @@ public class MemberController implements MemberApi {
 		@RequestBody MemberUpdateRequest memberUpdateRequest) {
 		MemberServiceDto memberServiceDto = memberUpdateRequest.toServiceDtoFromEmail(email);
 
-		memberService.update(memberServiceDto);
+		memberService.updateMember(memberServiceDto);
 
 		return ResponseEntity.ok(ResultResponse.of(UPDATE_MEMBER_SUCCESS));
 	}
@@ -38,7 +38,7 @@ public class MemberController implements MemberApi {
 	public ResponseEntity<ResultResponse> getMember(@LoginMemberEmail String email) {
 		MemberServiceDto memberServiceDto = MemberServiceDto.createFromEmail(email);
 
-		MemberResponse response = memberService.findMemberResponseByEmail(memberServiceDto);
+		MemberResponse response = memberService.findMemberResponse(memberServiceDto);
 
 		return ResponseEntity.ok(ResultResponse.of(GET_MEMBER_SUCCESS, response));
 	}

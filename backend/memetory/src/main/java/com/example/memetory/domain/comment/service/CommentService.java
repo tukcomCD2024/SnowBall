@@ -22,7 +22,7 @@ public class CommentService {
 
     @Transactional
     public void register(CommentServiceDto commentServiceDto) {
-        Member foundMember = memberService.findByEmail(commentServiceDto.getEmail());
+        Member foundMember = memberService.findMemberFromEmail(commentServiceDto.getEmail());
         Memes foundMemes = memesService.getMemesBetweenService(commentServiceDto.getMemesId());
         foundMemes.addCommentCount();
 

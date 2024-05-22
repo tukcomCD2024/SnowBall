@@ -57,7 +57,7 @@ public class MemeServiceTest {
 		MemeServiceDto memeServiceDto = MEME_SERVICE_DTO();
 
 		// when
-		when(memberService.findById(memeServiceDto.getMemberId())).thenReturn(member);
+		when(memberService.findMemberFromId(memeServiceDto.getMemberId())).thenReturn(member);
 		when(memeRepository.save(any())).thenReturn(meme);
 
 		MemeResponse result = memeService.register(memeServiceDto);
@@ -75,7 +75,7 @@ public class MemeServiceTest {
 
 		// when
 		when(memeRepository.findById(memeServiceDto.getMemeId())).thenReturn(Optional.ofNullable(meme));
-		when(memberService.findById(memeServiceDto.getMemberId())).thenReturn(member);
+		when(memberService.findMemberFromId(memeServiceDto.getMemberId())).thenReturn(member);
 		MemeResponse result = memeService.getMeme(memeServiceDto);
 
 		// given

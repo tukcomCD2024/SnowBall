@@ -52,7 +52,7 @@ public class LikeServiceTest {
 	@DisplayName("register 성공 테스트")
 	void 좋아요_등록() {
 		// given
-		given(memberService.findByEmail(likeServiceDto.getEmail())).willReturn(member);
+		given(memberService.findMemberFromEmail(likeServiceDto.getEmail())).willReturn(member);
 		given(memesService.getMemesBetweenService(likeServiceDto.getMemesId())).willReturn(memes);
 
 		// when
@@ -68,7 +68,7 @@ public class LikeServiceTest {
 	void 좋아요_취소() {
 		// given
 		Like like = LIKE(member, memes);
-		given(memberService.findByEmail(likeServiceDto.getEmail())).willReturn(member);
+		given(memberService.findMemberFromEmail(likeServiceDto.getEmail())).willReturn(member);
 		given(memesService.getMemesBetweenService(likeServiceDto.getMemesId())).willReturn(memes);
 		given(likeRepository.findLikeByMemberAndMemes(member, memes)).willReturn(Optional.ofNullable(like));
 

@@ -41,7 +41,7 @@ public class MemberControllerTest extends LoginTest {
 	@DisplayName("멤버 업데이트 실패(닉네임 중복)")
 	public void 멤버_업데이트_실패_닉네임_중복() throws Exception {
 		// given -> 결과에 대한 객체, Member 객체 저장할 필요 존재
-		doThrow(new DuplicatedMemberException()).when(memberService).update(any());
+		doThrow(new DuplicatedMemberException()).when(memberService).updateMember(any());
 
 		// when
 		final ResultActions perform = mockMvc.perform(post("/member").contentType(MediaType.APPLICATION_JSON)

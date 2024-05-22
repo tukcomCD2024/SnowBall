@@ -56,7 +56,7 @@ public class MemberRepositoryTest {
 		Member savedMember = memberRepository.save(MEMBER());
 
 		// then 확인하기
-		assertTrue(memberRepository.existsMemberByNickname(savedMember.getNickname()));
+		assertTrue(memberRepository.existMemberByNickname(savedMember.getNickname()));
 	}
 
 	@Test

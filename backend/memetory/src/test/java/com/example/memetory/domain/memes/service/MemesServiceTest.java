@@ -57,7 +57,7 @@ public class MemesServiceTest {
 	@DisplayName("밈스 저장 성공")
 	void 밈스_저장() {
 		// when
-		when(memberService.findByEmail(memesServiceDto.getEmail())).thenReturn(member);
+		when(memberService.findMemberFromEmail(memesServiceDto.getEmail())).thenReturn(member);
 		when(memeService.getMemeBetweenService(memesServiceDto.getMemeId())).thenReturn(meme);
 
 		memesService.register(memesServiceDto);
@@ -71,7 +71,7 @@ public class MemesServiceTest {
 	void 밈스_삭제() {
 		// given
 		given(memesRepository.findByMemesId(any())).willReturn(Optional.ofNullable(memes));
-		given(memberService.findByEmail(any())).willReturn(member);
+		given(memberService.findMemberFromEmail(any())).willReturn(member);
 
 		// when
 		memesService.delete(memesServiceDto);
@@ -85,7 +85,7 @@ public class MemesServiceTest {
 	void 밈스_삭제_실패() {
 		// given
 		given(memesRepository.findByMemesId(any())).willReturn(Optional.ofNullable(memes));
-		given(memberService.findByEmail(any())).willReturn(any());
+		given(memberService.findMemberFromEmail(any())).willReturn(any());
 
 		// when
 		assertThrows(NotDeleteMemesException.class, () -> memesService.delete(memesServiceDto));
