@@ -15,21 +15,27 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class MemberService {
 	private final MemberRepository memberRepository;
 
 	@Transactional
-	public void updateMember(MemberServiceDto memberServiceDto) {
-		if (memberRepository.existMemberByNickname(memberServiceDto.getNickname())) {
+	public MemberResponse updateMember(MemberServiceDto memberServiceDto) {
+		if (isDuplicateNickname(memberServiceDto.getNickname())) {
 			throw new DuplicatedMemberException();
 		}
-		findMemberFromEmail(memberServiceDto.getEmail()).update(memberServiceDto);
+		Member member = findMemberFromEmail(memberServiceDto.getEmail());
+		member.update(memberServiceDto);
+
+		return MemberResponse.of(member);
+	}
+
+	private boolean isDuplicateNickname(String nickname) {
+		return memberRepository.existMemberByNickname(nickname);
 	}
 
 	@Transactional(readOnly = true)
-	public Member findMemberFromId(Long id) {
-		return memberRepository.findById(id).orElseThrow(NotFoundMemberException::new);
+	public Member findMemberFromEmail(String email) {
+		return memberRepository.findByEmail(email).orElseThrow(NotFoundMemberException::new);
 	}
 
 	@Transactional(readOnly = true)
@@ -40,7 +46,7 @@ public class MemberService {
 	}
 
 	@Transactional(readOnly = true)
-	public Member findMemberFromEmail(String email) {
-		return memberRepository.findByEmail(email).orElseThrow(NotFoundMemberException::new);
+	public Member findMemberFromId(Long id) {
+		return memberRepository.findById(id).orElseThrow(NotFoundMemberException::new);
 	}
 }
