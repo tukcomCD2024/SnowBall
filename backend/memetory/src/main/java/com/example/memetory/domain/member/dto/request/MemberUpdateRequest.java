@@ -18,7 +18,7 @@ public class MemberUpdateRequest {
 	@Schema(description = "변경할 이미지 S3 Url")
 	private String imageUrl;
 
-	public MemberServiceDto toServiceDto(String email) {
+	public MemberServiceDto toServiceDtoFromEmail(String email) {
 		return MemberServiceDto.builder()
 			.email(email)
 			.nickname(this.nickname)

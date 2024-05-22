@@ -11,4 +11,10 @@ public class MemberServiceDto {
 	private String email;
 	private String nickname;
 	private String imageUrl;
+
+	public static MemberServiceDto createFromEmail(String email) {
+		return MemberServiceDto.builder()
+			.email(email)
+			.build();
+	}
 }
