@@ -1,4 +1,6 @@
-package com.example.memetory.domain.member.dto;
+package com.example.memetory.domain.member.dto.request;
+
+import com.example.memetory.domain.member.dto.MemberServiceDto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
@@ -10,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @Schema(description = "멤버 업데이트 포맷")
-public class MemberUpdateDto {
+public class MemberUpdateRequest {
 	@Schema(description = "변경할 닉네임")
 	private String nickname;
 	@Schema(description = "변경할 이미지 S3 Url")

@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.memetory.domain.member.controller.MemberController;
-import com.example.memetory.domain.member.dto.MemberUpdateDto;
+import com.example.memetory.domain.member.dto.request.MemberUpdateRequest;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.global.LoginTest;
 import com.example.memetory.global.security.jwt.dto.TokenResponse;
@@ -37,7 +37,7 @@ public class AuthTest extends LoginTest {
 	public void accessToken_인가_성공_with_Bearer() throws Exception {
 		// when
 		final ResultActions perform = mockMvc.perform(post("/member").contentType(MediaType.APPLICATION_JSON)
-			.content(toRequestBody(new MemberUpdateDto("junrain2", "imageUrl2")))
+			.content(toRequestBody(new MemberUpdateRequest("junrain2", "imageUrl2")))
 			.header("Authorization", "Bearer " + accessToken));
 
 		// then
@@ -49,7 +49,7 @@ public class AuthTest extends LoginTest {
 	public void accessToken_인가_성공() throws Exception {
 		// when
 		final ResultActions perform = mockMvc.perform(post("/member").contentType(MediaType.APPLICATION_JSON)
-			.content(toRequestBody(new MemberUpdateDto("junrain2", "imageUrl2")))
+			.content(toRequestBody(new MemberUpdateRequest("junrain2", "imageUrl2")))
 			.header("Authorization", accessToken));
 
 		// then
@@ -69,7 +69,7 @@ public class AuthTest extends LoginTest {
 
 		// when
 		final ResultActions perform = mockMvc.perform(post("/member").contentType(MediaType.APPLICATION_JSON)
-			.content(toRequestBody(new MemberUpdateDto("junrain2", "imageUrl2")))
+			.content(toRequestBody(new MemberUpdateRequest("junrain2", "imageUrl2")))
 			.header("Authorization", accessToken));
 
 		// then
@@ -96,7 +96,7 @@ public class AuthTest extends LoginTest {
 
 		// when
 		final ResultActions perform = mockMvc.perform(post("/member").contentType(MediaType.APPLICATION_JSON)
-			.content(toRequestBody(new MemberUpdateDto("junrain2", "imageUrl2")))
+			.content(toRequestBody(new MemberUpdateRequest("junrain2", "imageUrl2")))
 			.header("Authorization-refresh", refreshToken)).andDo(print());
 
 		// then
@@ -117,7 +117,7 @@ public class AuthTest extends LoginTest {
 
 		// when
 		final ResultActions perform = mockMvc.perform(post("/member").contentType(MediaType.APPLICATION_JSON)
-			.content(toRequestBody(new MemberUpdateDto("junrain2", "imageUrl2")))
+			.content(toRequestBody(new MemberUpdateRequest("junrain2", "imageUrl2")))
 			.header("Authorization-refresh", refreshToken)).andDo(print());
 
 		// then

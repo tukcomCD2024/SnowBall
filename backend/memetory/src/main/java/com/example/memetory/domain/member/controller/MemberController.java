@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.memetory.domain.member.dto.MemberServiceDto;
-import com.example.memetory.domain.member.dto.MemberUpdateDto;
+import com.example.memetory.domain.member.dto.request.MemberUpdateRequest;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.global.annotation.LoginMemberEmail;
 import com.example.memetory.global.response.ResultResponse;
@@ -24,8 +24,8 @@ public class MemberController implements MemberApi {
 
 	@PostMapping
 	public ResponseEntity<ResultResponse> updateMember(@LoginMemberEmail String email,
-		@RequestBody MemberUpdateDto memberUpdateDto) {
-		MemberServiceDto memberServiceDto = memberUpdateDto.toServiceDto(email);
+		@RequestBody MemberUpdateRequest memberUpdateRequest) {
+		MemberServiceDto memberServiceDto = memberUpdateRequest.toServiceDto(email);
 
 		memberService.update(memberServiceDto);
 

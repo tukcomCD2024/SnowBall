@@ -1,10 +1,8 @@
 package com.example.memetory.domain.memes.dto.response;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import com.example.memetory.domain.comment.dto.CommentInfo;
-import com.example.memetory.domain.member.dto.MemberResponse;
+import com.example.memetory.domain.member.dto.response.MemberResponse;
 import com.example.memetory.domain.memes.entity.Memes;
 
 import io.swagger.v3.oas.annotations.media.Schema;

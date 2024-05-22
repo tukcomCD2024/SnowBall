@@ -14,7 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.example.memetory.domain.member.dto.MemberUpdateDto;
+import com.example.memetory.domain.member.dto.request.MemberUpdateRequest;
 import com.example.memetory.domain.member.exception.DuplicatedMemberException;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.global.LoginTest;
@@ -30,7 +30,7 @@ public class MemberControllerTest extends LoginTest {
 	public void 멤버_업데이트_성공() throws Exception {
 		// when
 		final ResultActions perform = mockMvc.perform(post("/member").contentType(MediaType.APPLICATION_JSON)
-			.content(toRequestBody(new MemberUpdateDto("junrain2", "imageUrl2")))
+			.content(toRequestBody(new MemberUpdateRequest("junrain2", "imageUrl2")))
 			.header("Authorization", "Bearer " + accessToken)).andDo(print());
 
 		// then
@@ -45,7 +45,7 @@ public class MemberControllerTest extends LoginTest {
 
 		// when
 		final ResultActions perform = mockMvc.perform(post("/member").contentType(MediaType.APPLICATION_JSON)
-			.content(toRequestBody(new MemberUpdateDto("junrain", "imageUrl")))
+			.content(toRequestBody(new MemberUpdateRequest("junrain", "imageUrl")))
 			.header("Authorization", "Bearer " + accessToken)).andDo(print());
 
 		// then

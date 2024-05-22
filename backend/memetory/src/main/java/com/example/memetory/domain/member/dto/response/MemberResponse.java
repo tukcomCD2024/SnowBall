@@ -1,4 +1,4 @@
-package com.example.memetory.domain.member.dto;
+package com.example.memetory.domain.member.dto.response;
 
 import java.time.LocalDateTime;
 
@@ -14,12 +14,14 @@ import lombok.NoArgsConstructor;
 public class MemberResponse {
 	private Long memberId;
 	private String nickName;
+	private String imageUrl;
 	private LocalDateTime createdAt;
 
 	@Builder
-	public MemberResponse(Long memberId, String nickName, LocalDateTime createdAt) {
+	public MemberResponse(Long memberId, String nickName, String imageUrl, LocalDateTime createdAt) {
 		this.memberId = memberId;
 		this.nickName = nickName;
+		this.imageUrl = imageUrl;
 		this.createdAt = createdAt;
 	}
 
@@ -27,6 +29,7 @@ public class MemberResponse {
 		return MemberResponse.builder()
 			.memberId(member.getId())
 			.nickName(member.getNickname())
+			.imageUrl(member.getImageUrl())
 			.createdAt(member.getCreatedAt())
 			.build();
 	}

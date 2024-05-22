@@ -17,7 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.example.memetory.domain.member.dto.MemberResponse;
+import com.example.memetory.domain.member.dto.response.MemberResponse;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.meme.entity.Meme;
