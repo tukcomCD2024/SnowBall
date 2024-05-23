@@ -5,6 +5,7 @@ import static com.example.memetory.domain.member.MemberFixture.*;
 import static com.example.memetory.domain.meme.MemeFixture.*;
 import static com.example.memetory.domain.memes.MemesFixture.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.util.Optional;
@@ -16,9 +17,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import com.example.memetory.domain.like.dto.LikeServiceDto;
 import com.example.memetory.domain.like.entity.Like;
+import com.example.memetory.domain.like.exception.NotCreateLikeException;
 import com.example.memetory.domain.like.repository.LikeRepository;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
@@ -49,14 +52,14 @@ public class LikeServiceTest {
 	}
 
 	@Test
-	@DisplayName("register 성공 테스트")
-	void 좋아요_등록() {
+	@DisplayName("likeServiceDto로 인한 Like 등록 성공")
+	void Given_likeServiceDto_When_registerLike_Execute_likeRepositorySave() {
 		// given
 		given(memberService.findMemberFromEmail(likeServiceDto.getEmail())).willReturn(member);
 		given(memesService.getMemesBetweenService(likeServiceDto.getMemesId())).willReturn(memes);
 
 		// when
-		likeService.register(likeServiceDto);
+		likeService.registerLike(likeServiceDto);
 
 		// then
 		assertThat(memes.getLikeCount()).isEqualTo(2L);
@@ -64,8 +67,22 @@ public class LikeServiceTest {
 	}
 
 	@Test
-	@DisplayName("cancel 성공 테스트")
-	void 좋아요_취소() {
+	@DisplayName("Like 테이블의 중복된 Memes와 Member 칼럼으로 인한 NotCreateLikeException 발생")
+	void Given_likeServiceDto_When_registerLike_Throw_NotCreateLikeException() {
+		// given
+		given(memberService.findMemberFromEmail(likeServiceDto.getEmail())).willReturn(member);
+		given(memesService.getMemesBetweenService(likeServiceDto.getMemesId())).willReturn(memes);
+		given(likeRepository.save(any())).willThrow(new DataIntegrityViolationException(any()));
+
+		// then
+		assertThrows(NotCreateLikeException.class, () -> likeService.registerLike(likeServiceDto));
+		verify(likeRepository).save(any(Like.class));
+		assertThat(memes.getLikeCount()).isEqualTo(1L);
+	}
+
+	@Test
+	@DisplayName("likeServiceDto로 인한 Like 삭제 성공")
+	void Given_LikeServiceDto_when_cancelLike_Execute_likeRepositoryDelete() {
 		// given
 		Like like = LIKE(member, memes);
 		given(memberService.findMemberFromEmail(likeServiceDto.getEmail())).willReturn(member);
@@ -73,10 +90,10 @@ public class LikeServiceTest {
 		given(likeRepository.findLikeByMemberAndMemes(member, memes)).willReturn(Optional.ofNullable(like));
 
 		// when
-		likeService.cancel(likeServiceDto);
+		likeService.cancelLike(likeServiceDto);
 
 		// then
-		assertThat(memes.getLikeCount()).isEqualTo(0L);
+		assertThat(memes.getLikeCount()).isZero();
 		verify(likeRepository).delete(like);
 	}
 }

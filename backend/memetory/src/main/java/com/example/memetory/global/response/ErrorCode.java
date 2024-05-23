@@ -30,6 +30,7 @@ public enum ErrorCode {
 
 	// Like
 	LIKE_NOT_FOUND(404, "좋아요 찾기 실패"),
+	LIKE_NOT_CREATE(400, "중복된 좋아요"),
 
 	// Complain
 	COMPLAIN_NOT_FOUND(404, "신고 찾기 실패"),

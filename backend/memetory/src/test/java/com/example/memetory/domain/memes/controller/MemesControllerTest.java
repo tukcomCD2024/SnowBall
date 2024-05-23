@@ -175,7 +175,7 @@ public class MemesControllerTest extends LoginTest {
 			.header("Authorization", "Bearer " + accessToken)).andDo(print());
 
 		// then
-		verify(likeService).register(any(LikeServiceDto.class));
+		verify(likeService).registerLike(any(LikeServiceDto.class));
 		perform.andExpect(status().isCreated())
 			.andExpect(jsonPath(MESSAGE).value(CREATE_LIKE_SUCCESS.getMessage()));
 	}
@@ -188,7 +188,7 @@ public class MemesControllerTest extends LoginTest {
 			.header("Authorization", "Bearer " + accessToken)).andDo(print());
 
 		// then
-		verify(likeService).cancel(any(LikeServiceDto.class));
+		verify(likeService).cancelLike(any(LikeServiceDto.class));
 		perform.andExpect(status().isOk())
 			.andExpect(jsonPath(MESSAGE).value(DELETE_LIKE_SUCCESS.getMessage()));
 	}
@@ -197,7 +197,7 @@ public class MemesControllerTest extends LoginTest {
 	@Test
 	void 좋아요_취소_실패() throws Exception {
 		// when
-		doThrow(new NotFoundLikeException()).when(likeService).cancel(any(LikeServiceDto.class));
+		doThrow(new NotFoundLikeException()).when(likeService).cancelLike(any(LikeServiceDto.class));
 
 		final ResultActions perform = mockMvc.perform(delete("/memes/-1/like").contentType(MediaType.APPLICATION_JSON)
 			.header("Authorization", "Bearer " + accessToken)).andDo(print());

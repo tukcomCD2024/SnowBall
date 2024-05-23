@@ -93,7 +93,7 @@ public class MemesController implements MemesApi {
 	@Override
 	public ResponseEntity<ResultResponse> registerLike(@LoginMemberEmail String email, @PathVariable Long memesId) {
 		LikeServiceDto likeServiceDto = LikeServiceDto.create(email, memesId);
-		likeService.register(likeServiceDto);
+		likeService.registerLike(likeServiceDto);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(ResultResponse.of(CREATE_LIKE_SUCCESS));
 	}
@@ -102,7 +102,7 @@ public class MemesController implements MemesApi {
 	@Override
 	public ResponseEntity<ResultResponse> cancelLike(@LoginMemberEmail String email, @PathVariable Long memesId) {
 		LikeServiceDto likeServiceDto = LikeServiceDto.create(email, memesId);
-		likeService.cancel(likeServiceDto);
+		likeService.cancelLike(likeServiceDto);
 
 		return ResponseEntity.ok(ResultResponse.of(DELETE_LIKE_SUCCESS));
 	}
