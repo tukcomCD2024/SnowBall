@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.memetory.domain.like.dto.LikeServiceDto;
+import com.example.memetory.domain.like.service.LikeService;
 import com.example.memetory.domain.memes.dto.MemesServiceDto;
 import com.example.memetory.domain.memes.dto.request.GenerateMemesRequest;
 import com.example.memetory.domain.memes.dto.response.MemesInfo;
@@ -31,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/memes")
 public class MemesController implements MemesApi {
 	private final MemesService memesService;
+	private final LikeService likeService;
 
 	@PostMapping
 	@Override
@@ -84,5 +87,23 @@ public class MemesController implements MemesApi {
 		MemesInfoSliceResponse response = memesService.getMemesInfoSliceResponse(pageable);
 
 		return ResponseEntity.ok(ResultResponse.of(GET_ALL_MEMES_SUCCESS, response));
+	}
+
+	@PostMapping("/{memesId}/like")
+	@Override
+	public ResponseEntity<ResultResponse> registerLike(@LoginMemberEmail String email, @PathVariable Long memesId) {
+		LikeServiceDto likeServiceDto = LikeServiceDto.create(email, memesId);
+		likeService.register(likeServiceDto);
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(ResultResponse.of(CREATE_LIKE_SUCCESS));
+	}
+
+	@DeleteMapping("/{memesId}/like")
+	@Override
+	public ResponseEntity<ResultResponse> cancelLike(@LoginMemberEmail String email, @PathVariable Long memesId) {
+		LikeServiceDto likeServiceDto = LikeServiceDto.create(email, memesId);
+		likeService.cancel(likeServiceDto);
+
+		return ResponseEntity.ok(ResultResponse.of(DELETE_LIKE_SUCCESS));
 	}
 }

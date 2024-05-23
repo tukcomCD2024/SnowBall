@@ -18,6 +18,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import com.example.memetory.domain.like.dto.LikeServiceDto;
+import com.example.memetory.domain.like.exception.NotFoundLikeException;
+import com.example.memetory.domain.like.service.LikeService;
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.memes.dto.request.GenerateMemesRequest;
 import com.example.memetory.domain.memes.dto.response.MemesInfo;
@@ -32,6 +35,8 @@ import com.example.memetory.global.LoginTest;
 public class MemesControllerTest extends LoginTest {
 	@MockBean
 	private MemesService memesService;
+	@MockBean
+	private LikeService likeService;
 
 	@Test
 	@DisplayName("Memes 생성")
@@ -160,5 +165,45 @@ public class MemesControllerTest extends LoginTest {
 		perform.andExpect(status().isOk()).andExpectAll(
 			jsonPath(MESSAGE).value(GET_ALL_MEMES_SUCCESS.getMessage()),
 			jsonPath("$.data.memesInfoList[0].title").value(response.getMemesInfoList().get(0).getTitle()));
+	}
+
+	@DisplayName("좋아요 등록 성공")
+	@Test
+	void 좋아요_등록() throws Exception {
+		// when
+		final ResultActions perform = mockMvc.perform(post("/memes/-1/like").contentType(MediaType.APPLICATION_JSON)
+			.header("Authorization", "Bearer " + accessToken)).andDo(print());
+
+		// then
+		verify(likeService).register(any(LikeServiceDto.class));
+		perform.andExpect(status().isCreated())
+			.andExpect(jsonPath(MESSAGE).value(CREATE_LIKE_SUCCESS.getMessage()));
+	}
+
+	@DisplayName("좋아요 취소 성공")
+	@Test
+	void 좋아요_취소() throws Exception {
+		// when
+		final ResultActions perform = mockMvc.perform(delete("/memes/-1/like").contentType(MediaType.APPLICATION_JSON)
+			.header("Authorization", "Bearer " + accessToken)).andDo(print());
+
+		// then
+		verify(likeService).cancel(any(LikeServiceDto.class));
+		perform.andExpect(status().isOk())
+			.andExpect(jsonPath(MESSAGE).value(DELETE_LIKE_SUCCESS.getMessage()));
+	}
+
+	@DisplayName("좋아요 취소 실패")
+	@Test
+	void 좋아요_취소_실패() throws Exception {
+		// when
+		doThrow(new NotFoundLikeException()).when(likeService).cancel(any(LikeServiceDto.class));
+
+		final ResultActions perform = mockMvc.perform(delete("/memes/-1/like").contentType(MediaType.APPLICATION_JSON)
+			.header("Authorization", "Bearer " + accessToken)).andDo(print());
+
+		// then
+		perform.andExpect(status().isNotFound())
+			.andExpect(jsonPath(ERROR_MESSAGE).value(LIKE_NOT_FOUND.getMessage()));
 	}
 }
