@@ -16,8 +16,7 @@
 ![밈토리](https://github.com/JunRain2/practice-java/assets/107318116/c1f84a01-c138-4355-86e5-55e6cb57a064)
 
 ## Figma
-
-... 작업중
+<img width="608" alt="밈토리_와이어프레임" src="https://github.com/tukcomCD2024/SnowBall/assets/105618997/d3290126-86b0-4c6a-9b1e-c7eba646cea9">
 
 ## Jira
 <a href=https://happis9899.atlassian.net/jira/software/projects/SNOW/boards/3>@SnowBall With Jira</a>
