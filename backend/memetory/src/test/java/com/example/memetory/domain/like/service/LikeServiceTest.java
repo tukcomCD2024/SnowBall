@@ -67,7 +67,7 @@ public class LikeServiceTest {
 	}
 
 	@Test
-	@DisplayName("Like 테이블의 중복된 Memes와 Member 칼럼으로 인한 NotCreateLikeException 발생")
+	@DisplayName("Like 테이블의 중복된 Memes와 Member 칼럼으로 인한 NotCreateLikeException 반환")
 	void Given_likeServiceDto_When_registerLike_Throw_NotCreateLikeException() {
 		// given
 		given(memberService.findMemberFromEmail(likeServiceDto.getEmail())).willReturn(member);

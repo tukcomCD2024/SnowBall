@@ -12,71 +12,78 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.memetory.domain.member.dto.MemberServiceDto;
 import com.example.memetory.domain.member.entity.Member;
+import com.example.memetory.domain.member.entity.SocialType;
 import com.example.memetory.global.RepositoryTest;
 
 import jakarta.transaction.Transactional;
 
-@DisplayName("member 레포지토리 테스트의 ")
+@DisplayName("Member 레포지토리 테스트의 ")
 @RepositoryTest
 public class MemberRepositoryTest {
 	@Autowired
 	private MemberRepository memberRepository;
 
 	@Test
-	@DisplayName("이메일로 멤버 찾기")
-	public void 이메일로_Member_찾기() {
-		// given -> 멤버 저장하기
+	@DisplayName("이메일을 통한 멤버 반환 성공")
+	public void Given_email_When_findByEmail_Then_Member() {
+		// given
 		Member savedMember = memberRepository.save(MEMBER());
+		String email = savedMember.getEmail();
 
 		// when 멤버 찾기
-		Optional<Member> findMember = memberRepository.findByEmail(savedMember.getEmail());
+		Optional<Member> findMember = memberRepository.findByEmail(email);
 
 		// then 확인하기
 		assertThat(savedMember).isEqualTo(findMember.get());
 	}
 
 	@Test
-	@DisplayName("SocialType과 SocialId로 멤버 찾기")
-	public void SocialType과_SocialId로_Member_찾기() {
+	@DisplayName("SocialType과 SocialId을 통한 멤버 반환 성공")
+	public void Given_SocialTypeAndSocialId_Then_findBySocialTypeAndSocialId_Then_Member() {
 		// given -> 멤버 저장하기
 		Member savedMember = memberRepository.save(MEMBER());
+		SocialType socialType = savedMember.getSocialType();
+		String socialId = savedMember.getSocialId();
 
-		// when 멤버 찾기
-		Optional<Member> findMember = memberRepository
-			.findBySocialTypeAndSocialId(savedMember.getSocialType(), savedMember.getSocialId());
+		// when
+		Optional<Member> findMember = memberRepository.findBySocialTypeAndSocialId(socialType, socialId);
 
-		// then 확인하기
+		// then
 		assertThat(savedMember).isEqualTo(findMember.get());
 	}
 
 	@Test
-	@DisplayName("닉네임 존재하는지 확인하기")
-	public void 닉네임_존재_여부() {
-		// given -> 멤버 저장하기
+	@DisplayName("닉네임이 존재해서 true 반환 성공")
+	public void Given_nickName_When_findByNickName_Then_True() {
+		// given
 		Member savedMember = memberRepository.save(MEMBER());
+		String nickName = savedMember.getNickname();
+
+		// when
+		boolean result = memberRepository.existMemberByNickname(nickName);
 
 		// then 확인하기
-		assertTrue(memberRepository.existMemberByNickname(savedMember.getNickname()));
+		assertTrue(result);
 	}
 
 	@Test
-	@DisplayName("멤버 업데이트 확인 테스트")
-	public void 멤버_업데이트() {
+	@DisplayName("MemberServiceDto를 통한 멤버 업데이트 성공")
+	public void Given_MemberServiceDto_When_update() {
 		// given
 		Member savedMember = memberRepository.save(MEMBER());
 		MemberServiceDto memberServiceDto = UPDATE_MEMBER_SERVICE_DTO();
 
 		// when
-		updatedMember(savedMember, memberServiceDto);
+		Member expectedMember = updatedMember(savedMember, memberServiceDto);
+		Member result = memberRepository.findById(savedMember.getId()).get();
 
 		// then
-		assertThat(memberRepository.findById(savedMember.getId()).get().getNickname()).isEqualTo(
-			memberServiceDto.getNickname());
-
+		assertThat(result).isEqualTo(expectedMember);
 	}
 
 	@Transactional
-	public void updatedMember(Member savedMember, MemberServiceDto memberServiceDto) {
-		savedMember.update(memberServiceDto);
+	public Member updatedMember(final Member member,final MemberServiceDto memberServiceDto) {
+		member.update(memberServiceDto);
+		return member;
 	}
 }

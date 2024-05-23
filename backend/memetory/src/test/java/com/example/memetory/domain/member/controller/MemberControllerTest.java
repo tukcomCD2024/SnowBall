@@ -1,5 +1,6 @@
 package com.example.memetory.domain.member.controller;
 
+import static com.example.memetory.domain.member.MemberFixture.*;
 import static com.example.memetory.global.response.ErrorCode.*;
 import static com.example.memetory.global.response.ResultCode.*;
 import static org.mockito.BDDMockito.*;
@@ -14,7 +15,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import com.example.memetory.domain.member.dto.MemberServiceDto;
 import com.example.memetory.domain.member.dto.request.MemberUpdateRequest;
+import com.example.memetory.domain.member.dto.response.MemberResponse;
 import com.example.memetory.domain.member.exception.DuplicatedMemberException;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.global.LoginTest;
@@ -26,27 +29,42 @@ public class MemberControllerTest extends LoginTest {
 	private MemberService memberService;
 
 	@Test
-	@DisplayName("멤버 업데이트 성공")
-	public void 멤버_업데이트_성공() throws Exception {
+	@DisplayName("MemberUpdateRequest를 통한 멤버 업데이트 성공")
+	public void Given_MemberUpdateRequest_When_updateMember_Then_UPDATRE_MEMBER_SUCCESS() throws Exception {
+		// given
+		MemberUpdateRequest request = new MemberUpdateRequest("junrain2", "imageUrl2");
+		MemberResponse expectedResult = MemberResponse.of(MEMBER());
+		String expectedNickname = expectedResult.getNickName();
+
+		given(memberService.updateMember(any())).willReturn(expectedResult);
+
 		// when
-		final ResultActions perform = mockMvc.perform(post("/member").contentType(MediaType.APPLICATION_JSON)
-			.content(toRequestBody(new MemberUpdateRequest("junrain2", "imageUrl2")))
-			.header("Authorization", "Bearer " + accessToken)).andDo(print());
+		final ResultActions perform = mockMvc.perform(post("/member")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(toRequestBody(request))
+			.header("Authorization", "Bearer " + accessToken))
+			.andDo(print());
 
 		// then
-		perform.andExpect(status().isOk()).andExpect(jsonPath(MESSAGE).value(UPDATE_MEMBER_SUCCESS.getMessage()));
+		perform.andExpect(status().isOk())
+			.andExpect(jsonPath(MESSAGE).value(UPDATE_MEMBER_SUCCESS.getMessage()))
+			.andExpect(jsonPath("$.data.nickName").value(expectedNickname));
 	}
 
 	@Test
-	@DisplayName("멤버 업데이트 실패(닉네임 중복)")
-	public void 멤버_업데이트_실패_닉네임_중복() throws Exception {
-		// given -> 결과에 대한 객체, Member 객체 저장할 필요 존재
+	@DisplayName("중복된 닉네임으로 인한 NICKNAME_IS_DUPLICATED 반환")
+	public void Given_MemberUpdateRequest_When_updateMember_Then_NICKNAME_IS_DUPLICATED() throws Exception {
+		// given
+		MemberUpdateRequest request = new MemberUpdateRequest("junrain2", "imageUrl2");
+
 		doThrow(new DuplicatedMemberException()).when(memberService).updateMember(any());
 
 		// when
-		final ResultActions perform = mockMvc.perform(post("/member").contentType(MediaType.APPLICATION_JSON)
-			.content(toRequestBody(new MemberUpdateRequest("junrain", "imageUrl")))
-			.header("Authorization", "Bearer " + accessToken)).andDo(print());
+		final ResultActions perform = mockMvc.perform(post("/member")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(toRequestBody(request))
+			.header("Authorization", "Bearer " + accessToken))
+			.andDo(print());
 
 		// then
 		perform.andExpect(status().isConflict())
@@ -54,16 +72,23 @@ public class MemberControllerTest extends LoginTest {
 	}
 
 	@Test
-	@DisplayName("단일 멤버 조회 성공")
-	public void 단일_멤버_조회_성공() throws Exception {
+	@DisplayName("email을 통한 MemberResponse 반환 성공")
+	public void Given_email_When_findMember_Then_MemberResponse() throws Exception {
 		// given
-		given(memberService.findMemberFromEmail(anyString())).willReturn(loginMember);
+		MemberResponse expectedResult = MemberResponse.of(MEMBER());
+		String expectedNickname = expectedResult.getNickName();
+
+		given(memberService.findMemberResponse(any(MemberServiceDto.class))).willReturn(expectedResult);
 
 		// when
-		final ResultActions perform = mockMvc.perform(get("/member").contentType(MediaType.APPLICATION_JSON)
-			.header("Authorization", "Bearer " + accessToken)).andDo(print());
+		final ResultActions perform = mockMvc.perform(get("/member")
+			.contentType(MediaType.APPLICATION_JSON)
+			.header("Authorization", "Bearer " + accessToken))
+			.andDo(print());
 
 		// then
-		perform.andExpect(status().isOk()).andExpect(jsonPath(MESSAGE).value(GET_MEMBER_SUCCESS.getMessage()));
+		perform.andExpect(status().isOk())
+			.andExpect(jsonPath(MESSAGE).value(GET_MEMBER_SUCCESS.getMessage()))
+			.andExpect(jsonPath("$.data.nickName").value(expectedNickname));
 	}
 }
