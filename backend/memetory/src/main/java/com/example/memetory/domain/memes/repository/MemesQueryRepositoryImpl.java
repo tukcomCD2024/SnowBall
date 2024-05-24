@@ -14,7 +14,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
-import com.example.memetory.domain.memes.dto.response.MemesInfo;
+import com.example.memetory.domain.memes.dto.response.MemesInfoResponse;
 import com.example.memetory.domain.memes.entity.Memes;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -38,9 +38,9 @@ public class MemesQueryRepositoryImpl implements MemesQueryRepository {
 	}
 
 	@Override
-	public Slice<MemesInfo> findAllMemesSlice(Pageable pageable) {
+	public Slice<MemesInfoResponse> findMemesInfoSlice(Pageable pageable) {
 		int pageSize = pageable.getPageSize();
-		List<MemesInfo> memesList = jpaQueryFactory.select(memesQDtoFactory.qMemesInfo())
+		List<MemesInfoResponse> memesList = jpaQueryFactory.select(memesQDtoFactory.qMemesInfo())
 			.from(memes)
 			.join(memes.member, member)
 			.offset(pageable.getOffset())
@@ -57,7 +57,7 @@ public class MemesQueryRepositoryImpl implements MemesQueryRepository {
 	}
 
 	@Override
-	public List<MemesInfo> findTopMemesOrderByLikeCount() {
+	public List<MemesInfoResponse> findTopMemesOrderByLikeCount() {
 		return jpaQueryFactory.select(memesQDtoFactory.qMemesInfo())
 			.from(memes)
 			.join(memes.member, member)
@@ -67,7 +67,7 @@ public class MemesQueryRepositoryImpl implements MemesQueryRepository {
 	}
 
 	@Override
-	public List<MemesInfo> findTopMemesByLikeCountForPeriod(LocalDateTime time) {
+	public List<MemesInfoResponse> findTopMemesOrderByLikeCountForPeriod(LocalDateTime time) {
 		return jpaQueryFactory.select(memesQDtoFactory.qMemesInfoSetLike())
 			.from(like)
 			.join(like.memes, memes)

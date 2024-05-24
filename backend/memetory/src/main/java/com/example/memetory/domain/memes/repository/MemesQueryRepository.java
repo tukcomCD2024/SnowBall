@@ -7,15 +7,15 @@ import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
-import com.example.memetory.domain.memes.dto.response.MemesInfo;
+import com.example.memetory.domain.memes.dto.response.MemesInfoResponse;
 import com.example.memetory.domain.memes.entity.Memes;
 
 public interface MemesQueryRepository {
 	Optional<Memes> findByMemesId(Long memesId);
 
-	Slice<MemesInfo> findAllMemesSlice(Pageable pageable);
+	Slice<MemesInfoResponse> findMemesInfoSlice(Pageable pageable);
 
-	List<MemesInfo> findTopMemesOrderByLikeCount();
+	List<MemesInfoResponse> findTopMemesOrderByLikeCount();
 
-	List<MemesInfo> findTopMemesByLikeCountForPeriod(LocalDateTime time);
+	List<MemesInfoResponse> findTopMemesOrderByLikeCountForPeriod(LocalDateTime time);
 }

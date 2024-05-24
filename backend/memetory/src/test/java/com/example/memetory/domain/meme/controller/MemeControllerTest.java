@@ -57,7 +57,7 @@ public class MemeControllerTest extends LoginTest {
 	}
 
 	@Test
-	@DisplayName("권한이 없는 멤버 이메일로 인한 AccessDeniedMemeException 반환")
+	@DisplayName("권한 없는 멤버 이메일로 인한 AccessDeniedMemeException 반환")
 	void Given_NotPermissionMemberId_When_findMemberMemeResponse_Throw_AccessDeniedMemberMemeException() throws Exception {
 		// given
 		given(memeService.findMemberMemeResponse(any(MemeServiceDto.class))).willThrow(new AccessDeniedMemeException());

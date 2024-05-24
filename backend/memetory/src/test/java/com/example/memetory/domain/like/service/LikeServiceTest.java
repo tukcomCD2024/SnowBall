@@ -53,10 +53,10 @@ public class LikeServiceTest {
 
 	@Test
 	@DisplayName("likeServiceDto로 인한 Like 등록 성공")
-	void Given_likeServiceDto_When_registerLike_Execute_likeRepositorySave() {
+	void Given_likeServiceDto_When_registerLike_Execute_likeRepository_save() {
 		// given
 		given(memberService.findMemberFromEmail(likeServiceDto.getEmail())).willReturn(member);
-		given(memesService.getMemesBetweenService(likeServiceDto.getMemesId())).willReturn(memes);
+		given(memesService.findMemesFromMemesId(likeServiceDto.getMemesId())).willReturn(memes);
 
 		// when
 		likeService.registerLike(likeServiceDto);
@@ -71,7 +71,7 @@ public class LikeServiceTest {
 	void Given_likeServiceDto_When_registerLike_Throw_NotCreateLikeException() {
 		// given
 		given(memberService.findMemberFromEmail(likeServiceDto.getEmail())).willReturn(member);
-		given(memesService.getMemesBetweenService(likeServiceDto.getMemesId())).willReturn(memes);
+		given(memesService.findMemesFromMemesId(likeServiceDto.getMemesId())).willReturn(memes);
 		given(likeRepository.save(any())).willThrow(new DataIntegrityViolationException(any()));
 
 		// then
@@ -82,11 +82,11 @@ public class LikeServiceTest {
 
 	@Test
 	@DisplayName("likeServiceDto로 인한 Like 삭제 성공")
-	void Given_LikeServiceDto_when_cancelLike_Execute_likeRepositoryDelete() {
+	void Given_LikeServiceDto_when_cancelLike_Execute_likeRepository_delete() {
 		// given
 		Like like = LIKE(member, memes);
 		given(memberService.findMemberFromEmail(likeServiceDto.getEmail())).willReturn(member);
-		given(memesService.getMemesBetweenService(likeServiceDto.getMemesId())).willReturn(memes);
+		given(memesService.findMemesFromMemesId(likeServiceDto.getMemesId())).willReturn(memes);
 		given(likeRepository.findLikeByMemberAndMemes(member, memes)).willReturn(Optional.ofNullable(like));
 
 		// when

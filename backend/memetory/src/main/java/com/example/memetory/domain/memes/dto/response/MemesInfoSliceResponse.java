@@ -17,12 +17,12 @@ public class MemesInfoSliceResponse {
 	private boolean hasNext;
 
 	@Schema(description = "밈스 리스트")
-	private List<MemesInfo> memesInfoList;
+	private List<MemesInfoResponse> memesInfoResponseList;
 
 	@Builder
-	public MemesInfoSliceResponse(int currentPage, boolean hasNext, List<MemesInfo> memesInfoList) {
+	public MemesInfoSliceResponse(int currentPage, boolean hasNext, List<MemesInfoResponse> memesInfoResponseList) {
 		this.currentPage = currentPage;
 		this.hasNext = hasNext;
-		this.memesInfoList = memesInfoList;
+		this.memesInfoResponseList = memesInfoResponseList;
 	}
 }

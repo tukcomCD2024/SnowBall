@@ -14,14 +14,14 @@ public class LikeServiceDto {
     private Long memesId;
     private String email;
 
-    public static LikeServiceDto create(String email, Long memesId) {
+    public static LikeServiceDto fromEmailAndMemesId(String email, Long memesId) {
         return LikeServiceDto.builder()
                 .email(email)
                 .memesId(memesId)
                 .build();
     }
 
-    public Like toEntity(Member member, Memes memes) {
+    public Like toEntityFromMemberAndMemes(Member member, Memes memes) {
         return Like.builder()
                 .member(member)
                 .memes(memes)

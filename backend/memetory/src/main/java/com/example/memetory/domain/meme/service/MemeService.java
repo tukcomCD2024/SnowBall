@@ -51,14 +51,19 @@ public class MemeService {
 
 	@Transactional(readOnly = true)
 	public MemeResponse findMemberMemeResponse(MemeServiceDto memeServiceDto) {
-		Member member = memberService.findMemberFromId(memeServiceDto.getMemberId());
 		Meme meme = memeRepository.findById(memeServiceDto.getMemeId()).orElseThrow(NotFoundMemeException::new);
 
-		if (meme.getMember() != member) {
-			throw new AccessDeniedMemeException();
-		}
+		Member loginMember = memberService.findMemberFromId(memeServiceDto.getMemberId());
+		Member memeMember = meme.getMember();
+		certifyMemeMember(memeMember, loginMember);
 
 		return MemeResponse.of(meme);
+	}
+
+	public static void certifyMemeMember(Member m1, Member m2) {
+		if (!m1.equals(m2)) {
+			throw new AccessDeniedMemeException();
+		}
 	}
 
 	@Transactional

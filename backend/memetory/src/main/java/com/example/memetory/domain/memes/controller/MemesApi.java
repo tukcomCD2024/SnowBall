@@ -28,7 +28,7 @@ public interface MemesApi {
 			description = "밈스 생성!"
 		)
 	})
-	ResponseEntity<ResultResponse> register(
+	ResponseEntity<ResultResponse> registerMemes(
 		@Parameter(hidden = true) String email,
 		GenerateMemesRequest generateMemesRequest
 	);
@@ -99,7 +99,7 @@ public interface MemesApi {
 			description = "밈스 단일 조회"
 		)
 	})
-	ResponseEntity<ResultResponse> findMemes(
+	ResponseEntity<ResultResponse> findMemesResponse(
 		@Parameter(in = ParameterIn.PATH, description = "밈스 아이디", required = true) Long memesId
 	);
 
@@ -114,7 +114,7 @@ public interface MemesApi {
 			description = "밈스 전체 조회"
 		)
 	})
-	ResponseEntity<ResultResponse> findAllMemes(Pageable pageable);
+	ResponseEntity<ResultResponse> findMemesInfoSliceResponse(Pageable pageable);
 
 	@Operation(
 		summary = "meme`s 좋아요 등록",

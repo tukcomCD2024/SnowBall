@@ -23,7 +23,7 @@ import com.example.memetory.domain.memes.entity.Memes;
 import com.example.memetory.domain.memes.repository.MemesRepository;
 import com.example.memetory.global.RepositoryTest;
 
-@DisplayName("like 레포지토리 테스트의 ")
+@DisplayName("Like 레포지토리 테스트의 ")
 @RepositoryTest
 public class LikeRepositoryTest {
 	@Autowired

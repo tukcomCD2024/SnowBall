@@ -4,8 +4,8 @@ import static com.example.memetory.global.response.ErrorCode.*;
 
 import com.example.memetory.global.exception.BusinessException;
 
-public class NotDeleteMemesException extends BusinessException {
-	public NotDeleteMemesException() {
-		super(MEMES_NOT_DELETE);
+public class AccessDinedMemesException extends BusinessException {
+	public AccessDinedMemesException() {
+		super(MEMES_ACCESS_DENY);
 	}
 }

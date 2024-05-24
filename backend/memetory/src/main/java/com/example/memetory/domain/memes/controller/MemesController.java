@@ -19,7 +19,7 @@ import com.example.memetory.domain.like.dto.LikeServiceDto;
 import com.example.memetory.domain.like.service.LikeService;
 import com.example.memetory.domain.memes.dto.MemesServiceDto;
 import com.example.memetory.domain.memes.dto.request.GenerateMemesRequest;
-import com.example.memetory.domain.memes.dto.response.MemesInfo;
+import com.example.memetory.domain.memes.dto.response.MemesInfoResponse;
 import com.example.memetory.domain.memes.dto.response.MemesInfoSliceResponse;
 import com.example.memetory.domain.memes.dto.response.MemesResponse;
 import com.example.memetory.domain.memes.service.MemesService;
@@ -35,64 +35,65 @@ public class MemesController implements MemesApi {
 	private final MemesService memesService;
 	private final LikeService likeService;
 
+	@GetMapping
+	@Override
+	public ResponseEntity<ResultResponse> findMemesInfoSliceResponse(Pageable pageable) {
+		MemesInfoSliceResponse response = memesService.findMemesInfoSliceResponse(pageable);
+
+		return ResponseEntity.ok(ResultResponse.of(GET_ALL_MEMES_SUCCESS, response));
+	}
+
 	@PostMapping
 	@Override
-	public ResponseEntity<ResultResponse> register(@LoginMemberEmail String email,
+	public ResponseEntity<ResultResponse> registerMemes(@LoginMemberEmail String email,
 		@RequestBody GenerateMemesRequest generateMemesRequest) {
-		memesService.register(generateMemesRequest.toServiceDto(email));
+		MemesResponse response = memesService.registerMemes(generateMemesRequest.toServiceDtoFromEmail(email));
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(ResultResponse.of(CREATE_MEMES_SUCCESS));
+		return ResponseEntity.status(HttpStatus.CREATED).body(ResultResponse.of(CREATE_MEMES_SUCCESS, response));
+	}
+
+	@GetMapping("/{memesId}")
+	@Override
+	public ResponseEntity<ResultResponse> findMemesResponse(@PathVariable Long memesId) {
+		MemesResponse response = memesService.findMemesResponse(MemesServiceDto.fromMemesId(memesId));
+
+		return ResponseEntity.ok(ResultResponse.of(GET_ONE_MEMES_SUCCESS, response));
+	}
+
+	@DeleteMapping("/{memesId}")
+	@Override
+	public ResponseEntity<ResultResponse> deleteMemes(@LoginMemberEmail String email, @PathVariable Long memesId) {
+		MemesServiceDto memesServiceDto = MemesServiceDto.fromMemesIdAndEmail(memesId, email);
+
+		memesService.deleteMemes(memesServiceDto);
+		return ResponseEntity.ok(ResultResponse.of(DELETE_MEMES_SUCCESS));
 	}
 
 	@GetMapping("/like/all")
 	@Override
 	public ResponseEntity<ResultResponse> findTopMemesByLike() {
-		return ResponseEntity.ok(ResultResponse.of(GET_TOP_TEN_MEMES_SUCCESS, memesService.getTopMemesByLike()));
+		List<MemesInfoResponse> response = memesService.findTopMemesByLike();
+		return ResponseEntity.ok(ResultResponse.of(GET_TOP_TEN_MEMES_SUCCESS, response));
 	}
 
 	@GetMapping("/like/month")
 	@Override
 	public ResponseEntity<ResultResponse> findTopMemesByLikeForMonth() {
-		List<MemesInfo> response = memesService.getTopMemesByLikeForMonth();
-
+		List<MemesInfoResponse> response = memesService.findTopMemesByLikeForMonth();
 		return ResponseEntity.ok(ResultResponse.of(GET_MONTH_TOP_TEN_MEMES_SUCCESS, response));
 	}
 
 	@GetMapping("/like/week")
 	@Override
 	public ResponseEntity<ResultResponse> findTopMemesByLikeForWeek() {
-		List<MemesInfo> response = memesService.getTopMemesByLikeForWeek();
-
+		List<MemesInfoResponse> response = memesService.findTopMemesByLikeForWeek();
 		return ResponseEntity.ok(ResultResponse.of(GET_WEEK_TOP_TEN_MEMES_SUCCESS, response));
-	}
-
-	@DeleteMapping("/{memesId}")
-	@Override
-	public ResponseEntity<ResultResponse> deleteMemes(@LoginMemberEmail String email, @PathVariable Long memesId) {
-		memesService.delete(MemesServiceDto.create(memesId, email));
-		return ResponseEntity.ok(ResultResponse.of(DELETE_MEMES_SUCCESS));
-	}
-
-	@GetMapping("/{memesId}")
-	@Override
-	public ResponseEntity<ResultResponse> findMemes(@PathVariable Long memesId) {
-		MemesResponse response = memesService.getMemesResponse(MemesServiceDto.create(memesId));
-
-		return ResponseEntity.ok(ResultResponse.of(GET_ONE_MEMES_SUCCESS, response));
-	}
-
-	@GetMapping
-	@Override
-	public ResponseEntity<ResultResponse> findAllMemes(Pageable pageable) {
-		MemesInfoSliceResponse response = memesService.getMemesInfoSliceResponse(pageable);
-
-		return ResponseEntity.ok(ResultResponse.of(GET_ALL_MEMES_SUCCESS, response));
 	}
 
 	@PostMapping("/{memesId}/like")
 	@Override
 	public ResponseEntity<ResultResponse> registerLike(@LoginMemberEmail String email, @PathVariable Long memesId) {
-		LikeServiceDto likeServiceDto = LikeServiceDto.create(email, memesId);
+		LikeServiceDto likeServiceDto = LikeServiceDto.fromEmailAndMemesId(email, memesId);
 		likeService.registerLike(likeServiceDto);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(ResultResponse.of(CREATE_LIKE_SUCCESS));
@@ -101,7 +102,7 @@ public class MemesController implements MemesApi {
 	@DeleteMapping("/{memesId}/like")
 	@Override
 	public ResponseEntity<ResultResponse> cancelLike(@LoginMemberEmail String email, @PathVariable Long memesId) {
-		LikeServiceDto likeServiceDto = LikeServiceDto.create(email, memesId);
+		LikeServiceDto likeServiceDto = LikeServiceDto.fromEmailAndMemesId(email, memesId);
 		likeService.cancelLike(likeServiceDto);
 
 		return ResponseEntity.ok(ResultResponse.of(DELETE_LIKE_SUCCESS));

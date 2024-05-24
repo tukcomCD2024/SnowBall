@@ -26,11 +26,11 @@ public enum ErrorCode {
 
 	// Memes
 	MEMES_NOT_FOUND(404, "밈스를 찾기 실패"),
-	MEMES_NOT_DELETE(403, "밈스 삭제 실패"),
+	MEMES_ACCESS_DENY(403, "밈스 접근 실패"),
 
 	// Like
 	LIKE_NOT_FOUND(404, "좋아요 찾기 실패"),
-	LIKE_NOT_CREATE(400, "중복된 좋아요"),
+	LIKE_NOT_CREATE(409, "중복된 좋아요"),
 
 	// Complain
 	COMPLAIN_NOT_FOUND(404, "신고 찾기 실패"),

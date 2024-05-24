@@ -14,11 +14,11 @@ import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.service.MemeService;
 import com.example.memetory.domain.memes.dto.MemesServiceDto;
-import com.example.memetory.domain.memes.dto.response.MemesInfo;
+import com.example.memetory.domain.memes.dto.response.MemesInfoResponse;
 import com.example.memetory.domain.memes.dto.response.MemesInfoSliceResponse;
 import com.example.memetory.domain.memes.dto.response.MemesResponse;
 import com.example.memetory.domain.memes.entity.Memes;
-import com.example.memetory.domain.memes.exception.NotDeleteMemesException;
+import com.example.memetory.domain.memes.exception.AccessDinedMemesException;
 import com.example.memetory.domain.memes.exception.NotFoundMemesException;
 import com.example.memetory.domain.memes.repository.MemesRepository;
 
@@ -32,60 +32,77 @@ public class MemesService {
 	private final MemesRepository memesRepository;
 
 	@Transactional
-	public void register(MemesServiceDto memesServiceDto) {
-		Member member = memberService.findMemberFromEmail(memesServiceDto.getEmail());
+	public MemesResponse registerMemes(MemesServiceDto memesServiceDto) {
 		Meme meme = memeService.findMemeFromId(memesServiceDto.getMemeId());
 
-		Memes newMemes = memesServiceDto.toEntity(member, meme);
-		memesRepository.save(newMemes);
+		Member member = memberService.findMemberFromEmail(memesServiceDto.getEmail());
+		Member memeMember = meme.getMember();
+		memeService.certifyMemeMember(member, memeMember);
+
+		Memes memes = memesServiceDto.toEntityFromMemberAndMeme(member, meme);
+		Memes savedMemes = memesRepository.save(memes);
+
+		return MemesResponse.of(savedMemes);
 	}
 
 	@Transactional
-	public void delete(MemesServiceDto memesServiceDto) {
-		Memes memes = findById(memesServiceDto.getMemesId());
-		if (memes.getMember() != memberService.findMemberFromEmail(memesServiceDto.getEmail())) {
-			throw new NotDeleteMemesException();
-		}
+	public void deleteMemes(MemesServiceDto memesServiceDto) {
+		Memes memes = findMemberMemes(memesServiceDto);
+
 		memesRepository.delete(memes);
 	}
 
-	@Transactional(readOnly = true)
-	public MemesResponse getMemesResponse(MemesServiceDto memesServiceDto) {
-		return MemesResponse.of(findById(memesServiceDto.getMemesId()));
+	private Memes findMemberMemes(MemesServiceDto memesServiceDto) {
+		Memes memes = findMemesFromMemesId(memesServiceDto.getMemesId());
+
+		Member loginMember = memberService.findMemberFromEmail(memesServiceDto.getEmail());
+		Member memesMember = memes.getMember();
+		certifyMemesMember(loginMember, memesMember);
+
+		return memes;
+	}
+
+	private void certifyMemesMember(Member m1, Member m2) {
+		if (!m1.equals(m2)) {
+			throw new AccessDinedMemesException();
+		}
 	}
 
 	@Transactional(readOnly = true)
-	public MemesInfoSliceResponse getMemesInfoSliceResponse(Pageable pageable) {
-		Slice<MemesInfo> memesSlice = memesRepository.findAllMemesSlice(pageable);
+	public MemesResponse findMemesResponse(MemesServiceDto memesServiceDto) {
+		Memes memes = findMemesFromMemesId(memesServiceDto.getMemesId());
+		return MemesResponse.of(memes);
+	}
+
+	@Transactional(readOnly = true)
+	public Memes findMemesFromMemesId(Long memesId) {
+		return memesRepository.findByMemesId(memesId).orElseThrow(NotFoundMemesException::new);
+	}
+
+	@Transactional(readOnly = true)
+	public MemesInfoSliceResponse findMemesInfoSliceResponse(Pageable pageable) {
+		Slice<MemesInfoResponse> memesSlice = memesRepository.findMemesInfoSlice(pageable);
 
 		return MemesInfoSliceResponse.builder()
 			.currentPage(pageable.getPageNumber())
 			.hasNext(memesSlice.hasNext())
-			.memesInfoList(memesSlice.getContent())
+			.memesInfoResponseList(memesSlice.getContent())
 			.build();
 	}
 
 	@Transactional(readOnly = true)
-	public List<MemesInfo> getTopMemesByLike() {
+	public List<MemesInfoResponse> findTopMemesByLike() {
 		return memesRepository.findTopMemesOrderByLikeCount();
 	}
 
 	@Transactional(readOnly = true)
-	public List<MemesInfo> getTopMemesByLikeForMonth() {
-		return memesRepository.findTopMemesByLikeCountForPeriod(now().minusMonths(1));
+	public List<MemesInfoResponse> findTopMemesByLikeForMonth() {
+		return memesRepository.findTopMemesOrderByLikeCountForPeriod(now().minusMonths(1));
 	}
 
 	@Transactional(readOnly = true)
-	public List<MemesInfo> getTopMemesByLikeForWeek() {
-		return memesRepository.findTopMemesByLikeCountForPeriod(now().minusWeeks(1));
+	public List<MemesInfoResponse> findTopMemesByLikeForWeek() {
+		return memesRepository.findTopMemesOrderByLikeCountForPeriod(now().minusWeeks(1));
 	}
 
-	@Transactional(readOnly = true)
-	public Memes getMemesBetweenService(Long memesId) {
-		return findById(memesId);
-	}
-
-	private Memes findById(Long memesId) {
-		return memesRepository.findByMemesId(memesId).orElseThrow(NotFoundMemesException::new);
-	}
 }
