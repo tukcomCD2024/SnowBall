@@ -71,7 +71,7 @@ public class MemberRepositoryTest {
 	public void Given_MemberServiceDto_When_update() {
 		// given
 		Member savedMember = memberRepository.save(MEMBER());
-		MemberServiceDto memberServiceDto = UPDATE_MEMBER_SERVICE_DTO();
+		MemberServiceDto memberServiceDto = UPDATED_MEMBER_SERVICE_DTO();
 
 		// when
 		Member expectedMember = updatedMember(savedMember, memberServiceDto);

@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.example.memetory.domain.meme.dto.MemePageResponse;
 import com.example.memetory.domain.meme.dto.MemeResponse;
 import com.example.memetory.domain.meme.dto.MemeServiceDto;
-import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.exception.AccessDeniedMemeException;
 import com.example.memetory.domain.meme.exception.NotFoundMemeException;
 import com.example.memetory.domain.meme.service.MemeService;
@@ -38,15 +37,17 @@ public class MemeControllerTest extends LoginTest {
 	 */
 
 	@Test
-	@DisplayName("단일 밈 조회 성공")
-	void 단일_밈_조회_성공() throws Exception {
-		// given 예상될 MemeResponse 구현
-		Meme meme = MEME(loginMember);
-		given(memeService.getMeme(any())).willReturn(MemeResponse.of(meme));
+	@DisplayName("이메일과 밈id를 통한 멤버의 MemeResponse 반환 성공")
+	void Given_emailAndMemeId_When_findMemberMemeResponse_Then_Member_MemeResponse() throws Exception {
+		// given
+		MemeResponse returnedMemeResponse = MemeResponse.of(MEME(loginMember));
+		given(memeService.findMemberMemeResponse(any())).willReturn(returnedMemeResponse);
 
 		// when
 		final ResultActions perform = mockMvc.perform(
-				get("/meme/-1").contentType(MediaType.APPLICATION_JSON).header("Authorization", "Bearer " + accessToken))
+				get("/meme/-1")
+					.contentType(MediaType.APPLICATION_JSON)
+					.header("Authorization", "Bearer " + accessToken))
 			.andDo(print());
 
 		// then
@@ -56,14 +57,16 @@ public class MemeControllerTest extends LoginTest {
 	}
 
 	@Test
-	@DisplayName("단일 밈 조회 실패, 로그인한 유저의 밈이 아닐 경우")
-	void 단일_밈_조회_실패_유저인증_실패() throws Exception {
-		// given 예상될 MemeResponse 구현
-		given(memeService.getMeme(any(MemeServiceDto.class))).willThrow(new AccessDeniedMemeException());
+	@DisplayName("권한이 없는 멤버 이메일로 인한 AccessDeniedMemeException 반환")
+	void Given_NotPermissionMemberId_When_findMemberMemeResponse_Throw_AccessDeniedMemberMemeException() throws Exception {
+		// given
+		given(memeService.findMemberMemeResponse(any(MemeServiceDto.class))).willThrow(new AccessDeniedMemeException());
 
 		// when
 		final ResultActions perform = mockMvc.perform(
-				get("/meme/-1").contentType(MediaType.APPLICATION_JSON).header("Authorization", "Bearer " + accessToken))
+				get("/meme/-1")
+					.contentType(MediaType.APPLICATION_JSON)
+					.header("Authorization", "Bearer " + accessToken))
 			.andDo(print());
 
 		// then
@@ -72,15 +75,18 @@ public class MemeControllerTest extends LoginTest {
 	}
 
 	@Test
-	@DisplayName("단일 밈 조회 실패, 존재하지 않는 밈일 경우")
-	void 단일_밈_조회_실패_존재하지_않는_밈() throws Exception {
-		// given 예상될 MemeResponse 구현
-		Meme meme = MEME(loginMember);
-		given(memeService.getMeme(any())).willThrow(new NotFoundMemeException());
+	@DisplayName("존재하지 않는 memeId로 인한 NotFoundMemeException 반환")
+	void Given_NotExistMemeId_Then_findMemberMemeResponse_Throw_NotFoundMemberMemeException() throws Exception {
+		// given
+		Long notExistMemeId = -1L;
+
+		given(memeService.findMemberMemeResponse(any(MemeServiceDto.class))).willThrow(new NotFoundMemeException());
 
 		// when
 		final ResultActions perform = mockMvc.perform(
-				get("/meme/-1").contentType(MediaType.APPLICATION_JSON).header("Authorization", "Bearer " + accessToken))
+				get("/meme/" + notExistMemeId)
+					.contentType(MediaType.APPLICATION_JSON)
+					.header("Authorization", "Bearer " + accessToken))
 			.andDo(print());
 
 		// then
@@ -89,16 +95,16 @@ public class MemeControllerTest extends LoginTest {
 	}
 
 	@Test
-	@DisplayName("전체 밈 조회 성공")
-	void 전체_밈_조회_성공() throws Exception {
-		// given 예상될 MemeResponse 구현
-		List<MemeResponse> memeList = List.of(MEME(loginMember), SECOND_MEME(loginMember))
+	@DisplayName("이메일과 Pageable을 통한 멤버의 MemePageResponse 반환 성공")
+	void Given_emailAndPageable_When_findMemberMemePageResponse_Then_Member_MemePageResponse() throws Exception {
+		// given
+		List<MemeResponse> memeList = List.of(MEME(loginMember), OTHER_MEME(loginMember))
 			.stream()
 			.map(MemeResponse::of)
 			.toList();
 		MemePageResponse memePageResponse = MemePageResponse.builder().memeList(memeList).build();
 
-		given(memeService.getAllMeme(any(), any())).willReturn(memePageResponse);
+		given(memeService.findMemberMemePageResponse(any(), any())).willReturn(memePageResponse);
 
 		// when
 		final ResultActions perform = mockMvc.perform(

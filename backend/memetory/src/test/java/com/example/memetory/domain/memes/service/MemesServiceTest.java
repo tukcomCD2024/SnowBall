@@ -58,7 +58,7 @@ public class MemesServiceTest {
 	void 밈스_저장() {
 		// when
 		when(memberService.findMemberFromEmail(memesServiceDto.getEmail())).thenReturn(member);
-		when(memeService.getMemeBetweenService(memesServiceDto.getMemeId())).thenReturn(meme);
+		when(memeService.findMemeFromId(memesServiceDto.getMemeId())).thenReturn(meme);
 
 		memesService.register(memesServiceDto);
 

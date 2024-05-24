@@ -92,7 +92,7 @@ public class MemberServiceTest {
 	@Test
 	@DisplayName("MemberServiceDto로 인한 Member 업데이트 성공")
 	void Given_MemberServiceDto_When_updateMember_Then_Member() {
-		MemberServiceDto memberServiceDto = UPDATE_MEMBER_SERVICE_DTO();
+		MemberServiceDto memberServiceDto = UPDATED_MEMBER_SERVICE_DTO();
 		String expectedNickname = memberServiceDto.getNickname();
 
 		given(memberRepository.existMemberByNickname(anyString())).willReturn(false);
@@ -110,7 +110,7 @@ public class MemberServiceTest {
 	@DisplayName("중복된 닉네임으로 인한 DuplicatedMemberException 반환")
 	void Given_MemberServiceDto_When_updateMember_Throw_DuplicatedMemberException() {
 		// given
-		MemberServiceDto memberServiceDto = UPDATE_MEMBER_SERVICE_DTO();
+		MemberServiceDto memberServiceDto = UPDATED_MEMBER_SERVICE_DTO();
 		String duplicatedNickname = memberServiceDto.getNickname();
 
 		given(memberRepository.existMemberByNickname(duplicatedNickname)).willReturn(true);

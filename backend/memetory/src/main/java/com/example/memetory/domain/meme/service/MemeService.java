@@ -26,11 +26,13 @@ public class MemeService {
 	private final MemeRepository memeRepository;
 
 	@Transactional
-	public MemeResponse register(MemeServiceDto memeServiceDto) {
+	public MemeResponse registerMeme(MemeServiceDto memeServiceDto) {
 		Member member = memberService.findMemberFromId(memeServiceDto.getMemberId());
-		Meme meme = memeServiceDto.toEntity(member);
+		Meme meme = memeServiceDto.toEntityFromMember(member);
 
-		return MemeResponse.of(memeRepository.save(meme));
+		Meme savedMeme = memeRepository.save(meme);
+
+		return MemeResponse.of(savedMeme);
 	}
 
 	@Transactional(readOnly = true)
@@ -48,7 +50,7 @@ public class MemeService {
 	}
 
 	@Transactional(readOnly = true)
-	public MemeResponse getMeme(MemeServiceDto memeServiceDto) {
+	public MemeResponse findMemberMemeResponse(MemeServiceDto memeServiceDto) {
 		Member member = memberService.findMemberFromId(memeServiceDto.getMemberId());
 		Meme meme = memeRepository.findById(memeServiceDto.getMemeId()).orElseThrow(NotFoundMemeException::new);
 
@@ -60,7 +62,7 @@ public class MemeService {
 	}
 
 	@Transactional
-	public MemePageResponse getAllMeme(MemeServiceDto memeServiceDto, Pageable pageable) {
+	public MemePageResponse findMemberMemePageResponse(MemeServiceDto memeServiceDto, Pageable pageable) {
 		Member member = memberService.findMemberFromEmail(memeServiceDto.getEmail());
 
 		Page<MemeResponse> memeList = memeRepository.findAllByMember(member, pageable);
@@ -72,9 +74,8 @@ public class MemeService {
 			.build();
 	}
 
-	// Service 계층 끼리의 밈 조회
 	@Transactional(readOnly = true)
-	public Meme getMemeBetweenService(Long memeId) {
+	public Meme findMemeFromId(Long memeId) {
 		return memeRepository.findById(memeId).orElseThrow(NotFoundMemeException::new);
 	}
 }

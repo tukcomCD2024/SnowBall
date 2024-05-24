@@ -19,7 +19,7 @@ public class ShotStackCallBackRequest {
     @Schema(description = "에러")
     private String error;
 
-    public MemeServiceDto toServiceDto(Long memberId) {
+    public MemeServiceDto toServiceDtoFromMemeberId(Long memberId) {
         return MemeServiceDto.builder()
                 .memberId(memberId)
                 .s3Url(url)

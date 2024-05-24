@@ -4,8 +4,6 @@ import static com.example.memetory.domain.member.MemberFixture.*;
 import static com.example.memetory.domain.meme.MemeFixture.*;
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,41 +26,45 @@ public class MemeRepositoryTest {
 	@Autowired
 	private MemberRepository memberRepository;
 
-	private Member savedMember;
+	private Member member;
 
 	@BeforeEach
 	void setUp() {
-		savedMember = memberRepository.save(MEMBER());
+		member = memberRepository.save(MEMBER());
 	}
 
 	@Test
-	@DisplayName("Meme 저장 확인과 Meme Id를 통한 조회 확인")
-	public void Meme_저장() {
+	@DisplayName("id를 통한 밈 반환 성공")
+	public void Given_id_Then_findById_Return_Meme() {
+		// given
+		Meme savedMeme = memeRepository.save(MEME(member));
+
 		// when 밈 저장하기
-		Meme savedMeme = memeRepository.save(MEME(savedMember));
+		Meme result = memeRepository.findById(savedMeme.getId()).get();
 
 		// then 밈이 저장됐는지 확인
-		assertThat(memeRepository.findById(savedMeme.getId()).get()).isEqualTo(savedMeme);
+		assertThat(result).isEqualTo(savedMeme);
 	}
 
 	@Test
-	@DisplayName("Member를 통한 사용자 Meme 전체 조회")
-	public void 전체_Meme_조회() {
-		// given DB에 밈과 유저를 저장
-		Member anthorMember = memberRepository.save(SECOND_MEMBER());
-		Meme firstMeme = MEME(savedMember);
-		Meme secondtMeme = SECOND_MEME(savedMember);
-		Meme anotherMemberMeme = MEME(anthorMember);
-		Pageable pageable = PageRequest.of(0, 10);
+	@DisplayName("Member를 통한 사용자 Page<MemeResponse> 반환 성공")
+		public void Given_Member_Then_findAllByMember_Then_Page_MemesResponse() {
+		// given
+		final int memeCount = 18;
+		final int pageSize = 10;
+		Member anthorMember = memberRepository.save(OTHER_MEMBER());
+		Pageable pageable = PageRequest.of(0, pageSize);
 
-		List<Meme> savedMemes = List.of(firstMeme, secondtMeme, anotherMemberMeme);
-		memeRepository.saveAll(savedMemes);
+		for (int i = 0; i < memeCount; i++)
+			memeRepository.save(MEME(member));
+		for (int i = 0; i < 2; i++)
+			memeRepository.save(MEME(anthorMember));
 
-		// when MEMBER를 통해서 MEME을 조회
-		Page<MemeResponse> findMemes = memeRepository.findAllByMember(savedMember, pageable);
+		// when
+		Page<MemeResponse> findMemes = memeRepository.findAllByMember(member, pageable);
 
-		// then 일치하는지 조회
-		assertThat(findMemes.getContent()).usingRecursiveComparison()
-			.isEqualTo(List.of(firstMeme, secondtMeme).stream().map(MemeResponse::of).toList());
+		// then
+		assertThat(findMemes.getContent()).hasSize(pageSize);
+		assertThat(findMemes.getTotalElements()).isEqualTo(memeCount);
 	}
 }

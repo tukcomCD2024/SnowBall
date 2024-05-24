@@ -9,12 +9,8 @@ public class MemeFixture {
 		return Meme.builder().s3Url("s3Url").member(member).build();
 	}
 
-	public static Meme SECOND_MEME(Member member) {
+	public static Meme OTHER_MEME(Member member) {
 		return Meme.builder().s3Url("s3Url2").member(member).build();
-	}
-
-	public static Meme THIRD_MEME(Member member) {
-		return Meme.builder().s3Url("s3Url3").member(member).build();
 	}
 
 	public static MemeServiceDto MEME_SERVICE_DTO() {

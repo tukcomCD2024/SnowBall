@@ -18,7 +18,7 @@ public class MemberFixture {
 			.build();
 	}
 
-	public final static Member SECOND_MEMBER() {
+	public final static Member OTHER_MEMBER() {
 		return Member.builder()
 			.email("junrain@ourservice.com")
 			.role(Role.USER)
@@ -38,7 +38,7 @@ public class MemberFixture {
 			.build();
 	}
 
-	public final static MemberServiceDto UPDATE_MEMBER_SERVICE_DTO() {
+	public final static MemberServiceDto UPDATED_MEMBER_SERVICE_DTO() {
 		return MemberServiceDto.builder()
 			.imageUrl("imageUrl2")
 			.nickname("junRain2")
