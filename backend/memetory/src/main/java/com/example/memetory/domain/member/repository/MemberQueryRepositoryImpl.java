@@ -30,7 +30,7 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
 	}
 
 	@Override
-	public boolean existsMemberByNickname(String nickname) {
+	public boolean existMemberByNickname(String nickname) {
 		return jpaQueryFactory.selectFrom(member).where(member.nickname.eq(nickname)).fetchOne() != null;
 	}
 }

@@ -2,7 +2,7 @@ package com.example.memetory.domain.member.controller;
 
 import org.springframework.http.ResponseEntity;
 
-import com.example.memetory.domain.member.dto.MemberUpdateDto;
+import com.example.memetory.domain.member.dto.request.MemberUpdateRequest;
 import com.example.memetory.global.response.ResultResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,5 +30,13 @@ public interface MemberApi {
 			description = "닉네임 중복"
 		)}
 	)
-	ResponseEntity<ResultResponse> updateMember(@Parameter(hidden = true) String email, MemberUpdateDto memberUpdateDto);
+	ResponseEntity<ResultResponse> updateMember(@Parameter(hidden = true) String email,
+		MemberUpdateRequest memberUpdateRequest);
+
+	@Operation(
+		summary = "단일 멤버 조회",
+		description = "로그인한 멤버의 프로필을 조회하기 위한 용도",
+		security = {@SecurityRequirement(name = "access_token")}
+	)
+	ResponseEntity<ResultResponse> findMember(@Parameter(hidden = true) String email);
 }

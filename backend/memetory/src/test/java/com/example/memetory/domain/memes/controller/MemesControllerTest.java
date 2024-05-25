@@ -18,12 +18,17 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import com.example.memetory.domain.like.dto.LikeServiceDto;
+import com.example.memetory.domain.like.exception.NotCreateLikeException;
+import com.example.memetory.domain.like.exception.NotFoundLikeException;
+import com.example.memetory.domain.like.service.LikeService;
 import com.example.memetory.domain.meme.entity.Meme;
+import com.example.memetory.domain.memes.dto.MemesServiceDto;
 import com.example.memetory.domain.memes.dto.request.GenerateMemesRequest;
-import com.example.memetory.domain.memes.dto.response.MemesInfo;
+import com.example.memetory.domain.memes.dto.response.MemesInfoResponse;
 import com.example.memetory.domain.memes.dto.response.MemesInfoSliceResponse;
 import com.example.memetory.domain.memes.dto.response.MemesResponse;
-import com.example.memetory.domain.memes.exception.NotDeleteMemesException;
+import com.example.memetory.domain.memes.exception.AccessDinedMemesException;
 import com.example.memetory.domain.memes.service.MemesService;
 import com.example.memetory.global.LoginTest;
 
@@ -32,29 +37,39 @@ import com.example.memetory.global.LoginTest;
 public class MemesControllerTest extends LoginTest {
 	@MockBean
 	private MemesService memesService;
+	@MockBean
+	private LikeService likeService;
 
 	@Test
-	@DisplayName("Memes 생성")
-	public void 밈스_생성() throws Exception {
+	@DisplayName("GenerateMemesRequest을 통한 Memes 생성 성공")
+	public void Given_GenerateMemesRequest_When_registerMemes_Then_MemesResponse() throws Exception {
 		// given
+		final String title = "new Memes";
+
 		Meme meme = MEME(loginMember);
+
+		GenerateMemesRequest request = new GenerateMemesRequest(meme.getId(), title);
+		MemesResponse response = MemesResponse.of(MEMES(loginMember, meme));
+
+		given(memesService.registerMemes(any(MemesServiceDto.class))).willReturn(response);
 
 		// when
 		final ResultActions perform = mockMvc.perform(
 			post("/memes")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(toRequestBody(new GenerateMemesRequest(meme.getId(), "new Title")))
+				.content(toRequestBody(request))
 				.header("Authorization", "Bearer " + accessToken)
 		).andDo(print());
 
 		// then
 		perform.andExpect(status().isCreated())
-			.andExpect(jsonPath(MESSAGE).value(CREATE_MEMES_SUCCESS.getMessage()));
+			.andExpect(jsonPath(MESSAGE).value(CREATE_MEMES_SUCCESS.getMessage()))
+			.andExpect(jsonPath("$.data.title").value(title));
 	}
 
 	@Test
-	@DisplayName("밈스 삭제")
-	public void 밈스_삭제() throws Exception {
+	@DisplayName("memesId를 통한 밈스 삭제 성공")
+	public void Given_memesId_When_deleteMemes_Then_DELETE_MEMES_SUCCESS() throws Exception {
 		// when
 		final ResultActions perform = mockMvc.perform(
 			delete("/memes/-1")
@@ -68,10 +83,10 @@ public class MemesControllerTest extends LoginTest {
 	}
 
 	@Test
-	@DisplayName("밈스 삭제 실패")
-	public void 밈스_삭제_실패() throws Exception {
+	@DisplayName("권한 없는 멤버로 인한 MEMES_ACCESS_DENY 반환")
+	public void Given_unAuthorizedMember_When_deleteMemes_Then_MEMES_ACCESS_DENY() throws Exception {
 		// given
-		doThrow(new NotDeleteMemesException()).when(memesService).delete(any());
+		doThrow(new AccessDinedMemesException()).when(memesService).deleteMemes(any());
 
 		// when
 		final ResultActions perform = mockMvc.perform(
@@ -82,12 +97,12 @@ public class MemesControllerTest extends LoginTest {
 
 		// then
 		perform.andExpect(status().isForbidden())
-			.andExpect(jsonPath(ERROR_MESSAGE).value(MEMES_NOT_DELETE.getMessage()));
+			.andExpect(jsonPath(ERROR_MESSAGE).value(MEMES_ACCESS_DENY.getMessage()));
 	}
 
 	@Test
-	@DisplayName("좋아요 Top 10 밈스 조회")
-	public void TOP10_조회() throws Exception {
+	@DisplayName("올타임 좋아요 Top 10 밈스 반환 성공")
+	public void When_findTopMemesByLike_Then_GET_TOP_TEN_MEMES_SUCCESS() throws Exception {
 		// when
 		final ResultActions perform = mockMvc.perform(
 			get("/memes/like/all")
@@ -101,8 +116,8 @@ public class MemesControllerTest extends LoginTest {
 	}
 
 	@Test
-	@DisplayName("주간 좋아요 Top 10 밈스 조회")
-	public void 주간_TOP10_조회() throws Exception {
+	@DisplayName("주간 좋아요 Top 10 밈스 반환 성공")
+	public void When_findTopMemesByLikeForWeek_Then_GET_WEEK_TOP_TEN_MEMES_SUCCESS() throws Exception {
 		// when
 		final ResultActions perform = mockMvc.perform(
 			get("/memes/like/week")
@@ -116,11 +131,11 @@ public class MemesControllerTest extends LoginTest {
 	}
 
 	@Test
-	@DisplayName("밈스 단일 조회 성공")
-	public void 밈스_단일_조회_성공() throws Exception {
+	@DisplayName("밈스 id를 통한 MemesResponse 반환 성공")
+	public void Given_memesId_When_findMemesResponse_Thee_MemeResponse() throws Exception {
 		Meme meme = MEME(loginMember);
-		MemesResponse result = MemesResponse.of(MEMES(loginMember, meme));
-		given(memesService.getMemesResponse(any())).willReturn(result);
+		MemesResponse response = MemesResponse.of(MEMES(loginMember, meme));
+		given(memesService.findMemesResponse(any())).willReturn(response);
 
 		// when
 		final ResultActions perform = mockMvc.perform(
@@ -137,21 +152,23 @@ public class MemesControllerTest extends LoginTest {
 	}
 
 	@Test
-	@DisplayName("전체 밈스 슬라이스 조회 성공")
-	public void 전체_밈스_슬라이스_조회_성공() throws Exception {
+	@DisplayName("Pageable을 통한 MemesInfoSliceResponse 반환 성공")
+	public void Given_Pageable_When_findMemesInfoSliceResponse_Then_MemesInfoPageResponse() throws Exception {
+		final String page = "page=0&size=10";
 		Meme meme = MEME(loginMember);
 
 		MemesInfoSliceResponse response = MemesInfoSliceResponse.builder()
-			.memesInfoList(List.of(MemesInfo.of(MEMES(loginMember, meme))))
+			.memesInfoResponseList(List.of(MemesInfoResponse.of(MEMES(loginMember, meme))))
 			.currentPage(0)
 			.hasNext(false)
 			.build();
+		given(memesService.findMemesInfoSliceResponse(any())).willReturn(response);
 
-		given(memesService.getMemesInfoSliceResponse(any())).willReturn(response);
+		String expectedTitle = response.getMemesInfoResponseList().get(0).getTitle();
 
 		// when
 		final ResultActions perform = mockMvc.perform(
-			get("/memes?page=0&size=10")
+			get("/memes?" + page)
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("Authorization", "Bearer " + accessToken)
 		).andDo(print());
@@ -159,6 +176,71 @@ public class MemesControllerTest extends LoginTest {
 		// then
 		perform.andExpect(status().isOk()).andExpectAll(
 			jsonPath(MESSAGE).value(GET_ALL_MEMES_SUCCESS.getMessage()),
-			jsonPath("$.data.memesInfoList[0].title").value(response.getMemesInfoList().get(0).getTitle()));
+			jsonPath("$.data.memesInfoResponseList[0].title").value(expectedTitle));
+	}
+
+	@Test
+	@DisplayName("memesId를 통한 좋아요 등록 성공")
+	void Given_memesId_When_registerLike_Then_CREATE_LIKE_SUCCESS() throws Exception {
+		// when
+		final ResultActions perform = mockMvc.perform(post("/memes/-1/like")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + accessToken))
+			.andDo(print());
+
+		// then
+		verify(likeService).registerLike(any(LikeServiceDto.class));
+		perform.andExpect(status().isCreated())
+			.andExpect(jsonPath(MESSAGE).value(CREATE_LIKE_SUCCESS.getMessage()));
+	}
+
+	@Test
+	@DisplayName("DB에 존재하는 좋아요로 인한 LIKE_NOT_CREATE 반환")
+	void Given_ExistLike_When_registerLike_Then_LIKE_NOT_CREATE() throws Exception {
+		// given
+		doThrow(new NotCreateLikeException()).when(likeService).registerLike(any(LikeServiceDto.class));
+
+		// when
+		final ResultActions perform = mockMvc.perform(post("/memes/-1/like")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + accessToken))
+			.andDo(print());
+
+		// then
+		verify(likeService).registerLike(any(LikeServiceDto.class));
+		perform.andExpect(status().isConflict())
+			.andExpect(jsonPath(ERROR_MESSAGE).value(LIKE_NOT_CREATE.getMessage()));
+	}
+
+	@Test
+	@DisplayName("memesId를 통한 좋아요 삭제 성공")
+	void Given_memesId_When_cancelLike_Then_DELETE_LIKE_SUCCESS() throws Exception {
+		// when
+		final ResultActions perform = mockMvc.perform(delete("/memes/-1/like")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + accessToken))
+			.andDo(print());
+
+		// then
+		verify(likeService).cancelLike(any(LikeServiceDto.class));
+		perform.andExpect(status().isOk())
+			.andExpect(jsonPath(MESSAGE).value(DELETE_LIKE_SUCCESS.getMessage()));
+	}
+
+	@Test
+	@DisplayName("DB에 없는 좋아요로 인한 LIKE_NOT_FOUND 반환")
+	void Given_NotExistLike_When_cancelLike_Then_LIKE_NOT_FOUND() throws Exception {
+		// given
+		doThrow(new NotFoundLikeException()).when(likeService).cancelLike(any(LikeServiceDto.class));
+
+		// when
+		final ResultActions perform = mockMvc.perform(delete("/memes/-1/like")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + accessToken))
+			.andDo(print());
+
+		// then
+		perform.andExpect(status().isNotFound())
+			.andExpect(jsonPath(ERROR_MESSAGE).value(LIKE_NOT_FOUND.getMessage()));
 	}
 }

@@ -32,7 +32,7 @@ public class VoiceService {
 
     @Transactional
     public void register(VoiceServiceDto voiceServiceDto) {
-        Member foundMember = memberService.findByEmail(voiceServiceDto.getEmail());
+        Member foundMember = memberService.findMemberFromEmail(voiceServiceDto.getEmail());
         Voice newVoice = voiceServiceDto.toEntity(foundMember);
 
         voiceRepository.save(newVoice);
@@ -40,7 +40,7 @@ public class VoiceService {
 
     @Transactional(readOnly = true)
     public String findVoiceByMemberId(VoiceServiceDto voiceServiceDto) {
-        Member foundMember = memberService.findByEmail(voiceServiceDto.getEmail());
+        Member foundMember = memberService.findMemberFromEmail(voiceServiceDto.getEmail());
         Voice foundVoice = voiceRepository.findByMemberId(foundMember.getId()).orElseThrow(NotFoundVoiceException::new);
 
         return foundVoice.getElevenlabsVoiceId();

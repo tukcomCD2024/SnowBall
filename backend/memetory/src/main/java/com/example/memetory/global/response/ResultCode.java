@@ -9,6 +9,7 @@ import lombok.Getter;
 public enum ResultCode {
 	// member
 	UPDATE_MEMBER_SUCCESS(200,"멤버 업데이트 성공"),
+	GET_MEMBER_SUCCESS(200, "단일 멤버 조회 성공"),
 
 	// meme
 	CREATE_MEME_SUCCESS(201, "밈 생성 성공"),
@@ -39,9 +40,9 @@ public enum ResultCode {
 	// voice
 	CREATE_VOICE_SUCCESS(201, "목소리 생성 성공"),
 	GET_MEMBER_VOICE_SUCCESS(200, "멤버별 목소리 조회 성공"),
-	GET_VOICE_LIBRARY_SUCCESS(200, "기본 목소리 라이브러리 조회 성공")
-
+	GET_VOICE_LIBRARY_SUCCESS(200, "기본 목소리 라이브러리 조회 성공"),
 	;
+
 	private final int status;
 	private final String message;
 }

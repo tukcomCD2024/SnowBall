@@ -45,7 +45,7 @@ public interface MemeApi {
 			description = "밈 생성"
 		)
 	})
-	ResponseEntity<ResultResponse> register(
+	ResponseEntity<ResultResponse> registerMeme(
 		@Parameter(hidden = true) String email,
 		GenerateMemeListRequest generateMemeListRequest
 	);
@@ -61,7 +61,7 @@ public interface MemeApi {
 			description = "밈 단일 조회"
 		)
 	})
-	ResponseEntity<ResultResponse> findMeme(
+	ResponseEntity<ResultResponse> findMemberMemeResponse(
 		@Parameter(hidden = true) String email,
 		@Parameter(in = ParameterIn.PATH, description = "밈 아이디", required = true) Long memeId
 	);
@@ -77,7 +77,7 @@ public interface MemeApi {
 			description = "밈 전체 조회"
 		)
 	})
-	ResponseEntity<ResultResponse> findMemePage(
+	ResponseEntity<ResultResponse> findMemberMemePageResponse(
 		@Parameter(hidden = true) String email,
 		@Parameter Pageable pageable
 	);

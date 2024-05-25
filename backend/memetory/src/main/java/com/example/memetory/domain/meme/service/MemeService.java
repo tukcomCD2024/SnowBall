@@ -26,18 +26,20 @@ public class MemeService {
 	private final MemeRepository memeRepository;
 
 	@Transactional
-	public MemeResponse register(MemeServiceDto memeServiceDto) {
-		Member member = memberService.findById(memeServiceDto.getMemberId());
-		Meme meme = memeServiceDto.toEntity(member);
+	public MemeResponse registerMeme(MemeServiceDto memeServiceDto) {
+		Member member = memberService.findMemberFromId(memeServiceDto.getMemberId());
+		Meme meme = memeServiceDto.toEntityFromMember(member);
 
-		return MemeResponse.of(memeRepository.save(meme));
+		Meme savedMeme = memeRepository.save(meme);
+
+		return MemeResponse.of(savedMeme);
 	}
 
 	@Transactional(readOnly = true)
 	public String getAIServerSendJson(MemeServiceDto memeServiceDto) {
 		Gson gson = new Gson();
 
-		Member member = memberService.findByEmail(memeServiceDto.getEmail());
+		Member member = memberService.findMemberFromEmail(memeServiceDto.getEmail());
 
 		AIServerSendDto aiServerSendDto = AIServerSendDto.builder()
 			.memberId(member.getId())
@@ -48,20 +50,25 @@ public class MemeService {
 	}
 
 	@Transactional(readOnly = true)
-	public MemeResponse getMeme(MemeServiceDto memeServiceDto) {
-		Member member = memberService.findById(memeServiceDto.getMemberId());
+	public MemeResponse findMemberMemeResponse(MemeServiceDto memeServiceDto) {
 		Meme meme = memeRepository.findById(memeServiceDto.getMemeId()).orElseThrow(NotFoundMemeException::new);
 
-		if (meme.getMember() != member) {
-			throw new AccessDeniedMemeException();
-		}
+		Member loginMember = memberService.findMemberFromId(memeServiceDto.getMemberId());
+		Member memeMember = meme.getMember();
+		certifyMemeMember(memeMember, loginMember);
 
 		return MemeResponse.of(meme);
 	}
 
+	public static void certifyMemeMember(Member m1, Member m2) {
+		if (!m1.equals(m2)) {
+			throw new AccessDeniedMemeException();
+		}
+	}
+
 	@Transactional
-	public MemePageResponse getAllMeme(MemeServiceDto memeServiceDto, Pageable pageable) {
-		Member member = memberService.findByEmail(memeServiceDto.getEmail());
+	public MemePageResponse findMemberMemePageResponse(MemeServiceDto memeServiceDto, Pageable pageable) {
+		Member member = memberService.findMemberFromEmail(memeServiceDto.getEmail());
 
 		Page<MemeResponse> memeList = memeRepository.findAllByMember(member, pageable);
 
@@ -72,9 +79,8 @@ public class MemeService {
 			.build();
 	}
 
-	// Service 계층 끼리의 밈 조회
 	@Transactional(readOnly = true)
-	public Meme getMemeBetweenService(Long memeId) {
+	public Meme findMemeFromId(Long memeId) {
 		return memeRepository.findById(memeId).orElseThrow(NotFoundMemeException::new);
 	}
 }

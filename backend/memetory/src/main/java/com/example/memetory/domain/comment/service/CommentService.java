@@ -22,8 +22,8 @@ public class CommentService {
 
     @Transactional
     public void register(CommentServiceDto commentServiceDto) {
-        Member foundMember = memberService.findByEmail(commentServiceDto.getEmail());
-        Memes foundMemes = memesService.getMemesBetweenService(commentServiceDto.getMemesId());
+        Member foundMember = memberService.findMemberFromEmail(commentServiceDto.getEmail());
+        Memes foundMemes = memesService.findMemesFromMemesId(commentServiceDto.getMemesId());
         foundMemes.addCommentCount();
 
         Comment newComment = commentServiceDto.toEntity(foundMember, foundMemes);
@@ -34,7 +34,7 @@ public class CommentService {
     @Transactional
     public void delete(CommentServiceDto commentServiceDto) {
         Comment foundComment = commentRepository.findById(commentServiceDto.getCommentId()).orElseThrow(NotFoundCommentException::new);
-        Memes foundMemes = memesService.getMemesBetweenService(foundComment.getMemes().getId());
+        Memes foundMemes = memesService.findMemesFromMemesId(foundComment.getMemes().getId());
         foundMemes.cancelCommentCount();
 
         commentRepository.delete(foundComment);

@@ -19,20 +19,20 @@ public class MemeServiceDto {
 	private String email;
 	private List<GenerateMemeDto> scene;
 
-	public static MemeServiceDto create(String email, Long memeId) {
+	public static MemeServiceDto fromEmailAndMemeId(String email, Long memeId) {
 		return MemeServiceDto.builder()
 			.email(email)
 			.memeId(memeId)
 			.build();
 	}
 
-	public static MemeServiceDto create(String email) {
+	public static MemeServiceDto fromEmail(String email) {
 		return MemeServiceDto.builder()
 			.email(email)
 			.build();
 	}
 
-	public Meme toEntity(Member member) {
+	public Meme toEntityFromMember(Member member) {
 		return Meme.builder()
 			.member(member)
 			.s3Url(this.s3Url)

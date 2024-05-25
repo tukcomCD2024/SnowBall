@@ -22,8 +22,8 @@ public class ComplainService {
 
     @Transactional
     public void register(ComplainServiceDto complainServiceDto) {
-        Member foundMember = memberService.findByEmail(complainServiceDto.getEmail());
-        Memes foundMemes = memesService.getMemesBetweenService(complainServiceDto.getMemesId());
+        Member foundMember = memberService.findMemberFromEmail(complainServiceDto.getEmail());
+        Memes foundMemes = memesService.findMemesFromMemesId(complainServiceDto.getMemesId());
 
         Complain newComplain = complainServiceDto.toEntity(foundMember, foundMemes);
         complainRepository.save(newComplain);

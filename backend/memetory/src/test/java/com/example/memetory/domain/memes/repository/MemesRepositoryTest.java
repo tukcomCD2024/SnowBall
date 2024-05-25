@@ -1,5 +1,6 @@
 package com.example.memetory.domain.memes.repository;
 
+import static com.example.memetory.domain.like.LikeFixture.*;
 import static com.example.memetory.domain.member.MemberFixture.*;
 import static com.example.memetory.domain.meme.MemeFixture.*;
 import static com.example.memetory.domain.memes.MemesFixture.*;
@@ -22,11 +23,11 @@ import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.repository.MemberRepository;
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.repository.MemeRepository;
-import com.example.memetory.domain.memes.dto.response.MemesInfo;
+import com.example.memetory.domain.memes.dto.response.MemesInfoResponse;
 import com.example.memetory.domain.memes.entity.Memes;
 import com.example.memetory.global.RepositoryTest;
 
-@DisplayName("memes 레포지토리 테스트의 ")
+@DisplayName("Memes 레포지토리 테스트의 ")
 @RepositoryTest
 public class MemesRepositoryTest {
 	@Autowired
@@ -48,47 +49,48 @@ public class MemesRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Memes의 저장 및 단일 조회 테스트")
-	void MEMES_단일조회() {
-		// given Memes 세팅
-		Memes savedMemes = memesRepository.save(MEMES(member, meme));
+	@DisplayName("밈스 id를 통한 단일 밈스 조회 성공")
+	void Given_Memes_When_findByMemesId_Then_Memes() {
+		// given
+		Memes expectedResult = memesRepository.save(MEMES(member, meme));
 
 		// when 
-		Memes expect = memesRepository.findByMemesId(savedMemes.getId()).get();
+		Memes result = memesRepository.findByMemesId(expectedResult.getId()).get();
 
 		// then
-		assertThat(expect).isEqualTo(savedMemes);
-		assertThat(expect.getMember()).isEqualTo(member);
-		assertThat(expect.getMeme()).isEqualTo(meme);
+		assertThat(result).isEqualTo(expectedResult);
 	}
 
 	@Test
-	@DisplayName("Memes의 Slice 테스트")
-	void MEMES_슬라이스_조회() {
-		// given Memes 100 세팅
-		for (int i = 0; i < 100; i++) {
+	@DisplayName("Pageable을 통한 Slice<MemesInfo> 반환")
+	void Given_Pageable_When_findMemesInfoSlice_Then_Slice_MemesInfo() {
+		// given
+		final int pageSize = 10;
+
+		for (int i = 0; i < pageSize + 1; i++) {
 			memesRepository.save(MEMES_SET_LIKE(member, meme, (long)i));
 		}
-		PageRequest page1 = PageRequest.of(0, 10);
-		PageRequest page2 = PageRequest.of(9, 10);
-		// when 실행
-		Slice<MemesInfo> result1 = memesRepository.findAllMemesSlice(page1);
-		Slice<MemesInfo> result2 = memesRepository.findAllMemesSlice(page2);
+
+		PageRequest page = PageRequest.of(0, pageSize);
+
+		// when
+		Slice<MemesInfoResponse> result = memesRepository.findMemesInfoSlice(page);
 
 		// then
-		assertThat(result1.getContent()).hasSize(10);
-		assertFalse(result2.hasNext());
+		assertThat(result.getContent()).hasSize(pageSize);
+		assertTrue(result.hasNext());
 	}
 
 	@Test
-	@DisplayName("Memes의 좋아요 Top 10 테스트")
-	void MEMES_TOP_10() {
-		// given Memes 100 세팅
+	@DisplayName("전체 조회수 Top10 List<MemesInfo> 반환")
+	void When_findTopMemesOrderByLikeCount_Then_List_MemesInfo() {
+		// given
 		for (int i = 0; i < 100; i++) {
 			memesRepository.save(MEMES_SET_LIKE(memberRepository.save(MEMBER()), meme, (long)i));
 		}
-		// when 실행
-		List<MemesInfo> result = memesRepository.findTopMemesOrderByLikeCount();
+
+		// when
+		List<MemesInfoResponse> result = memesRepository.findTopMemesOrderByLikeCount();
 
 		// then
 		assertThat(result).hasSize(10);
@@ -96,23 +98,17 @@ public class MemesRepositoryTest {
 		assertThat(result.get(1).getLikeCount()).isEqualTo(98L);
 	}
 
+	// TODO Like의 createdAt의 시간을 바꿔서 테스트를 진행해 봐야함.
 	@Test
-	@DisplayName("Memes의 주별 좋아요 Top 10 테스트")
-	void MEMES_TOP_10_WEEK() {
-		// given Memes 100 세팅
-		for (int i = 1; i <= 10; i++) {
-			Memes savedMemes = memesRepository.save(MEMES(member, meme));
-			for (int j = 0; j < i * 2; j++) {
-				likeRepository.save(Like.builder()
-					.memes(savedMemes)
-					.member(memberRepository.save(MEMBER()))
-					.build());
-			}
-		}
-		LocalDateTime time = LocalDateTime.now().minusWeeks(1);
+	@DisplayName("지난주를 통해 일주일동안 좋아요 Top 10 List<MemesInfo> 반한")
+	void Given_lastWeek_When_findTopMemesOrderByLikeCountForPeriod_Then_List_MemesInfo() {
+		// give
+		saveLikesSetOtherTime();
+
+		LocalDateTime lastWeek = LocalDateTime.now().minusWeeks(1);
 
 		// when 실행
-		List<MemesInfo> result = memesRepository.findTopMemesByLikeCountForPeriod(time);
+		List<MemesInfoResponse> result = memesRepository.findTopMemesOrderByLikeCountForPeriod(lastWeek);
 
 		// then
 		assertThat(result).hasSize(10);
@@ -120,22 +116,32 @@ public class MemesRepositoryTest {
 		assertThat(result.get(0).getMemberNickname()).isEqualTo(member.getNickname());
 	}
 
+	private void saveLikesSetOtherTime() {
+		for (int i = 1; i <= 10; i++) {
+			Memes savedMemes = memesRepository.save(MEMES(member, meme));
+
+			for (int j = 0; j < i * 2; j++) {
+				Member savedMember = memberRepository.save(MEMBER());
+				Like saveLike = likeRepository.save(LIKE(savedMember, savedMemes));
+
+				saveLike.getCreatedAt().minusDays(i);
+			}
+		}
+	}
+
 	@Test
-	@DisplayName("Memes의 주별 좋아요 Top 10 해당하는 시간 없음")
-	void MEMES_TOP_10_AFTER_WEEK() {
-		// given Memes 100 세팅
+	@DisplayName("다음주를 통해 좋아요 Top 10 빈 List<MemesInfo> 반환")
+	void Given_nextWeek_When_findTopMemesOrderByLikeCountForPeriod_Then_List_MemesInfo() {
+		// given
 		Memes savedMemes = memesRepository.save(MEMES(member, meme));
-		likeRepository.save(Like.builder()
-			.memes(savedMemes)
-			.member(member)
-			.build());
+		likeRepository.save(LIKE(member, savedMemes));
 
-		LocalDateTime time = LocalDateTime.now().plusWeeks(1);
+		LocalDateTime nextWeek = LocalDateTime.now().plusWeeks(1);
 
-		// when 실행
-		List<MemesInfo> result = memesRepository.findTopMemesByLikeCountForPeriod(time);
+		// when
+		List<MemesInfoResponse> result = memesRepository.findTopMemesOrderByLikeCountForPeriod(nextWeek);
 
 		// then
-		assertThat(result).hasSize(0);
+		assertThat(result).isEmpty();
 	}
 }

@@ -30,6 +30,7 @@ public class MemesFixture {
 		return MemesServiceDto.builder()
 			.memberId(-1L)
 			.memeId(-1L)
+			.memesId(-1L)
 			.email("junrain@ourservice.com")
 			.title("new Memes")
 			.build();

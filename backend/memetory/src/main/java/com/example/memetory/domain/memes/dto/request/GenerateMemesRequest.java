@@ -19,7 +19,7 @@ public class GenerateMemesRequest {
     @Schema(description = "밈스 제목")
     private String title;
 
-    public MemesServiceDto toServiceDto(String email) {
+    public MemesServiceDto toServiceDtoFromEmail(String email) {
         return MemesServiceDto.builder()
                 .email(email)
                 .memeId(memeId)

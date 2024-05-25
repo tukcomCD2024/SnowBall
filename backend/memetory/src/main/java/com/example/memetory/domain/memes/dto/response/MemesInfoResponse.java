@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Schema(description = "밈스 미리보기 정보")
-public class MemesInfo {
+public class MemesInfoResponse {
 
 	@Schema(description = "밈스 아이디")
 	private Long memesId;
@@ -35,7 +35,7 @@ public class MemesInfo {
 
 	@QueryProjection
 	@Builder
-	public MemesInfo(Long memesId, String memberNickname, String title, Long commentCount, Long likeCount,
+	public MemesInfoResponse(Long memesId, String memberNickname, String title, Long commentCount, Long likeCount,
 		LocalDateTime createdAt) {
 		this.memesId = memesId;
 		this.memberNickname = memberNickname;
@@ -45,8 +45,8 @@ public class MemesInfo {
 		this.createdAt = createdAt;
 	}
 
-	public static MemesInfo of(Memes memes) {
-		return MemesInfo.builder()
+	public static MemesInfoResponse of(Memes memes) {
+		return MemesInfoResponse.builder()
 			.memesId(memes.getId())
 			.memberNickname(memes.getMember().getNickname())
 			.title(memes.getTitle())

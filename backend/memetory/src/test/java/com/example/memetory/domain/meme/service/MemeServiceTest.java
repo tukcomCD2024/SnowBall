@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,80 +52,87 @@ public class MemeServiceTest {
 	}
 
 	@Test
-	@DisplayName("밈 저장 성공")
-	void 밈_저장() {
+	@DisplayName("MemesServiceDto를 통한 밈 저장 성공")
+	void Given_MemesServiceDto_When_registerMeme_Then_Meme() {
 		// given Meme을 세팅
 		MemeServiceDto memeServiceDto = MEME_SERVICE_DTO();
+		Long memberId = memeServiceDto.getMemberId();
+		MemeResponse expectedResult = MemeResponse.of(meme);
+
+		given(memberService.findMemberFromId(memberId)).willReturn(member);
+		given(memeRepository.save(any(Meme.class))).willReturn(meme);
 
 		// when
-		when(memberService.findById(memeServiceDto.getMemberId())).thenReturn(member);
-		when(memeRepository.save(any())).thenReturn(meme);
-
-		MemeResponse result = memeService.register(memeServiceDto);
+		MemeResponse result = memeService.registerMeme(memeServiceDto);
 
 		// then
-		assertThat(result).isInstanceOf(MemeResponse.class);
+		assertThat(result).usingRecursiveComparison().isEqualTo(expectedResult);
 	}
 
 	@Test
-	@DisplayName("Meme ID를 통해 MemeResponse를 반환")
-	void 단일_밈_조회() {
+	@DisplayName("id를 통한 멤버의 MemeResponse를 반환 성공")
+	void Given_id_When_findMemberMemeResponse_Then_Member_MemeResponse() {
 		// given 밈 저장, memServiceDto, memeReponse 생성
-		MemeResponse expected = MemeResponse.of(meme);
+		MemeResponse expectedResult = MemeResponse.of(meme);
 		MemeServiceDto memeServiceDto = MEME_SERVICE_DTO();
+
+		given(memberService.findMemberFromId(memeServiceDto.getMemberId())).willReturn(member);
+		given(memeRepository.findById(memeServiceDto.getMemeId())).willReturn(Optional.ofNullable(meme));
 
 		// when
-		when(memeRepository.findById(memeServiceDto.getMemeId())).thenReturn(Optional.ofNullable(meme));
-		when(memberService.findById(memeServiceDto.getMemberId())).thenReturn(member);
-		MemeResponse result = memeService.getMeme(memeServiceDto);
+		MemeResponse result = memeService.findMemberMemeResponse(memeServiceDto);
 
 		// given
-		assertThat(result).usingRecursiveComparison().isEqualTo(expected);
+		assertThat(result).usingRecursiveComparison().isEqualTo(expectedResult);
 	}
 
 	@Test
-	@DisplayName("Meme ID를 통해 MemeResponse를 반환 실패")
-	void 단일_밈_조회_실패() {
-		// given 밈 저장, memServiceDto, memeReponse 생성
+	@DisplayName("존재하지 않는 id로 인한 NotFoundMemeException 반환")
+	void Given_notExistId_When_findMemberMemeResponse_Throw_NotFoundMemberMemeException() {
+		// given
 		MemeServiceDto memeServiceDto = MEME_SERVICE_DTO();
+		Long notExistId = memeServiceDto.getMemeId();
 
-		// when
-		when(memeRepository.findById(memeServiceDto.getMemeId())).thenReturn(Optional.empty());
+		given(memeRepository.findById(notExistId)).willReturn(Optional.empty());
 
 		// given
-		assertThrows(NotFoundMemeException.class, () -> memeService.getMeme(memeServiceDto));
+		assertThrows(NotFoundMemeException.class, () -> memeService.findMemberMemeResponse(memeServiceDto));
 	}
 
 	@Test
-	@DisplayName("Member를 통한 해당 멤버의 전체 밈 조회")
-	void 전체_밈_조회() {
-		// given 밈들 저장, MemeListResponse 세팅
-		Pageable page = PageRequest.of(0, 10);
+	@DisplayName("Member를 통한 멤버의 Page<MemeResponse> 조회 성공")
+	void Given_Member_When_findMemberMemePageResponse_Then_Page_Member_MemeResponse() {
+		// given
+		final int pageSize = 10;
+		Pageable page = PageRequest.of(0, pageSize);
 		MemeServiceDto memeServiceDto = MEME_SERVICE_DTO();
 
-		Member otherMember = SECOND_MEMBER();
-		Meme secondtMeme = SECOND_MEME(member);
-		Meme anotherMemberMeme = MEME(otherMember);
+		List<MemeResponse> memeList = createMemeResponseList(pageSize);
 
+		Page<MemeResponse> returnedMemeResponse = new PageImpl<>(memeList);
 
-		List<MemeResponse> memeList = List.of(meme, secondtMeme, anotherMemberMeme)
-			.stream()
-			.map(MemeResponse::of)
-			.toList();
-
-		Page<MemeResponse> returned = new PageImpl<>(memeList);
-
-		MemePageResponse expected = MemePageResponse.builder()
+		MemePageResponse expectedResult = MemePageResponse.builder()
 			.totalPage(1)
 			.currentPage(0)
 			.memeList(memeList)
 			.build();
-		
+
+		given(memeRepository.findAllByMember(any(), any())).willReturn(returnedMemeResponse);
+
 		// when
-		when(memeRepository.findAllByMember(any(), any())).thenReturn(returned);
-		MemePageResponse result = memeService.getAllMeme(memeServiceDto, page);
+		MemePageResponse result = memeService.findMemberMemePageResponse(memeServiceDto, page);
 
 		// then
-		assertThat(result).usingRecursiveComparison().isEqualTo(expected);
+		assertThat(result).usingRecursiveComparison().isEqualTo(expectedResult);
+	}
+
+	private List<MemeResponse> createMemeResponseList(int pageSize) {
+		List<MemeResponse> memeResponseList = new ArrayList<>();
+
+		for (int i = 0; i < pageSize; i++) {
+			memeResponseList.add(MemeResponse.of(MEME(member)));
+		}
+
+		return memeResponseList;
 	}
 }
