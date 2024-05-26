@@ -80,6 +80,9 @@ public class MemesServiceTest {
 		given(memeService.findMemeFromId(memesServiceDto.getMemeId())).willReturn(meme);
 		given(memberService.findMemberFromEmail(any(String.class))).willReturn(unAuthorizedMember);
 
+		doThrow(new AccessDeniedMemeException()).when(memeService)
+			.certifyMemeMember(any(Member.class), any(Member.class));
+
 		// then
 		assertThrows(AccessDeniedMemeException.class, () -> memesService.registerMemes(memesServiceDto));
 	}
