@@ -60,7 +60,7 @@ public class MemeService {
 		return MemeResponse.of(meme);
 	}
 
-	public static void certifyMemeMember(Member m1, Member m2) {
+	public void certifyMemeMember(Member m1, Member m2) {
 		if (!m1.equals(m2)) {
 			throw new AccessDeniedMemeException();
 		}

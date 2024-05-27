@@ -26,7 +26,9 @@ import com.example.memetory.domain.like.repository.LikeRepository;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.memes.entity.Memes;
+import com.example.memetory.domain.memes.repository.MemesRepository;
 import com.example.memetory.domain.memes.service.MemesService;
+import com.example.memetory.domain.memes.service.RankingService;
 
 @DisplayName("Like 서비스 테스트의 ")
 @ExtendWith(MockitoExtension.class)
@@ -37,6 +39,8 @@ public class LikeServiceTest {
 	private MemesService memesService;
 	@Mock
 	private LikeRepository likeRepository;
+	@Mock
+	private RankingService rankingService;
 	@InjectMocks
 	private LikeService likeService;
 
@@ -63,6 +67,7 @@ public class LikeServiceTest {
 
 		// then
 		assertThat(memes.getLikeCount()).isEqualTo(2L);
+		verify(rankingService).increaseTodayMemesLikeCountFromMemesId(any());
 		verify(likeRepository).save(any(Like.class));
 	}
 
@@ -95,5 +100,6 @@ public class LikeServiceTest {
 		// then
 		assertThat(memes.getLikeCount()).isZero();
 		verify(likeRepository).delete(like);
+		verify(rankingService).decreaseTodayMemesLikeCountFromMemesId(any());
 	}
 }

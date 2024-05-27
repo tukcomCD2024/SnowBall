@@ -28,6 +28,7 @@ import com.example.memetory.domain.meme.dto.MemePageResponse;
 import com.example.memetory.domain.meme.dto.MemeResponse;
 import com.example.memetory.domain.meme.dto.MemeServiceDto;
 import com.example.memetory.domain.meme.entity.Meme;
+import com.example.memetory.domain.meme.exception.AccessDeniedMemeException;
 import com.example.memetory.domain.meme.exception.NotFoundMemeException;
 import com.example.memetory.domain.meme.repository.MemeRepository;
 
@@ -135,4 +136,15 @@ public class MemeServiceTest {
 
 		return memeResponseList;
 	}
+
+	@Test
+	@DisplayName("밈 멤버와 다른 멤버로 인한 AccessDeniedMemeException 반환")
+	void Given_differentMember_When_certifyMemeMember_Throw_AccessDeniedMemeException() {
+		// given
+		Member differentMember = OTHER_MEMBER();
+
+		// then
+		assertThrows(AccessDeniedMemeException.class, () -> memeService.certifyMemeMember(member, differentMember));
+	}
+
 }

@@ -52,4 +52,11 @@ public class Like extends BaseEntity {
 		this.member = member;
 		this.memes = memes;
 	}
+
+	public static Like fromMemberAndMemes(Member member, Memes memes) {
+		return Like.builder()
+			.member(member)
+			.memes(memes)
+			.build();
+	}
 }
