@@ -55,4 +55,15 @@ public class MemesInfoResponse {
 			.createdAt(memes.getCreatedAt())
 			.build();
 	}
+
+	public static MemesInfoResponse fromMemesAndLikeCount(Memes memes, Long likeCount) {
+		return MemesInfoResponse.builder()
+			.memesId(memes.getId())
+			.memberNickname(memes.getMember().getNickname())
+			.title(memes.getTitle())
+			.commentCount(memes.getCommentCount())
+			.likeCount(likeCount)
+			.createdAt(memes.getCreatedAt())
+			.build();
+	}
 }

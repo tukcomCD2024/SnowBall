@@ -9,6 +9,8 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.memetory.domain.memes.dto.MemesRankDto;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -17,7 +19,7 @@ public class RankingService {
 	private final String PREFIX = "LIKE_RANKING_DATE::";
 	private final String POSTFIX_WEEK = "::WEEK";
 	private final String POSTFIX_MONTH = "::MONTH";
-	private final Long TOP_TEN = 10L;
+	private final Long TOP_TEN = 9L;
 
 	private final ZSetOperations<String, Long> rankingZSet;
 
@@ -25,26 +27,33 @@ public class RankingService {
 	public void increaseTodayMemesLikeCountFromMemesId(Long memesId) {
 		String key = PREFIX + LocalDate.now();
 
+		increaseMemesLikeCountForToday(key, memesId);
+		increaseMemesLikeCountForLastWeek(key, memesId);
+		increaseMemesLikeCountForLastMonth(key, memesId);
+	}
+
+	private void increaseMemesLikeCountForToday(String key, Long memesId) {
 		rankingZSet.incrementScore(key, memesId, 1);
 	}
 
-	// Todo 음수를 확인하는 로직 추가 필요해 보임
-	@Transactional
-	public void decreaseTodayMemesLikeCountFromMemesId(Long memesId) {
-		String key = PREFIX + LocalDate.now();
+	private void increaseMemesLikeCountForLastWeek(String key, Long memesId) {
+		key += POSTFIX_WEEK;
 
-		rankingZSet.incrementScore(key, memesId, -1);
+		unionMemesIfKeyNotExists(key, 7);
+		rankingZSet.incrementScore(key, memesId, 1);
 	}
 
-	@Transactional(readOnly = true)
-	public List<Long> findTopTenMemesLikeCountForWeek() {
-		String key = PREFIX + LocalDate.now() + POSTFIX_WEEK;
+	private void increaseMemesLikeCountForLastMonth(String key, Long memesId) {
+		key += POSTFIX_MONTH;
 
-		if (isNotExistedKey(key))
-			unionMemesFromKeyAndDay(key, 7);
+		unionMemesIfKeyNotExists(key, 30);
+		rankingZSet.incrementScore(key, memesId, 1);
+	}
 
-		Set<Long> result = rankingZSet.reverseRange(key, 0, TOP_TEN);
-		return List.copyOf(result);
+	private void unionMemesIfKeyNotExists(String key, int day) {
+		if (isNotExistedKey(key)) {
+			unionMemesFromKeyAndDay(key, day);
+		}
 	}
 
 	private boolean isNotExistedKey(String key) {
@@ -65,15 +74,54 @@ public class RankingService {
 		rankingZSet.unionAndStore(key, keyList, key);
 	}
 
+	@Transactional
+	public void decreaseTodayMemesLikeCountFromMemesId(Long memesId) {
+		String key = PREFIX + LocalDate.now();
+
+		decreaseMemesLikeCountForToday(key, memesId);
+		decreaseMemesLikeCountForLastWeek(key, memesId);
+		decreaseMemesLikeCountForLastMonth(key, memesId);
+	}
+
+	private void decreaseMemesLikeCountForToday(String key, Long memesId) {
+		rankingZSet.incrementScore(key, memesId, -1);
+	}
+
+	private void decreaseMemesLikeCountForLastWeek(String key, Long memesId) {
+		key += POSTFIX_WEEK;
+
+		unionMemesIfKeyNotExists(key, 7);
+		rankingZSet.incrementScore(key, memesId, -1);
+	}
+
+	private void decreaseMemesLikeCountForLastMonth(String key, Long memesId) {
+		key += POSTFIX_MONTH;
+
+		unionMemesIfKeyNotExists(key, 30);
+		rankingZSet.incrementScore(key, memesId, -1);
+	}
+
 	@Transactional(readOnly = true)
-	public List<Long> findTopTenMemesLikeCountForMonth() {
+	public List<MemesRankDto> findTopTenMemesLikeCountForWeek() {
+		String key = PREFIX + LocalDate.now() + POSTFIX_WEEK;
+
+		unionMemesIfKeyNotExists(key, 7);
+
+		Set<ZSetOperations.TypedTuple<Long>> rankTuple = rankingZSet.reverseRangeWithScores(key, 0, TOP_TEN);
+		List<MemesRankDto> result = rankTuple.stream().map(MemesRankDto::of).toList();
+
+		return result;
+	}
+
+	@Transactional(readOnly = true)
+	public List<MemesRankDto> findTopTenMemesLikeCountForMonth() {
 		String key = PREFIX + LocalDate.now() + POSTFIX_MONTH;
 
-		if (isNotExistedKey(key)) {
-			unionMemesFromKeyAndDay(key, 30);
-		}
+		unionMemesIfKeyNotExists(key, 30);
 
-		Set<Long> result = rankingZSet.reverseRange(key, 0, TOP_TEN);
-		return List.copyOf(result);
+		Set<ZSetOperations.TypedTuple<Long>> rankTuple = rankingZSet.reverseRangeWithScores(key, 0, TOP_TEN);
+		List<MemesRankDto> result = rankTuple.stream().map(MemesRankDto::of).toList();
+
+		return result;
 	}
 }

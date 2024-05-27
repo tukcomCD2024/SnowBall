@@ -105,4 +105,6 @@ public class MemesService {
 		return memesRepository.findTopMemesOrderByLikeCountForPeriod(now().minusWeeks(1));
 	}
 
+	//Todo memesIdList를 받아서 memesInfo로 순서 변환없이 변환하는 작업 필요
+
 }
