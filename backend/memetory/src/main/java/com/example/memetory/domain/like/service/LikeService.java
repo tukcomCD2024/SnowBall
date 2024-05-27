@@ -13,6 +13,7 @@ import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.memes.entity.Memes;
 import com.example.memetory.domain.memes.service.MemesService;
+import com.example.memetory.domain.memes.service.RankingService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,15 +23,16 @@ public class LikeService {
 	private final MemberService memberService;
 	private final MemesService memesService;
 	private final LikeRepository likeRepository;
+	private final RankingService rankingService;
 
 	@Transactional
 	public void registerLike(LikeServiceDto likeServiceDto) {
 		Member member = memberService.findMemberFromEmail(likeServiceDto.getEmail());
 		Memes memes = memesService.findMemesFromMemesId(likeServiceDto.getMemesId());
 
-		Like newLike = likeServiceDto.toEntityFromMemberAndMemes(member, memes);
+		Like newLike = Like.fromMemberAndMemes(member, memes);
 		saveLike(newLike);
-		memes.addLikeCount();
+		increaseMemesLikeCount(memes);
 	}
 
 	private void saveLike(Like like) {
@@ -41,6 +43,11 @@ public class LikeService {
 		}
 	}
 
+	private void increaseMemesLikeCount(Memes memes) {
+		memes.addLikeCount();
+		rankingService.increaseTodayMemesLikeCountFromMemesId(memes.getId());
+	}
+
 	@Transactional
 	public void cancelLike(LikeServiceDto likeServiceDto) {
 		Member member = memberService.findMemberFromEmail(likeServiceDto.getEmail());
@@ -48,6 +55,11 @@ public class LikeService {
 		Like like = likeRepository.findLikeByMemberAndMemes(member, memes).orElseThrow(NotFoundLikeException::new);
 
 		likeRepository.delete(like);
+		decreaseMemesLikeCount(memes);
+	}
+
+	private void decreaseMemesLikeCount(Memes memes) {
 		memes.cancelLikeCount();
+		rankingService.decreaseTodayMemesLikeCountFromMemesId(memes.getId());
 	}
 }

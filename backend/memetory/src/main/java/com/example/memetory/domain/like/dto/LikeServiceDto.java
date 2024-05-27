@@ -20,11 +20,4 @@ public class LikeServiceDto {
                 .memesId(memesId)
                 .build();
     }
-
-    public Like toEntityFromMemberAndMemes(Member member, Memes memes) {
-        return Like.builder()
-                .member(member)
-                .memes(memes)
-                .build();
-    }
 }
