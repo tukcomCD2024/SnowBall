@@ -1,7 +1,5 @@
 package com.example.memetory.domain.memes.service;
 
-import static java.time.LocalDateTime.*;
-
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
@@ -13,6 +11,7 @@ import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.service.MemeService;
+import com.example.memetory.domain.memes.dto.MemesRankDto;
 import com.example.memetory.domain.memes.dto.MemesServiceDto;
 import com.example.memetory.domain.memes.dto.response.MemesInfoResponse;
 import com.example.memetory.domain.memes.dto.response.MemesInfoSliceResponse;
@@ -30,6 +29,7 @@ public class MemesService {
 	private final MemberService memberService;
 	private final MemeService memeService;
 	private final MemesRepository memesRepository;
+	private final RankingService rankingService;
 
 	@Transactional
 	public MemesResponse registerMemes(MemesServiceDto memesServiceDto) {
@@ -97,14 +97,26 @@ public class MemesService {
 
 	@Transactional(readOnly = true)
 	public List<MemesInfoResponse> findTopMemesByLikeForMonth() {
-		return memesRepository.findTopMemesOrderByLikeCountForPeriod(now().minusMonths(1));
+		List<MemesRankDto> memesRankDtoList = rankingService.findTopTenMemesLikeCountForMonth();
+
+		return convertMemesRankDtoListIntoMemesInfoResponseList(memesRankDtoList);
 	}
 
 	@Transactional(readOnly = true)
 	public List<MemesInfoResponse> findTopMemesByLikeForWeek() {
-		return memesRepository.findTopMemesOrderByLikeCountForPeriod(now().minusWeeks(1));
+		List<MemesRankDto> memesRankDtoList = rankingService.findTopTenMemesLikeCountForWeek();
+
+		return convertMemesRankDtoListIntoMemesInfoResponseList(memesRankDtoList);
 	}
 
-	//Todo memesIdList를 받아서 memesInfo로 순서 변환없이 변환하는 작업 필요
+	private List<MemesInfoResponse> convertMemesRankDtoListIntoMemesInfoResponseList(
+		List<MemesRankDto> memesRankDtoList) {
 
+		return memesRankDtoList.stream().map(this::convertMemesRankDtoInooMemesInfoResponse).toList();
+	}
+
+	private MemesInfoResponse convertMemesRankDtoInooMemesInfoResponse(MemesRankDto memesRank) {
+		Memes memes = findMemesFromMemesId(memesRank.getMemesId());
+		return MemesInfoResponse.fromMemesAndLikeCount(memes, memesRank.getScore());
+	}
 }

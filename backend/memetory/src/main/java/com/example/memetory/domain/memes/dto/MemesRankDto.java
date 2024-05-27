@@ -11,12 +11,12 @@ import lombok.Getter;
 @Builder
 public class MemesRankDto {
 	private Long memesId;
-	private Double score;
+	private Long score;
 
 	public static MemesRankDto of(ZSetOperations.TypedTuple<Long> zSet) {
 		return MemesRankDto.builder()
 			.memesId(zSet.getValue())
-			.score(zSet.getScore())
+			.score(zSet.getScore().longValue())
 			.build();
 	}
 }

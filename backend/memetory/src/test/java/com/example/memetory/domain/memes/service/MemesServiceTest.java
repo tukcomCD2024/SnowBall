@@ -7,6 +7,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +24,9 @@ import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.exception.AccessDeniedMemeException;
 import com.example.memetory.domain.meme.service.MemeService;
+import com.example.memetory.domain.memes.dto.MemesRankDto;
 import com.example.memetory.domain.memes.dto.MemesServiceDto;
+import com.example.memetory.domain.memes.dto.response.MemesInfoResponse;
 import com.example.memetory.domain.memes.dto.response.MemesResponse;
 import com.example.memetory.domain.memes.entity.Memes;
 import com.example.memetory.domain.memes.exception.AccessDinedMemesException;
@@ -40,6 +44,8 @@ public class MemesServiceTest {
 	private MemesRepository memesRepository;
 	@Mock
 	private MemeService memeService;
+	@Mock
+	private RankingService rankingService;
 
 	private MemesServiceDto memesServiceDto;
 	private Member member;
@@ -137,5 +143,30 @@ public class MemesServiceTest {
 
 		// then
 		assertThrows(NotFoundMemesException.class, () -> memesService.findMemesResponse(memesServiceDto));
+	}
+
+	@Test
+	@DisplayName("주간 탑 10 조회로 인한 List<MemesInfoResponse> 반환")
+	void When_findTopMemesByLikeForWeek_Then_List_MemesInfoResponse() {
+		// given
+		List<MemesRankDto> memesRankDtoList = generateMemesRankDtoList();
+		given(rankingService.findTopTenMemesLikeCountForWeek()).willReturn(memesRankDtoList);
+		given(memesRepository.findByMemesId(any())).willReturn(Optional.ofNullable(MEMES(member, meme)));
+
+		// when
+		List<MemesInfoResponse> result = memesService.findTopMemesByLikeForWeek();
+
+		// then
+		assertThat(result).hasSize(10);
+		assertThat(result.get(0)).isInstanceOf(MemesInfoResponse.class);
+	}
+
+	private List<MemesRankDto> generateMemesRankDtoList() {
+		List<MemesRankDto> expectedResult = new ArrayList<>();
+
+		for (long i = 1; i <= 10; i++) {
+			expectedResult.add(new MemesRankDto(i, i));
+		}
+		return expectedResult;
 	}
 }
