@@ -50,7 +50,6 @@ dependencies {
     // Swagger 적용
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
-
     // AWS SDK
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
@@ -59,6 +58,8 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.security:spring-security-test'
 
+    // rest-assured
+    testImplementation 'io.rest-assured:rest-assured:5.1.1'
 }
 
 clean {
