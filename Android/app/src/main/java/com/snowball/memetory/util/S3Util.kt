@@ -91,6 +91,10 @@ class S3Util(private val context: Context) {
         deferred.await()
     }
 
+    // 파일을 S3Url로 변환
+    fun getFileUrl(fileName: String): String {
+        return "https://$bucketName.s3.$region.amazonaws.com/$fileName"
+    }
 //    fun uploadAudioFile(fileName: String, file: File) {
 //        val awsCredentials = BasicAWSCredentials(accessKey, secretKey)
 //        val s3Client = AmazonS3Client(awsCredentials, Region.getRegion(Regions.AP_NORTHEAST_2))
