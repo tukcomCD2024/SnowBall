@@ -20,14 +20,6 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     private val _loginResult = MutableLiveData<Result<TokenResponseDto>>()
     val loginResult: LiveData<Result<TokenResponseDto>> = _loginResult
 
-//    fun requestAccessToken(request: GoogleTokenRequestDto) {
-//        viewModelScope.launch {
-//            val result = authRepository.requestAccessToken(request)
-//            // 이제 GoogleTokenResponseDto 결과를 accessTokenResult로 포스팅
-//            _accessTokenResult.postValue(result)
-//        }
-//    }
-
     fun requestAccessToken(request: GoogleTokenRequestDto) {
         viewModelScope.launch {
             val result = authRepository.requestAccessToken(request)
@@ -35,48 +27,20 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
             result.onSuccess { googleTokenResponse ->
                 _accessTokenResult.postValue(Result.success(googleTokenResponse))
                 loginUser(SignInRequestDto(googleTokenResponse.access_token, "GOOGLE")) // Assuming serverAuthCode is a property
+                Log.d("AuthViewModel", "$result, $accessTokenResult, ${Result.success(googleTokenResponse)}")
             }
             result.onFailure {
                 _accessTokenResult.postValue(Result.failure(it))
             }
         }
-//        viewModelScope.launch {
-//            val result = authRepository.requestAccessToken(request)
-//            result.onSuccess {
-//                _accessTokenResult.postValue(Result.success(it))
-//
-//            }
-//            result.onFailure {
-//                _accessTokenResult.postValue(Result.failure(it))
-//            }
-//        }
     }
 
     fun loginUser(request: SignInRequestDto) {
         viewModelScope.launch {
             val result = authRepository.loginUser(request)
             _loginResult.postValue(result)
+            Log.d("AuthViewModel", "$result, $loginResult")
+
         }
     }
 }
-
-//class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
-//    fun login(signInRequestDto: SignInRequestDto) {
-//        authRepository.loginUser(signInRequestDto, object : AuthRepository.AuthCallback {
-//            override fun onSuccess(authToken: String?, refreshToken: String?, tokenResponse: TokenResponseDto?) {
-//                Log.d("AUTH", "authToken = $authToken, refreshToken = $refreshToken, tokenResponse = $tokenResponse")
-//                // Handle success
-//            }
-//
-//            override fun onError(code: Int?, message: String?) {
-//                Log.e("AUTH", "StatusCode = $code, message = $message")
-//                // Handle error
-//            }
-//        })
-//    }
-//
-//    fun requestAccessToken(googleTokenRequestDto: GoogleTokenRequestDto) {
-//        authRepository.requestAccessToken(googleTokenRequestDto)
-//    }
-//
-//}
