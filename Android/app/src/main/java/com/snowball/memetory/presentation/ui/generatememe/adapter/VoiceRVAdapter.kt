@@ -14,9 +14,13 @@ import com.snowball.memetory.databinding.ItemChooseVoiceBinding
 import com.snowball.memetory.domain.model.voice.Voice
 import de.hdodenhof.circleimageview.CircleImageView
 
+//class VoiceRVAdapter(
+//    private val voices: List<Voice>,
+//    private val onVoiceSelected: (Voice) -> Unit
+//) : RecyclerView.Adapter<VoiceRVAdapter.ViewHolder>() {
 
 class VoiceRVAdapter(
-    private val voices: List<Voice>,
+    private val voices: Voice,
     private val onVoiceSelected: (Voice) -> Unit
 ) : RecyclerView.Adapter<VoiceRVAdapter.ViewHolder>() {
 
@@ -37,7 +41,8 @@ class VoiceRVAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val voice = voices[position]
+//        val voice = voices[position]
+        val voice = voices
         holder.binding.nameText.text = voice.name
         holder.binding.itemRadioBtn.isChecked = position == selectedPosition
         holder.binding.itemRadioBtn.setOnClickListener {
@@ -45,12 +50,13 @@ class VoiceRVAdapter(
                 notifyItemChanged(selectedPosition)
                 selectedPosition = position
                 notifyItemChanged(selectedPosition)
-                onVoiceSelected(voices[selectedPosition])
+//                onVoiceSelected(voices[selectedPosition])
+                onVoiceSelected(voices)
             }
         }
     }
 
-    override fun getItemCount(): Int = voices.size
-
+//    override fun getItemCount(): Int = voices.size
+    override fun getItemCount(): Int = 1
     inner class ViewHolder(val binding: ItemChooseVoiceBinding) : RecyclerView.ViewHolder(binding.root)
 }

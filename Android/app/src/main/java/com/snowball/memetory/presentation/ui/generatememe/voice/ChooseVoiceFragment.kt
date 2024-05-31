@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.snowball.memetory.R
 import com.snowball.memetory.data.api.GenerateMemeService
 import com.snowball.memetory.data.api.NetworkModule
@@ -74,10 +75,15 @@ class ChooseVoiceFragment : Fragment(), VoiceRVAdapter.OnItemClickListener  {
         // 확인하기 버튼 클릭시 리사이클러뷰에서 선택한 라디오버튼에 대해서 voiceId값 가져옴.
         navController = Navigation.findNavController(view)
         binding.confirmBtn.setOnClickListener {
-            val selectedVoiceId = viewModel.selectedVoiceId.value
+//            val selectedVoiceId = viewModel.selectedVoiceId.value
+            val selectedVoiceId = viewModel.selectedVoiceId.value?: "defaultVoiceId"
             Log.d("ChooseVoiceFragment", "$selectedVoiceId")
+
+            val action = ChooseVoiceFragmentDirections.actionChooseVoiceFragmentToSceneDetailFragment(selectedVoiceId, "")
+            findNavController().navigate(action)
+
             // 선택된 VoiceId로 필요한 작업 수행
-            navController.navigate(R.id.action_chooseVoiceFragment_to_sceneDetailFragment)
+//            navController.navigate(R.id.action_chooseVoiceFragment_to_sceneDetailFragment, bundle)
         }
     }
 
@@ -101,11 +107,17 @@ class ChooseVoiceFragment : Fragment(), VoiceRVAdapter.OnItemClickListener  {
             }
         }
     }
-    private fun setupRecyclerView(voices: List<Voice>) {
+    private fun setupRecyclerView(voices: Voice) {
         val rvAdapter = VoiceRVAdapter(voices) { voice ->
             viewModel.selectVoice(voice)
         }
         binding.voiceRecyclerView.adapter = rvAdapter
     }
+//    private fun setupRecyclerView(voices: List<Voice>) {
+//        val rvAdapter = VoiceRVAdapter(voices) { voice ->
+//            viewModel.selectVoice(voice)
+//        }
+//        binding.voiceRecyclerView.adapter = rvAdapter
+//    }
 
 }
