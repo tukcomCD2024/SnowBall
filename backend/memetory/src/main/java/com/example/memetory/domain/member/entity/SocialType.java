@@ -8,10 +8,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum SocialType {
-	GOOGLE("https://www.googleapis.com/oauth2/v2/userinfo"),
-	KAKAO("https://kapi.kakao.com/v2/user/me");
-
-	private final String providerUrl;
+	GOOGLE(),
+	KAKAO();
 
 	@JsonCreator
 	public static SocialType from(String s) {
