@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingVertical="20dp"
-            tools:context=".presentation.ui.generatememe.SceneDetailFragment">
+            tools:context=".presentation.ui.generatememe.scenedetail.SceneDetailFragment">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/titleText"
