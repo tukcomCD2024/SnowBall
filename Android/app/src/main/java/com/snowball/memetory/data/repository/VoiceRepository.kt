@@ -4,6 +4,7 @@ import com.snowball.memetory.data.api.GenerateMemeService
 import com.snowball.memetory.data.dto.ResponseBody
 import com.snowball.memetory.data.dto.generatememe.voice.request.VoiceIdRequestDto
 import com.snowball.memetory.data.dto.generatememe.voice.response.VoiceIdResponseDto
+import com.snowball.memetory.domain.model.voice.Voice
 import com.snowball.memetory.domain.model.voice.VoiceList
 
 class VoiceRepository(private val generateMemeService: GenerateMemeService) {
@@ -20,7 +21,7 @@ class VoiceRepository(private val generateMemeService: GenerateMemeService) {
         }
     }
 
-    suspend fun getVoiceIdList(): Result<ResponseBody<VoiceList>> {
+    suspend fun getVoiceIdList(): Result<ResponseBody<Voice>> {
         return try {
             val response = generateMemeService.getVoiceIdList()
             if (response.isSuccessful) {
