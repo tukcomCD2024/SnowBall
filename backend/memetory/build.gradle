@@ -60,6 +60,9 @@ dependencies {
 
     // rest-assured
     testImplementation 'io.rest-assured:rest-assured:5.1.1'
+
+    // Mock Wire
+    testImplementation "org.wiremock:wiremock-jetty12:3.6.0"
 }
 
 clean {
