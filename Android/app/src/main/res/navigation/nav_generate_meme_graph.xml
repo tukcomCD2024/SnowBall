@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--suppress NavigationFile -->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,7 +13,12 @@
         tools:layout="@layout/fragment_choose_template">
         <action
             android:id="@+id/action_chooseTemplateFragment_to_sceneDetailFragment"
-            app:destination="@id/sceneDetailFragment" />
+            app:destination="@id/sceneDetailFragment">
+
+            <argument
+                android:name="selectedImageIndex"
+                app:argType="string" />
+        </action>
         <action
             android:id="@+id/action_chooseTemplateFragment_to_previewFragment"
             app:destination="@id/previewFragment" />
@@ -20,9 +26,18 @@
 
     <fragment
         android:id="@+id/sceneDetailFragment"
-        android:name="com.snowball.memetory.presentation.ui.generatememe.SceneDetailFragment"
+        android:name="com.snowball.memetory.presentation.ui.generatememe.scenedetail.SceneDetailFragment"
         android:label="fragment_scene_detail"
-        tools:layout="@layout/fragment_scene_detail" >
+        tools:layout="@layout/fragment_scene_detail">
+
+        <argument
+            android:name="selectedImageIndex"
+            app:argType="string" />
+
+        <argument
+            android:name="selectedVoiceId"
+            app:argType="string" />
+
         <action
             android:id="@+id/action_sceneDetailFragment_to_chooseVoiceFragment"
             app:destination="@id/chooseVoiceFragment" />
@@ -35,7 +50,7 @@
 
     <fragment
         android:id="@+id/chooseVoiceFragment"
-        android:name="com.snowball.memetory.presentation.ui.generatememe.ChooseVoiceFragment"
+        android:name="com.snowball.memetory.presentation.ui.generatememe.voice.ChooseVoiceFragment"
         android:label="fragment_choose_voice"
         tools:layout="@layout/fragment_choose_voice" >
 
@@ -43,7 +58,12 @@
             android:id="@+id/action_chooseVoiceFragment_to_sceneDetailFragment"
             app:destination="@id/sceneDetailFragment"
             app:popUpTo="@id/sceneDetailFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true" >
+
+            <argument
+                android:name="selectedVoiceId"
+                app:argType="string" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/previewFragment"

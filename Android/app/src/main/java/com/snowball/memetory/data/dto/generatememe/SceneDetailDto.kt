@@ -3,6 +3,8 @@ package com.snowball.memetory.data.dto.generatememe
 import android.net.Uri
 
 data class SceneDetailDto(
-    val imageUri: Uri?, // 선택된 이미지의 URI
-    val text: String?   // 사용자가 입력한 텍스트
+    var sourceImage: String, //S3 URL
+    var targetImage: Int, // 1,2 (순서)
+    var text: String, // 대사
+    var voiceId: String
 )

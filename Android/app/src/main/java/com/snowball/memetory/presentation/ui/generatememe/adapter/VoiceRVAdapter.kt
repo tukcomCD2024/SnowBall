@@ -11,9 +11,18 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.snowball.memetory.R
 import com.snowball.memetory.databinding.ItemChooseVoiceBinding
+import com.snowball.memetory.domain.model.voice.Voice
 import de.hdodenhof.circleimageview.CircleImageView
 
-class VoiceRVAdapter(private val dataList: List<String>, private val itemClick: VoiceRVAdapter.OnItemClickListener): RecyclerView.Adapter<VoiceRVAdapter.ViewHolder>() {
+//class VoiceRVAdapter(
+//    private val voices: List<Voice>,
+//    private val onVoiceSelected: (Voice) -> Unit
+//) : RecyclerView.Adapter<VoiceRVAdapter.ViewHolder>() {
+
+class VoiceRVAdapter(
+    private val voices: Voice,
+    private val onVoiceSelected: (Voice) -> Unit
+) : RecyclerView.Adapter<VoiceRVAdapter.ViewHolder>() {
 
     var selectedPosition = -1
 
@@ -21,38 +30,33 @@ class VoiceRVAdapter(private val dataList: List<String>, private val itemClick: 
         fun onItemClick(view: View, position: Int)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VoiceRVAdapter.ViewHolder {
-        val view = DataBindingUtil.inflate<ItemChooseVoiceBinding>(LayoutInflater.from(parent.context), R.layout.item_choose_voice, parent,false)
-        return ViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = DataBindingUtil.inflate<ItemChooseVoiceBinding>(
+            LayoutInflater.from(parent.context),
+            R.layout.item_choose_voice,
+            parent,
+            false
+        )
+        return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: VoiceRVAdapter.ViewHolder, position: Int) {
-        holder.name.text = dataList[position]
-        holder.radioBtn.isChecked = position == selectedPosition
-
-    }
-
-    override fun getItemCount(): Int {
-        return dataList.size
-    }
-
-    inner class ViewHolder(binding: ItemChooseVoiceBinding): RecyclerView.ViewHolder(binding.root) {
-        val name: AppCompatTextView = binding.nameText
-        val radioBtn: AppCompatRadioButton = binding.itemRadioBtn
-        init {
-            radioBtn.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-
-                    if (selectedPosition != adapterPosition) {
-                        val previousSelectedPosition = selectedPosition
-                        selectedPosition = adapterPosition
-                        notifyItemChanged(previousSelectedPosition)
-                        notifyItemChanged(selectedPosition)
-                        itemClick.onItemClick(itemView ,selectedPosition)
-                    }
-                }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+//        val voice = voices[position]
+        val voice = voices
+        holder.binding.nameText.text = voice.name
+        holder.binding.itemRadioBtn.isChecked = position == selectedPosition
+        holder.binding.itemRadioBtn.setOnClickListener {
+            if (selectedPosition != position) {
+                notifyItemChanged(selectedPosition)
+                selectedPosition = position
+                notifyItemChanged(selectedPosition)
+//                onVoiceSelected(voices[selectedPosition])
+                onVoiceSelected(voices)
             }
-
         }
     }
+
+//    override fun getItemCount(): Int = voices.size
+    override fun getItemCount(): Int = 1
+    inner class ViewHolder(val binding: ItemChooseVoiceBinding) : RecyclerView.ViewHolder(binding.root)
 }
