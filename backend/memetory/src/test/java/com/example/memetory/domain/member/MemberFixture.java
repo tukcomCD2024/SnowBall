@@ -1,6 +1,7 @@
 package com.example.memetory.domain.member;
 
 import com.example.memetory.domain.member.dto.MemberServiceDto;
+import com.example.memetory.domain.member.dto.request.MemberUpdateRequest;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.entity.Role;
 import com.example.memetory.domain.member.entity.SocialType;
@@ -45,4 +46,9 @@ public class MemberFixture {
 			.email("junrain@ourservice.com")
 			.build();
 	}
+
+	public final static MemberUpdateRequest MEMBER_UPDATE_REQUEST() {
+		return new MemberUpdateRequest("junrain2", "imageUrl2");
+	}
+
 }
