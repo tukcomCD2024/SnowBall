@@ -14,7 +14,7 @@ public class MemberFixture {
 			.name("이준우")
 			.nickname("junRain")
 			.socialType(SocialType.GOOGLE)
-			.socialId("-1")
+			.socialId("123456789")
 			.build();
 	}
 
