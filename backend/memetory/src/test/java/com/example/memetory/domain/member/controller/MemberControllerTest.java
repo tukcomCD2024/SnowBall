@@ -20,11 +20,11 @@ import com.example.memetory.domain.member.dto.request.MemberUpdateRequest;
 import com.example.memetory.domain.member.dto.response.MemberResponse;
 import com.example.memetory.domain.member.exception.DuplicatedMemberException;
 import com.example.memetory.domain.member.service.MemberService;
-import com.example.memetory.global.LoginTest;
+import com.example.memetory.global.BaseControllerTest;
 
 @DisplayName("Member 컨트롤러 테스트의 ")
 @WebMvcTest(MemberController.class)
-public class MemberControllerTest extends LoginTest {
+public class MemberControllerTest extends BaseControllerTest {
 	@MockBean
 	private MemberService memberService;
 

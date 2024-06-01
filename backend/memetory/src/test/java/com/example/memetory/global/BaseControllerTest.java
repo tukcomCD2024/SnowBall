@@ -26,7 +26,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest
-public abstract class LoginTest {
+public abstract class BaseControllerTest {
 	protected final String MESSAGE = "$.message";
 	protected final String ERROR_MESSAGE = "$.errorMessage";
 

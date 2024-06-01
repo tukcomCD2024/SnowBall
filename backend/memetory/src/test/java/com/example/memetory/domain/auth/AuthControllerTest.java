@@ -21,12 +21,12 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.example.memetory.domain.member.controller.MemberController;
 import com.example.memetory.domain.member.dto.request.MemberUpdateRequest;
 import com.example.memetory.domain.member.service.MemberService;
-import com.example.memetory.global.LoginTest;
+import com.example.memetory.global.BaseControllerTest;
 import com.example.memetory.global.security.jwt.refresh.domain.RefreshToken;
 
 @DisplayName("JWT 인증테스트의 ")
 @WebMvcTest(MemberController.class)
-public class AuthTest extends LoginTest {
+public class AuthControllerTest extends BaseControllerTest {
 	@MockBean
 	private MemberService memberService;
 
@@ -34,9 +34,12 @@ public class AuthTest extends LoginTest {
 	@DisplayName("Bearer+AccessToken을 통한 정상 인증")
 	public void Given_AccessTokenWithBearer_When_JwtFilter_Expect_Authorization() throws Exception {
 		// when
-		final ResultActions perform = mockMvc.perform(post("/member").contentType(MediaType.APPLICATION_JSON)
-			.content(toRequestBody(new MemberUpdateRequest("junrain2", "imageUrl2")))
-			.header("Authorization", "Bearer " + accessToken));
+		final ResultActions perform = mockMvc.perform(
+				post("/member")
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(toRequestBody(new MemberUpdateRequest("junrain2", "imageUrl2")))
+					.header("Authorization", "Bearer " + accessToken))
+			.andDo(print());
 
 		// then
 		perform.andExpect(status().isOk());
@@ -46,9 +49,12 @@ public class AuthTest extends LoginTest {
 	@DisplayName("AccessToken을 통한 정상 인증")
 	public void Given_AccessToken_When_JwtFilter_Expect_Authorization() throws Exception {
 		// when
-		final ResultActions perform = mockMvc.perform(post("/member").contentType(MediaType.APPLICATION_JSON)
-			.content(toRequestBody(new MemberUpdateRequest("junrain2", "imageUrl2")))
-			.header("Authorization", accessToken));
+		final ResultActions perform = mockMvc.perform(
+				post("/member")
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(toRequestBody(new MemberUpdateRequest("junrain2", "imageUrl2")))
+					.header("Authorization", accessToken))
+			.andDo(print());
 
 		// then
 		perform.andExpect(status().isOk());
@@ -66,9 +72,11 @@ public class AuthTest extends LoginTest {
 			.sign(Algorithm.HMAC512(secretKey));
 
 		// when
-		final ResultActions perform = mockMvc.perform(post("/member").contentType(MediaType.APPLICATION_JSON)
-			.content(toRequestBody(new MemberUpdateRequest("junrain2", "imageUrl2")))
-			.header("Authorization", expiredAccessToken));
+		final ResultActions perform = mockMvc.perform(
+				post("/member").contentType(MediaType.APPLICATION_JSON)
+					.content(toRequestBody(new MemberUpdateRequest("junrain2", "imageUrl2")))
+					.header("Authorization", expiredAccessToken))
+			.andDo(print());
 
 		// then
 		perform.andExpect(status().isForbidden());
@@ -88,9 +96,11 @@ public class AuthTest extends LoginTest {
 		given(refreshTokenService.findByToken(refreshToken)).willReturn(token);
 
 		// when
-		final ResultActions perform = mockMvc.perform(post("/member").contentType(MediaType.APPLICATION_JSON)
-			.content(toRequestBody(new MemberUpdateRequest("junrain2", "imageUrl2")))
-			.header("Authorization-refresh", refreshToken)).andDo(print());
+		final ResultActions perform = mockMvc.perform(
+				post("/member").contentType(MediaType.APPLICATION_JSON)
+					.content(toRequestBody(new MemberUpdateRequest("junrain2", "imageUrl2")))
+					.header("Authorization-refresh", refreshToken)).andDo(print())
+			.andDo(print());
 
 		// then
 		perform.andExpect(status().isUnauthorized())
@@ -109,9 +119,11 @@ public class AuthTest extends LoginTest {
 			.sign(Algorithm.HMAC512(secretKey));
 
 		// when
-		final ResultActions perform = mockMvc.perform(post("/member").contentType(MediaType.APPLICATION_JSON)
-			.content(toRequestBody(new MemberUpdateRequest("junrain2", "imageUrl2")))
-			.header("Authorization-refresh", expiredRefreshToken)).andDo(print());
+		final ResultActions perform = mockMvc.perform(
+			post("/member").contentType(MediaType.APPLICATION_JSON)
+				.content(toRequestBody(new MemberUpdateRequest("junrain2", "imageUrl2")))
+				.header("Authorization-refresh", expiredRefreshToken))
+			.andDo(print());
 
 		// then
 		perform.andExpect(status().isUnauthorized());
