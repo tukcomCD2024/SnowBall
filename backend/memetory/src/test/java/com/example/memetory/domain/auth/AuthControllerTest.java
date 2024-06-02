@@ -11,6 +11,7 @@ import java.util.Date;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -27,6 +28,9 @@ import com.example.memetory.global.security.jwt.refresh.domain.RefreshToken;
 @DisplayName("JWT 인증테스트의 ")
 @WebMvcTest(MemberController.class)
 public class AuthControllerTest extends BaseControllerTest {
+	@Value("${jwt.secretKey}")
+	private String secretKey;
+
 	@MockBean
 	private MemberService memberService;
 
@@ -120,9 +124,9 @@ public class AuthControllerTest extends BaseControllerTest {
 
 		// when
 		final ResultActions perform = mockMvc.perform(
-			post("/member").contentType(MediaType.APPLICATION_JSON)
-				.content(toRequestBody(new MemberUpdateRequest("junrain2", "imageUrl2")))
-				.header("Authorization-refresh", expiredRefreshToken))
+				post("/member").contentType(MediaType.APPLICATION_JSON)
+					.content(toRequestBody(new MemberUpdateRequest("junrain2", "imageUrl2")))
+					.header("Authorization-refresh", expiredRefreshToken))
 			.andDo(print());
 
 		// then

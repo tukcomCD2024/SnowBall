@@ -4,22 +4,18 @@ import static com.example.memetory.domain.member.MemberFixture.*;
 import static io.restassured.RestAssured.*;
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.Date;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.example.memetory.domain.member.dto.request.MemberUpdateRequest;
 import com.example.memetory.domain.member.dto.response.MemberResponse;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.repository.MemberRepository;
 import com.example.memetory.global.integration.BaseIntegrationTest;
+import com.example.memetory.global.security.jwt.util.JwtUtil;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -27,23 +23,16 @@ import io.restassured.response.Response;
 public class MemberIntegrationTest extends BaseIntegrationTest {
 	@Autowired
 	private MemberRepository memberRepository;
+	@Autowired
+	private JwtUtil jwtUtil;
 
 	private Member member;
 	private String accessToken;
 
-	@Value("${jwt.secretKey}")
-	private String secretKey;
-
 	@BeforeEach
 	void setUpAccessToken() {
-		Date now = new Date();
 		member = memberRepository.save(MEMBER());
-
-		accessToken = JWT.create()
-			.withSubject("AccessToken")
-			.withExpiresAt(new Date(now.getTime() + 18000))
-			.withClaim("email", member.getEmail())
-			.sign(Algorithm.HMAC512(secretKey));
+		accessToken = jwtUtil.generateAccessToken(member.getEmail());
 	}
 
 	@Test
