@@ -15,19 +15,16 @@ import com.example.memetory.global.security.jwt.dto.TokenResponse;
 import com.example.memetory.global.security.jwt.exception.NotFoundEmailException;
 import com.example.memetory.global.security.jwt.exception.NotFoundTokenException;
 import com.example.memetory.global.security.jwt.refresh.service.RefreshTokenService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
 @Getter
-@Slf4j
 public class JwtService {
 	private static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
 	private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
@@ -51,17 +48,15 @@ public class JwtService {
 
 	public void sendAccessAndRefreshToken(HttpServletResponse response, String email) {
 		try {
+			String refreshToken = createRefreshToken();
+			String token = objectMapper.writeValueAsString(TokenResponse.builder()
+				.accessToken(createAccessToken(email))
+				.refreshToken(refreshToken)
+				.build());
 
-		String refreshToken = createRefreshToken();
-		String token = objectMapper.writeValueAsString(TokenResponse.builder()
-			.accessToken(createAccessToken(email))
-			.refreshToken(refreshToken)
-			.build());
-
-		response.getWriter().write(token);
-		refreshTokenService.updateToken(email, refreshToken);
+			response.getWriter().write(token);
+			refreshTokenService.updateToken(email, refreshToken);
 		} catch (IOException e) {
-			log.error("sendAccessAndRefreshToken 오류 발생 : {}", e.getMessage());
 			throw new RuntimeException(e);
 		}
 
@@ -94,19 +89,18 @@ public class JwtService {
 			.map(token -> token.replace("Bearer ", ""));
 	}
 
-	public Optional<String> extractEmail(String accessToken) throws JWTVerificationException {
-		try {
-			return Optional.ofNullable(
-				JWT.require(Algorithm.HMAC512(secretKey)).build().verify(accessToken).getClaim(EMAIL_CLAIM).asString());
-		} catch (Exception e) {
-			log.error("액세스 토큰이 유효하지 않습니다.");
-			return Optional.empty();
-		}
+	public String extractEmail(String accessToken) throws JWTVerificationException {
+		return Optional.of(
+			JWT.require(Algorithm.HMAC512(secretKey))
+				.build()
+				.verify(accessToken)
+				.getClaim(EMAIL_CLAIM).asString())
+			.orElseThrow(NotFoundEmailException::new);
 	}
 
 	public String getEmail(HttpServletRequest request) {
 		String accessToken = this.extractAccessToken(request).orElseThrow(NotFoundTokenException::new);
-		return this.extractEmail(accessToken).orElseThrow(NotFoundEmailException::new);
+		return this.extractEmail(accessToken);
 	}
 
 	public boolean isTokenValid(String token) {
@@ -114,7 +108,6 @@ public class JwtService {
 			JWT.require(Algorithm.HMAC512(secretKey)).build().verify(token);
 			return true;
 		} catch (Exception e) {
-			log.error("유효하지 않은 토큰입니다. {}", e.getMessage());
 			return false;
 		}
 	}
