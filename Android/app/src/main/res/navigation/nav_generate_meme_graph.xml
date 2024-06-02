@@ -19,9 +19,6 @@
                 android:name="selectedImageIndex"
                 app:argType="string" />
         </action>
-        <action
-            android:id="@+id/action_chooseTemplateFragment_to_previewFragment"
-            app:destination="@id/previewFragment" />
     </fragment>
 
     <fragment
@@ -65,19 +62,5 @@
                 app:argType="string" />
         </action>
     </fragment>
-    <fragment
-        android:id="@+id/previewFragment"
-        android:name="com.snowball.memetory.presentation.ui.generatememe.PreviewFragment"
-        android:label="PreviewFragment"
-        tools:layout="@layout/fragment_preview">
-        <action
-            android:id="@+id/action_previewFragment_to_previewDetailFragment"
-            app:destination="@id/previewDetailFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/previewDetailFragment"
-        android:name="com.snowball.memetory.presentation.ui.generatememe.PreviewDetailFragment"
-        android:label="PreviewDetailFragment"
-        tools:layout="@layout/fragment_preview_detail"/>
 
 </navigation>
