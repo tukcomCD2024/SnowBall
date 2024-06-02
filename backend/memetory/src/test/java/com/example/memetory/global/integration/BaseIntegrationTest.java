@@ -11,6 +11,8 @@ import io.restassured.RestAssured;
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class BaseIntegrationTest {
+	protected final String MESSAGE = "message";
+	protected final String ERROR_MESSAGE = "errorMessage";
 
 	@LocalServerPort
 	int port;

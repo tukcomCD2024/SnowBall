@@ -51,4 +51,8 @@ public class MemberFixture {
 		return new MemberUpdateRequest("junrain2", "imageUrl2");
 	}
 
+	public final static MemberUpdateRequest DUPLICATED_NICKNAME_MEMBER_UPDATE_REQUEST() {
+		return new MemberUpdateRequest("junrain", "imageUrl2");
+	}
+
 }
