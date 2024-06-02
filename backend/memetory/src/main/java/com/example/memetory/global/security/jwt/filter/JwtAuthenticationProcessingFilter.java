@@ -15,6 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.repository.MemberRepository;
+import com.example.memetory.global.security.jwt.exception.NotFoundTokenException;
 import com.example.memetory.global.security.jwt.refresh.domain.RefreshToken;
 import com.example.memetory.global.security.jwt.refresh.service.RefreshTokenService;
 import com.example.memetory.global.security.jwt.service.JwtService;
@@ -40,17 +41,20 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
+
 		if (request.getRequestURI().equals(NO_CHECK_URL)) {
 			filterChain.doFilter(request, response);
 			return;
 		}
 
-		jwtService.extractRefreshToken(request).ifPresentOrElse(
-			rt -> {
-					checkRefreshTokenAndReIssueAccessToken(response, rt);
-					sendError(response, HttpServletResponse.SC_UNAUTHORIZED);
-				},
-				() -> checkAccessTokenAndAuthentication(request, response, filterChain));
+		try {
+			String refreshToken = jwtService.extractRefreshToken(request);
+			checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
+
+			sendError(response, HttpServletResponse.SC_UNAUTHORIZED);
+		} catch (NotFoundTokenException e) {
+			checkAccessTokenAndAuthentication(request, response, filterChain);
+		}
 	}
 
 	private void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken) {
