@@ -5,36 +5,19 @@ import static com.example.memetory.global.response.ErrorCode.*;
 import static io.restassured.RestAssured.*;
 import static org.assertj.core.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import com.example.memetory.domain.member.dto.request.MemberUpdateRequest;
 import com.example.memetory.domain.member.dto.response.MemberResponse;
 import com.example.memetory.domain.member.entity.Member;
-import com.example.memetory.domain.member.repository.MemberRepository;
 import com.example.memetory.global.integration.BaseIntegrationTest;
-import com.example.memetory.global.security.jwt.util.JwtUtil;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 
 public class MemberIntegrationTest extends BaseIntegrationTest {
-	@Autowired
-	private MemberRepository memberRepository;
-	@Autowired
-	private JwtUtil jwtUtil;
-
-	private Member member;
-	private String accessToken;
-
-	@BeforeEach
-	void setUpAccessToken() {
-		member = memberRepository.save(MEMBER());
-		accessToken = jwtUtil.generateAccessToken(member.getEmail());
-	}
 
 	@Test
 	@DisplayName("MemberUpdateRequest을 통한 MemberResponse 반환 성공")
@@ -89,5 +72,28 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
 
 		// then
 		assertThat(result).isEqualTo(NICKNAME_IS_DUPLICATED.getMessage());
+	}
+
+	@Test
+	@DisplayName("엑세스 토큰을 통한 회원의 멤버 조회 성공")
+	void Given_accessToken_When_findMember_Then_MemberResponse() {
+		ExtractableResponse<Response> response =
+			given()
+				.log()
+				.all()
+				.auth().oauth2(accessToken)
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.when()
+				.get("/member")
+				.then()
+				.log()
+				.all()
+				.extract();
+
+		MemberResponse result = response.jsonPath().getObject("data", MemberResponse.class);
+		Member expectedMember = memberRepository.findById(member.getId()).get();
+
+		// then
+		assertThat(result).usingRecursiveComparison().isEqualTo(MemberResponse.of(expectedMember));
 	}
 }

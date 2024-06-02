@@ -1,7 +1,6 @@
 package com.example.memetory.domain.auth;
 
 import static com.example.memetory.domain.auth.AuthFixture.*;
-import static com.example.memetory.domain.member.MemberFixture.*;
 import static io.restassured.RestAssured.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import com.example.memetory.domain.auth.dto.LoginRequest;
-import com.example.memetory.domain.member.entity.Member;
-import com.example.memetory.domain.member.repository.MemberRepository;
 import com.example.memetory.global.integration.BaseIntegrationTest;
 import com.example.memetory.global.integration.MockServer;
 import com.example.memetory.global.security.jwt.dto.TokenResponse;
@@ -28,13 +25,13 @@ import io.restassured.response.Response;
 @WireMockTest(httpPort = 9899)
 public class AuthIntegrationTest extends BaseIntegrationTest {
 	@Autowired
-	private MemberRepository memberRepository;
-	@Autowired
 	private JwtService jwtService;
 
 	@DisplayName("멤버가 DB에 없을 때, LoginRequest 통한 멤버 생성 성공")
 	@Test
 	void Given_LoginRequest_When_login_Then_CreateMember() throws JsonProcessingException {
+		// given
+		memberRepository.delete(member); // member가 DB에 없을 때 가정
 		LoginRequest loginRequest = GOOGLE_LOGIN_REQUEST();
 
 		MockServer.startOauth2GoogleServerFromLoginRequest(loginRequest);
@@ -63,9 +60,8 @@ public class AuthIntegrationTest extends BaseIntegrationTest {
 	@DisplayName("멤버가 DB에 있을때, LoginRequest 통한 로그인 성공")
 	@Test
 	void Given_LoginRequest_When_login_Then_Return_HttpStatus_OK() throws JsonProcessingException {
+		// given
 		LoginRequest loginRequest = GOOGLE_LOGIN_REQUEST();
-		// 멤버가 이미 DB에 있을 때 가정
-		Member member = memberRepository.save(MEMBER());
 
 		MockServer.startOauth2GoogleServerFromLoginRequest(loginRequest);
 
