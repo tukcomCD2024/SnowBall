@@ -1,11 +1,13 @@
 package com.snowball.memetory.presentation.ui.generatememe
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
@@ -14,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.snowball.memetory.R
 import com.snowball.memetory.databinding.FragmentChooseTemplateBinding
+import com.snowball.memetory.presentation.ui.MainActivity
 import com.snowball.memetory.presentation.ui.generatememe.adapter.TemplateDetailVPAdater
 import com.snowball.memetory.presentation.ui.generatememe.scenedetail.SceneDetailViewModel
 import com.snowball.memetory.presentation.ui.generatememe.voice.ChooseVoiceFragmentDirections
@@ -45,7 +48,12 @@ class ChooseTemplateFragment : Fragment() {
 
         binding.confirmBtn.setOnClickListener {
             viewModel.generateMeme()
-            navController.navigate(R.id.action_chooseTemplateFragment_to_previewFragment)
+            Toast.makeText(context, "밈이 만들어지고 있습니다.", Toast.LENGTH_LONG).show()
+            // 이전에 사용한 액티비티 종료 및 MainActivity(HomeFragment)로 이동
+            val intent = Intent(context, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+
         }
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -66,22 +74,6 @@ class ChooseTemplateFragment : Fragment() {
                 val action = ChooseTemplateFragmentDirections.actionChooseTemplateFragmentToSceneDetailFragment(index, "")
                 Log.d("SceneDetailFragment", "ChooseTemplateFragment: ${position+1}")
                 findNavController().navigate(action)
-
-//                navController.navigate(R.id.action_chooseTemplateFragment_to_sceneDetailFragment)
-
-//                val resourceId = imgRes[position]
-//                Log.d("ChooseTemplate", "$position+$resourceId")
-//                val isSelected = viewModel.targetImage(resourceId)
-                /////////////////////////////오류
-
-//                viewModel.selectedTemplateId = position
-//                viewModel.setImageSelected(resourceId, !isSelected)
-//                Log.d("ChooseTemplate", "${viewModel.selectedTemplateId}")
-
-                // 현재 선택된 템플릿의 정보를 ViewModel에 저장
-//                val currentData = SceneDetailDto(viewModel.selectedImageUri, viewModel.enteredText)
-//                viewModel.setTemplateData(resourceId, currentData)
-
 
             }
         }
