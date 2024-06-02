@@ -1,9 +1,13 @@
 package com.example.memetory.domain.meme.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
@@ -25,6 +29,9 @@ public class MemeService {
 	private final MemberService memberService;
 	private final MemeRepository memeRepository;
 
+	@Value("${spring.ai-server.url}")
+	private String aiServerUrl;
+
 	@Transactional
 	public MemeResponse registerMeme(MemeServiceDto memeServiceDto) {
 		Member member = memberService.findMemberFromId(memeServiceDto.getMemberId());
@@ -36,7 +43,17 @@ public class MemeService {
 	}
 
 	@Transactional(readOnly = true)
-	public String getAIServerSendJson(MemeServiceDto memeServiceDto) {
+	public void sendToMemeServer(MemeServiceDto memeServiceDto) {
+		WebClient.create(aiServerUrl)
+			.post()
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(BodyInserters.fromValue(convertMemeServiceDtoIntoJson(memeServiceDto)))
+			.retrieve()
+			.bodyToMono(Void.class)
+			.subscribe();
+	}
+
+	private String convertMemeServiceDtoIntoJson(MemeServiceDto memeServiceDto) {
 		Gson gson = new Gson();
 
 		Member member = memberService.findMemberFromEmail(memeServiceDto.getEmail());
