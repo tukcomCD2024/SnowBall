@@ -1,11 +1,13 @@
 package com.example.memetory.global.integration;
 
 import static com.example.memetory.domain.auth.AuthFixture.*;
+import static com.example.memetory.domain.meme.MemeFixture.*;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 import com.example.memetory.domain.auth.dto.LoginRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import com.google.gson.Gson;
 
 @WireMockTest(httpPort = 9899)
 public class MockServer {
@@ -18,6 +20,16 @@ public class MockServer {
 				.withStatus(200)
 				.withHeader("Content-Type", "application/json")
 				.withBody(JSON_GOOGLE_OAUTH2_RESPONSE())
+			));
+	}
+
+	public static void startMemeServerFromGenerateMemeListRequest() {
+		Gson gson = new Gson();
+
+		stubFor(post("/ai-server")
+			.withRequestBody(equalToJson(gson.toJson(AI_SERVER_SEND_DTO())))
+			.willReturn(aResponse()
+				.withStatus(201)
 			));
 	}
 }
