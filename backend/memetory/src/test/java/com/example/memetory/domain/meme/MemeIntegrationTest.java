@@ -1,19 +1,20 @@
 package com.example.memetory.domain.meme;
 
-import static com.example.memetory.domain.member.MemberFixture.*;
 import static com.example.memetory.domain.meme.MemeFixture.*;
 import static com.example.memetory.global.response.ErrorCode.*;
 import static com.example.memetory.global.response.ResultCode.*;
 import static io.restassured.RestAssured.*;
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
-import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.meme.dto.GenerateMemeListRequest;
+import com.example.memetory.domain.meme.dto.MemePageResponse;
 import com.example.memetory.domain.meme.dto.MemeResponse;
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.repository.MemeRepository;
@@ -84,11 +85,13 @@ public class MemeIntegrationTest extends BaseIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("권한 없는 멤버 이메일로 인한 MEME_ACCESS_DENY 반환")
-	void Given_MemeId_When_findMemberMemeResponse_Throw_AccessDeniedMemberMemeException() {
+	@DisplayName("AccessToken을 통한 멤버의 MemePageResponse 반환")
+	void Given_AccessToken_When_findMemberMemeResponse_Then_Member_MemePageResponse() {
 		// given
-		Member otherMember = memberRepository.save(OTHER_MEMBER());
-		Meme savedMeme = memeRepository.save(MEME(otherMember));
+		List<Meme> memeList = memeRepository.saveAll(
+			List.of(MEME(member), OTHER_MEME(member), MEME(member), OTHER_MEME(member)));
+
+		List<MemeResponse> expectedResult = memeList.stream().map(MemeResponse::of).toList();
 
 		// when
 		ExtractableResponse<Response> response =
@@ -97,7 +100,29 @@ public class MemeIntegrationTest extends BaseIntegrationTest {
 				.all()
 				.auth().oauth2(accessToken)
 				.when()
-				.get("/meme/" + savedMeme.getId())
+				.get("/meme?page=0&size=10")
+				.then()
+				.log()
+				.all()
+				.extract();
+
+		MemePageResponse result = response.jsonPath().getObject("data", MemePageResponse.class);
+
+		// then
+		assertThat(result.getMemeList()).usingRecursiveComparison().isEqualTo(expectedResult);
+	}
+
+	@Test
+	@DisplayName("존재하지 않는 MemeId로 인한 MEME_NOT_FOUND 반환")
+	void Given_MemeId_When_findMemberMemeResponse_Throw_NotFoundMemberMemeException() {
+		// when
+		ExtractableResponse<Response> response =
+			given()
+				.log()
+				.all()
+				.auth().oauth2(accessToken)
+				.when()
+				.get("/meme/1")
 				.then()
 				.log()
 				.all()
@@ -106,12 +131,12 @@ public class MemeIntegrationTest extends BaseIntegrationTest {
 		String result = response.jsonPath().get(ERROR_MESSAGE);
 
 		// then
-		assertThat(result).isEqualTo(MEME_ACCESS_DENY.getMessage());
+		assertThat(result).isEqualTo(MEME_NOT_FOUND.getMessage());
 	}
 
 	@Test
 	@DisplayName("존재하지 않는 MemeId로 인한 MEME_NOT_FOUND 반환")
-	void Given_MemeId_When_findMemberMemeResponse_Throw_NotFoundMemberMemeException() {
+	void Given_MemeId_When_findMemberMemePageResponse_Throw_NotFoundMemberMemeException() {
 		// when
 		ExtractableResponse<Response> response =
 			given()
