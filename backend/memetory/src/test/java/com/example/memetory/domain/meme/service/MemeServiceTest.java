@@ -77,7 +77,7 @@ public class MemeServiceTest {
 		MemeResponse expectedResult = MemeResponse.of(meme);
 		MemeServiceDto memeServiceDto = MEME_SERVICE_DTO();
 
-		given(memberService.findMemberFromId(memeServiceDto.getMemberId())).willReturn(member);
+		given(memberService.findMemberFromEmail(memeServiceDto.getEmail())).willReturn(member);
 		given(memeRepository.findById(memeServiceDto.getMemeId())).willReturn(Optional.ofNullable(meme));
 
 		// when

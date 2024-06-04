@@ -21,7 +21,7 @@ public class MemberFixture {
 
 	public final static Member OTHER_MEMBER() {
 		return Member.builder()
-			.email("junrain@ourservice.com")
+			.email("jerry@ourservice.com")
 			.role(Role.USER)
 			.imageUrl("imageUrl")
 			.name("강재혁")
