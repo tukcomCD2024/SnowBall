@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import com.example.memetory.domain.meme.dto.GenerateMemeListRequest;
+import com.example.memetory.domain.meme.dto.MemeResponse;
+import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.repository.MemeRepository;
 import com.example.memetory.global.integration.BaseIntegrationTest;
 import com.example.memetory.global.integration.MockServer;
@@ -50,5 +52,30 @@ public class MemeIntegrationTest extends BaseIntegrationTest {
 
 		// then
 		assertThat(result).isEqualTo(CREATE_MEME_SUCCESS.getMessage());
+	}
+
+	@Test
+	@DisplayName("밈id를 통한 멤버의 MemeResponse 반환 성공")
+	void Given_MemeId_When_findMemberMemeResponse_Then_Member_MemeResponse() {
+		Meme savedMeme = memeRepository.save(MEME(member));
+		MemeResponse expectedResult = MemeResponse.of(savedMeme);
+
+		// when
+		ExtractableResponse<Response> response =
+			given()
+				.log()
+				.all()
+				.auth().oauth2(accessToken)
+				.when()
+				.get("/meme/" + savedMeme.getId())
+				.then()
+				.log()
+				.all()
+				.extract();
+
+		MemeResponse result = response.jsonPath().getObject("data", MemeResponse.class);
+
+		// then
+		assertThat(result).usingRecursiveComparison().isEqualTo(expectedResult);
 	}
 }
