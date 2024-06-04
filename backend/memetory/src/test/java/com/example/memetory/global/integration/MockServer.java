@@ -6,10 +6,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 import com.example.memetory.domain.auth.dto.LoginRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.google.gson.Gson;
 
-@WireMockTest(httpPort = 9899)
 public class MockServer {
 	public static void startOauth2GoogleServerFromLoginRequest(LoginRequest loginRequest) throws
 		JsonProcessingException {

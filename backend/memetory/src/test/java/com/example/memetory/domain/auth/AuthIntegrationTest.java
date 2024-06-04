@@ -15,14 +15,12 @@ import com.example.memetory.global.integration.MockServer;
 import com.example.memetory.global.security.jwt.dto.TokenResponse;
 import com.example.memetory.global.security.jwt.service.JwtService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 
 import io.restassured.mapper.ObjectMapperType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 
 @DisplayName("Auth 통합 테스트의 ")
-@WireMockTest(httpPort = 9899)
 public class AuthIntegrationTest extends BaseIntegrationTest {
 	@Autowired
 	private JwtService jwtService;

@@ -11,10 +11,12 @@ import org.springframework.test.context.ActiveProfiles;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.repository.MemberRepository;
 import com.example.memetory.global.security.jwt.util.JwtUtil;
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 
 import io.restassured.RestAssured;
 
 @ActiveProfiles("test")
+@WireMockTest(httpPort = 9899)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class BaseIntegrationTest {
 	protected final String MESSAGE = "message";

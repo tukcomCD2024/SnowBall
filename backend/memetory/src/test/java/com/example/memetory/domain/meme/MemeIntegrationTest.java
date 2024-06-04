@@ -14,13 +14,11 @@ import com.example.memetory.domain.meme.dto.GenerateMemeListRequest;
 import com.example.memetory.domain.meme.repository.MemeRepository;
 import com.example.memetory.global.integration.BaseIntegrationTest;
 import com.example.memetory.global.integration.MockServer;
-import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 
 @DisplayName("Meme 통합 테스트의 ")
-@WireMockTest(httpPort = 9899)
 public class MemeIntegrationTest extends BaseIntegrationTest {
 	@Autowired
 	private MemeRepository memeRepository;
