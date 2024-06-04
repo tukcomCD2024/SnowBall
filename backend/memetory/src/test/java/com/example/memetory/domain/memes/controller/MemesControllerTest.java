@@ -30,11 +30,11 @@ import com.example.memetory.domain.memes.dto.response.MemesInfoSliceResponse;
 import com.example.memetory.domain.memes.dto.response.MemesResponse;
 import com.example.memetory.domain.memes.exception.AccessDinedMemesException;
 import com.example.memetory.domain.memes.service.MemesService;
-import com.example.memetory.global.LoginTest;
+import com.example.memetory.global.BaseControllerTest;
 
 @DisplayName("Memes 컨트롤러 테스트의 ")
 @WebMvcTest(MemesController.class)
-public class MemesControllerTest extends LoginTest {
+public class MemesControllerTest extends BaseControllerTest {
 	@MockBean
 	private MemesService memesService;
 	@MockBean

@@ -1,6 +1,7 @@
 package com.example.memetory.domain.member;
 
 import com.example.memetory.domain.member.dto.MemberServiceDto;
+import com.example.memetory.domain.member.dto.request.MemberUpdateRequest;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.entity.Role;
 import com.example.memetory.domain.member.entity.SocialType;
@@ -14,13 +15,13 @@ public class MemberFixture {
 			.name("이준우")
 			.nickname("junRain")
 			.socialType(SocialType.GOOGLE)
-			.socialId("-1")
+			.socialId("123456789")
 			.build();
 	}
 
 	public final static Member OTHER_MEMBER() {
 		return Member.builder()
-			.email("junrain@ourservice.com")
+			.email("jerry@ourservice.com")
 			.role(Role.USER)
 			.imageUrl("imageUrl")
 			.name("강재혁")
@@ -45,4 +46,13 @@ public class MemberFixture {
 			.email("junrain@ourservice.com")
 			.build();
 	}
+
+	public final static MemberUpdateRequest MEMBER_UPDATE_REQUEST() {
+		return new MemberUpdateRequest("junrain2", "imageUrl2");
+	}
+
+	public final static MemberUpdateRequest DUPLICATED_NICKNAME_MEMBER_UPDATE_REQUEST() {
+		return new MemberUpdateRequest("junrain", "imageUrl2");
+	}
+
 }

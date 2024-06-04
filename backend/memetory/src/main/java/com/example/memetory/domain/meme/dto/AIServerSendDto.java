@@ -5,11 +5,13 @@ import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AIServerSendDto {
 	@SerializedName("member_id")

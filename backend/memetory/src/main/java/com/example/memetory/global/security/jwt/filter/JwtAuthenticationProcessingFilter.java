@@ -1,5 +1,7 @@
 package com.example.memetory.global.security.jwt.filter;
 
+import static jakarta.servlet.http.HttpServletResponse.*;
+
 import java.io.IOException;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,7 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.repository.MemberRepository;
-import com.example.memetory.global.security.jwt.exception.InvalidTokenException;
+import com.example.memetory.global.security.jwt.exception.NotFoundTokenException;
 import com.example.memetory.global.security.jwt.refresh.domain.RefreshToken;
 import com.example.memetory.global.security.jwt.refresh.service.RefreshTokenService;
 import com.example.memetory.global.security.jwt.service.JwtService;
@@ -24,10 +26,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
-@Slf4j
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
 	private static final String NO_CHECK_URL = "/login";
@@ -41,49 +41,41 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
+
 		if (request.getRequestURI().equals(NO_CHECK_URL)) {
 			filterChain.doFilter(request, response);
 			return;
 		}
 
-		String refreshToken = jwtService.extractRefreshToken(request).orElse(null);
-
-		if (refreshToken != null) {
+		try {
+			String refreshToken = jwtService.extractRefreshToken(request);
 			checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
-			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-		}
 
-		if (refreshToken == null) {
+			sendError(response, HttpServletResponse.SC_UNAUTHORIZED);
+		} catch (NotFoundTokenException e) {
 			checkAccessTokenAndAuthentication(request, response, filterChain);
 		}
 	}
 
-	public void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken) {
+	private void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken) {
 		if (jwtService.isTokenValid(refreshToken)) {
 			RefreshToken refresh = refreshTokenService.findByToken(refreshToken);
 			jwtService.sendAccessAndRefreshToken(response, refresh.getEmail());
 		}
 	}
 
-	public void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
-		FilterChain filterChain) throws ServletException, IOException {
-		log.info("checkAccessTokenAndAuthentication() 호출");
+	private void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
+		FilterChain filterChain) {
 		try {
-			jwtService.extractAccessToken(request)
-				.ifPresent(accessToken -> jwtService.extractEmail(accessToken)
-					.ifPresentOrElse(email -> memberRepository.findByEmail(email).ifPresent(this::saveAuthentication),
-						() -> {
-							throw new InvalidTokenException();
-						}
-					)
-				);
+			String email = jwtService.getEmail(request);
+			memberRepository.findByEmail(email).ifPresent(this::saveAuthentication);
+			filterChain.doFilter(request, response);
 		} catch (Exception e) {
-			response.sendError(HttpServletResponse.SC_FORBIDDEN);
+			sendError(response, SC_FORBIDDEN);
 		}
-		filterChain.doFilter(request, response);
 	}
 
-	public void saveAuthentication(Member myMember) {
+	private void saveAuthentication(Member myMember) {
 		String password = PasswordUtil.generateRandomPassword();
 
 		UserDetails userDetailsUser = User.builder()
@@ -96,5 +88,13 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 			authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
+	}
+
+	private void sendError(HttpServletResponse response, int errorCode) {
+		try {
+			response.sendError(errorCode);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

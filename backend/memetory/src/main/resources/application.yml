@@ -37,6 +37,11 @@ spring:
   ai-server:
     url: "http://localhost:5001/files"
 
+  oauth2:
+    google-url: "https://www.googleapis.com/oauth2/v2/userinfo"
+    kakao-url: "https://kapi.kakao.com/v2/user/me"
+
+
 springdoc:
   swagger-ui:
     tags-sorter: alpha # 태그를 알파벳 순으로 정렬
@@ -44,3 +49,4 @@ springdoc:
 
   paths-to-match:
     - /** # swagger-ui에 표시할 api의 엔드포인트 패턴
+

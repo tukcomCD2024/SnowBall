@@ -23,11 +23,11 @@ import com.example.memetory.domain.meme.dto.MemeServiceDto;
 import com.example.memetory.domain.meme.exception.AccessDeniedMemeException;
 import com.example.memetory.domain.meme.exception.NotFoundMemeException;
 import com.example.memetory.domain.meme.service.MemeService;
-import com.example.memetory.global.LoginTest;
+import com.example.memetory.global.BaseControllerTest;
 
 @DisplayName("Meme 컨트롤러 테스트의 ")
 @WebMvcTest(MemeController.class)
-public class MemeControllerTest extends LoginTest {
+public class MemeControllerTest extends BaseControllerTest {
 	@MockBean
 	private MemeService memeService;
 

@@ -1,12 +1,8 @@
 package com.example.memetory.domain.auth.service;
 
-import static com.example.memetory.domain.member.entity.SocialType.*;
-
-import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -23,7 +19,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OAuth2ProviderService {
 
-	private static final Logger log = LoggerFactory.getLogger(OAuth2ProviderService.class);
+	@Value("${spring.oauth2.google-url}")
+	private String googleUrl;
+	@Value("${spring.oauth2.kakao-url}")
+	private String kakaoUrl;
 
 	public OAuth2UserInfo getUserInfo(LoginRequest request) {
 		return switch (request.getSocialType()) {
@@ -33,7 +32,7 @@ public class OAuth2ProviderService {
 	}
 
 	private OAuth2UserInfo getKakaoUserInfo(LoginRequest request) {
-		Map attributes = WebClient.create(KAKAO.getProviderUrl())
+		Map attributes = WebClient.create(kakaoUrl)
 			.get()
 			.headers(httpHeaders -> {
 				httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
@@ -49,7 +48,7 @@ public class OAuth2ProviderService {
 	}
 
 	private OAuth2UserInfo getGoogleUserInfo(LoginRequest request) {
-		Map attributes = WebClient.create(GOOGLE.getProviderUrl())
+		Map attributes = WebClient.create(googleUrl)
 			.get()
 			.headers(httpHeaders -> {
 				httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
