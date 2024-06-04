@@ -70,7 +70,7 @@ public class MemeService {
 	public MemeResponse findMemberMemeResponse(MemeServiceDto memeServiceDto) {
 		Meme meme = memeRepository.findById(memeServiceDto.getMemeId()).orElseThrow(NotFoundMemeException::new);
 
-		Member loginMember = memberService.findMemberFromId(memeServiceDto.getMemberId());
+		Member loginMember = memberService.findMemberFromEmail(memeServiceDto.getEmail());
 		Member memeMember = meme.getMember();
 		certifyMemeMember(memeMember, loginMember);
 
