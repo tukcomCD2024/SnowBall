@@ -84,7 +84,7 @@ public class MemeIntegrationTest extends BaseIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("권한 없는 멤버 이메일로 인한 ErrorMessage 반환")
+	@DisplayName("권한 없는 멤버 이메일로 인한 MEME_ACCESS_DENY 반환")
 	void Given_MemeId_When_findMemberMemeResponse_Throw_AccessDeniedMemberMemeException() {
 		// given
 		Member otherMember = memberRepository.save(OTHER_MEMBER());
@@ -108,4 +108,27 @@ public class MemeIntegrationTest extends BaseIntegrationTest {
 		// then
 		assertThat(result).isEqualTo(MEME_ACCESS_DENY.getMessage());
 	}
+
+	@Test
+	@DisplayName("존재하지 않는 MemeId로 인한 MEME_NOT_FOUND 반환")
+	void Given_MemeId_When_findMemberMemeResponse_Throw_NotFoundMemberMemeException() {
+		// when
+		ExtractableResponse<Response> response =
+			given()
+				.log()
+				.all()
+				.auth().oauth2(accessToken)
+				.when()
+				.get("/meme/1")
+				.then()
+				.log()
+				.all()
+				.extract();
+
+		String result = response.jsonPath().get(ERROR_MESSAGE);
+
+		// then
+		assertThat(result).isEqualTo(MEME_NOT_FOUND.getMessage());
+	}
+
 }
