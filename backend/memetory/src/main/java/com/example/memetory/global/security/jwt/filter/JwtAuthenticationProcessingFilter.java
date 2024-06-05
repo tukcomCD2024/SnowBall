@@ -51,7 +51,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 			String refreshToken = jwtService.extractRefreshToken(request);
 			checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
 
-			sendError(response, HttpServletResponse.SC_UNAUTHORIZED);
+			response.setStatus(SC_UNAUTHORIZED);
 		} catch (NotFoundTokenException e) {
 			checkAccessTokenAndAuthentication(request, response, filterChain);
 		}
@@ -70,9 +70,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 			String email = jwtService.getEmail(request);
 			memberRepository.findByEmail(email).ifPresent(this::saveAuthentication);
 		} catch (Exception e) {
-			sendError(response, SC_FORBIDDEN);
-		}
-		finally {
+			response.setStatus(SC_FORBIDDEN);
+		} finally {
 			filterChain.doFilter(request, response);
 		}
 	}
@@ -90,13 +89,5 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 			authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-	}
-
-	private void sendError(HttpServletResponse response, int errorCode) {
-		try {
-			response.sendError(errorCode);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
 	}
 }
