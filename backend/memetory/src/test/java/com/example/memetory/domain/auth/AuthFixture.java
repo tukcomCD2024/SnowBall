@@ -4,7 +4,6 @@ import java.util.Map;
 
 import com.example.memetory.domain.auth.dto.LoginRequest;
 import com.example.memetory.domain.member.entity.SocialType;
-import com.example.memetory.global.security.jwt.dto.TokenResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -16,18 +15,11 @@ public class AuthFixture {
 	}
 
 	public static LoginRequest GOOGLE_LOGIN_REQUEST() {
-		return new LoginRequest("google login token", SocialType.GOOGLE);
+		return new LoginRequest("google login token", SocialType.GOOGLE, "fcmToken");
 	}
 
-	public static String JSON_TOKEN_RESPONSE() throws JsonProcessingException {
-		return mapper.writeValueAsString(TOKEN_RESPONSE());
-	}
-
-	public static TokenResponse TOKEN_RESPONSE() {
-		return TokenResponse.builder()
-			.accessToken("access token")
-			.refreshToken("refresh token")
-			.build();
+	public static LoginRequest GOOGLE_LOGIN_REQUEST_OTHER_FCM_TOKE() {
+		return new LoginRequest("google login token", SocialType.GOOGLE, "fcmToken");
 	}
 
 	public static String JSON_GOOGLE_OAUTH2_RESPONSE() throws JsonProcessingException {

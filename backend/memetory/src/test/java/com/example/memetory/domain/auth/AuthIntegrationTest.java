@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import com.example.memetory.domain.auth.dto.LoginRequest;
+import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.global.integration.BaseIntegrationTest;
 import com.example.memetory.global.integration.MockServer;
 import com.example.memetory.global.security.jwt.dto.TokenResponse;
@@ -51,6 +52,10 @@ public class AuthIntegrationTest extends BaseIntegrationTest {
 		TokenResponse result = response.as(TokenResponse.class, ObjectMapperType.JACKSON_2);
 
 		// then
+		checkTokenResponse(result);
+	}
+
+	private void checkTokenResponse(TokenResponse result) {
 		assertTrue(jwtService.isTokenValid(result.getAccessToken()));
 		assertTrue(jwtService.isTokenValid(result.getRefreshToken()));
 	}
@@ -59,7 +64,7 @@ public class AuthIntegrationTest extends BaseIntegrationTest {
 	@Test
 	void Given_LoginRequest_When_login_Then_Return_HttpStatus_OK() throws JsonProcessingException {
 		// given
-		LoginRequest loginRequest = GOOGLE_LOGIN_REQUEST();
+		LoginRequest loginRequest = GOOGLE_LOGIN_REQUEST_OTHER_FCM_TOKE();
 
 		MockServer.startOauth2GoogleServerFromLoginRequest(loginRequest);
 
@@ -80,7 +85,12 @@ public class AuthIntegrationTest extends BaseIntegrationTest {
 		TokenResponse result = response.as(TokenResponse.class, ObjectMapperType.JACKSON_2);
 
 		// then
-		assertTrue(jwtService.isTokenValid(result.getAccessToken()));
-		assertTrue(jwtService.isTokenValid(result.getRefreshToken()));
+		checkMemberFcmTokenUpdate(loginRequest);
+		checkTokenResponse(result);
+	}
+
+	private void checkMemberFcmTokenUpdate(LoginRequest loginRequest) {
+		Member updateMember = memberRepository.findById(member.getId()).get();
+		assertEquals(updateMember.getFcmToken(), loginRequest.getFcmToken());
 	}
 }
