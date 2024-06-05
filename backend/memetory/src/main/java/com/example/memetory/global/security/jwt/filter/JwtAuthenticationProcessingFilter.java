@@ -65,13 +65,15 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 	}
 
 	private void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
-		FilterChain filterChain) {
+		FilterChain filterChain) throws ServletException, IOException {
 		try {
 			String email = jwtService.getEmail(request);
 			memberRepository.findByEmail(email).ifPresent(this::saveAuthentication);
-			filterChain.doFilter(request, response);
 		} catch (Exception e) {
 			sendError(response, SC_FORBIDDEN);
+		}
+		finally {
+			filterChain.doFilter(request, response);
 		}
 	}
 
