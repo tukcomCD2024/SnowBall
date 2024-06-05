@@ -31,6 +31,7 @@ public class Member extends BaseEntity {
 	private String nickname;
 	private String name;
 	private String imageUrl;
+	private String fcmToken;
 
 	@Enumerated(EnumType.STRING)
 	private Role role;
@@ -41,12 +42,13 @@ public class Member extends BaseEntity {
 	private String socialId;
 
 	@Builder
-	public Member(String email, String nickname, String name, String imageUrl, Role role, SocialType socialType,
-		String socialId) {
+	public Member(String email, String nickname, String name, String imageUrl, String fcmToken, Role role,
+		SocialType socialType, String socialId) {
 		this.email = email;
 		this.nickname = nickname;
 		this.name = name;
 		this.imageUrl = imageUrl;
+		this.fcmToken = fcmToken;
 		this.role = role;
 		this.socialType = socialType;
 		this.socialId = socialId;
