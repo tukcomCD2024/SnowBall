@@ -59,4 +59,8 @@ public class Member extends BaseEntity {
 		this.nickname = memberServiceDto.getNickname();
 		this.imageUrl = memberServiceDto.getImageUrl();
 	}
+
+	public void updateFcmToken(String fcmToken) {
+		this.fcmToken = fcmToken;
+	}
 }
