@@ -17,4 +17,6 @@ public class LoginRequest {
 	private String token;
 	@Schema(description = "인증서버타입, google, kakao 가능")
 	private SocialType socialType;
+	@Schema(description = "사용자의 기기 fcm 토큰")
+	private String fcmToken;
 }
