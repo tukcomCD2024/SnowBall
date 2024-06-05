@@ -66,13 +66,19 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
 	private void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
+		// TODO swagger 전달을 위한 코드 추후 제거
+		try {
+			jwtService.extractAccessToken(request);
+		} catch (Exception e) {
+			filterChain.doFilter(request, response);
+		}
+
 		try {
 			String email = jwtService.getEmail(request);
 			memberRepository.findByEmail(email).ifPresent(this::saveAuthentication);
+			filterChain.doFilter(request, response);
 		} catch (Exception e) {
 			response.setStatus(SC_FORBIDDEN);
-		} finally {
-			filterChain.doFilter(request, response);
 		}
 	}
 
