@@ -38,6 +38,7 @@ public class MemeService {
 		Meme meme = memeServiceDto.toEntityFromMember(member);
 
 		Meme savedMeme = memeRepository.save(meme);
+		// TODO FCM을 통한 알림 전송 구현
 
 		return MemeResponse.of(savedMeme);
 	}
