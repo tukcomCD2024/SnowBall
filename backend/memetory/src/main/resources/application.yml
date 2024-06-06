@@ -41,6 +41,9 @@ spring:
     google-url: "https://www.googleapis.com/oauth2/v2/userinfo"
     kakao-url: "https://kapi.kakao.com/v2/user/me"
 
+  firebase:
+    path: firebase/firebase_key.json
+
 
 springdoc:
   swagger-ui:
