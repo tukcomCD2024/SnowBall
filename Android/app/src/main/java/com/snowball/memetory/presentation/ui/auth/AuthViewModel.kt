@@ -10,6 +10,8 @@ import com.snowball.memetory.data.dto.auth.request.SignInRequestDto
 import com.snowball.memetory.data.dto.auth.response.GoogleTokenResponseDto
 import com.snowball.memetory.data.dto.auth.response.TokenResponseDto
 import com.snowball.memetory.data.repository.AuthRepository
+import com.snowball.memetory.util.MyFirebaseMessagingService
+import com.snowball.memetory.util.TokenManager
 import kotlinx.coroutines.launch
 
 
@@ -20,13 +22,14 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     private val _loginResult = MutableLiveData<Result<TokenResponseDto>>()
     val loginResult: LiveData<Result<TokenResponseDto>> = _loginResult
 
+    private val myFirebaseMessagingService = MyFirebaseMessagingService()
     fun requestAccessToken(request: GoogleTokenRequestDto) {
         viewModelScope.launch {
             val result = authRepository.requestAccessToken(request)
 
             result.onSuccess { googleTokenResponse ->
                 _accessTokenResult.postValue(Result.success(googleTokenResponse))
-                loginUser(SignInRequestDto(googleTokenResponse.access_token, "GOOGLE")) // Assuming serverAuthCode is a property
+                loginUser(SignInRequestDto(googleTokenResponse.access_token, "GOOGLE", myFirebaseMessagingService.getFirebaseToken())) // Assuming serverAuthCode is a property
                 Log.d("AuthViewModel", "$result, $accessTokenResult, ${Result.success(googleTokenResponse)}")
             }
             result.onFailure {
@@ -40,6 +43,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
             val result = authRepository.loginUser(request)
             _loginResult.postValue(result)
             Log.d("AuthViewModel", "$result, $loginResult")
+            Log.d("AuthViewModel", "FCMToken: ${TokenManager.getFCMToken()}")
 
         }
     }
