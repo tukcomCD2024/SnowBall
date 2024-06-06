@@ -33,4 +33,19 @@ object TokenManager {
 
     fun getAccessToken(): String? = encryptedSharedPreferences.getString("ACCESS_TOKEN", null)
     fun getRefreshToken(): String? = encryptedSharedPreferences.getString("REFRESH_TOKEN", null)
+
+    fun saveFcmToken(token: String) {
+        encryptedSharedPreferences.edit().putString("FCM_TOKEN", token).apply()
+    }
+
+    fun setTokenSentToServer(sent: Boolean) {
+        encryptedSharedPreferences.edit().putBoolean("TOKEN_SENT", sent).apply()
+    }
+
+    fun isTokenSentToServer(): Boolean {
+        return encryptedSharedPreferences.getBoolean("TOKEN_SENT", false)
+    }
+
+    fun getFCMToken(): String? = encryptedSharedPreferences.getString("FCM_TOKEN", null)
+
 }
