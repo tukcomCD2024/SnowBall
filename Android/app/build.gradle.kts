@@ -5,6 +5,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("androidx.navigation.safeargs")
+    id("com.google.gms.google-services")
 }
 
 val properties = Properties()
@@ -112,5 +113,10 @@ dependencies {
     // Jetpack Security
     implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
     
-    implementation("com.google.android.gms:play-services-basement:18.3.0")
+//    implementation("com.google.android.gms:play-services-basement:18.3.0")
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-messaging-ktx")
 }
