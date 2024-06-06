@@ -33,7 +33,7 @@ public class MemeController implements MemeApi {
 	@Override
 	public ResponseEntity<HttpStatus> callBackMeme(@PathVariable Long memberId,
 		@RequestBody ShotStackCallBackRequest shotStackCallBackRequest) {
-		MemeServiceDto memeServiceDto = shotStackCallBackRequest.toServiceDtoFromMemeberId(memberId);
+		MemeServiceDto memeServiceDto = shotStackCallBackRequest.toServiceDtoFromMemberId(memberId);
 
 		memeService.registerMeme(memeServiceDto);
 

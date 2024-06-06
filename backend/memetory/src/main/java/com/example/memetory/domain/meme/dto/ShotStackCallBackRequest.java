@@ -2,11 +2,13 @@ package com.example.memetory.domain.meme.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 @Schema(description = "밈 생성 후 콜백 받는 포맷")
 public class ShotStackCallBackRequest {
 
@@ -19,7 +21,7 @@ public class ShotStackCallBackRequest {
     @Schema(description = "에러")
     private String error;
 
-    public MemeServiceDto toServiceDtoFromMemeberId(Long memberId) {
+    public MemeServiceDto toServiceDtoFromMemberId(Long memberId) {
         return MemeServiceDto.builder()
                 .memberId(memberId)
                 .s3Url(url)
