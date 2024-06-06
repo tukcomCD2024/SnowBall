@@ -51,7 +51,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 			String refreshToken = jwtService.extractRefreshToken(request);
 			checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
 
-			sendError(response, HttpServletResponse.SC_UNAUTHORIZED);
+			response.setStatus(SC_UNAUTHORIZED);
 		} catch (NotFoundTokenException e) {
 			checkAccessTokenAndAuthentication(request, response, filterChain);
 		}
@@ -65,13 +65,20 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 	}
 
 	private void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
-		FilterChain filterChain) {
+		FilterChain filterChain) throws ServletException, IOException {
+		// TODO swagger 전달을 위한 코드 추후 제거
+		try {
+			jwtService.extractAccessToken(request);
+		} catch (Exception e) {
+			filterChain.doFilter(request, response);
+		}
+
 		try {
 			String email = jwtService.getEmail(request);
 			memberRepository.findByEmail(email).ifPresent(this::saveAuthentication);
 			filterChain.doFilter(request, response);
 		} catch (Exception e) {
-			sendError(response, SC_FORBIDDEN);
+			response.setStatus(SC_FORBIDDEN);
 		}
 	}
 
@@ -88,13 +95,5 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 			authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-	}
-
-	private void sendError(HttpServletResponse response, int errorCode) {
-		try {
-			response.sendError(errorCode);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
 	}
 }
