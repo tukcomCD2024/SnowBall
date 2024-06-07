@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.2.2'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'com.google.cloud.tools.jib' version '3.4.1'
+    id 'jacoco'
 }
 
 group = 'com.example'
@@ -70,8 +71,67 @@ clean {
     delete file('src/main/generated')
 }
 
-tasks.named('test') {
+test {
     useJUnitPlatform()
+    finalizedBy 'jacocoTestReport'
+}
+
+jacocoTestReport {
+    reports {
+        xml.required.set(false)
+        csv.required.set(true)
+        html.required.set(true)
+    }
+    def Qdomains = []
+
+    for (qPattern in '**/QA'..'**/QZ') {
+        Qdomains.add(qPattern + '*')
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it,
+                            excludes: ["**/dto/**",
+                                       "**/exception/**",
+                                       "**/userInfo/**",
+                                       "com/example/memetory/MemetoryApplication.class"
+                            ] + Qdomains)
+                })
+
+        )
+    }
+
+    finalizedBy 'jacocoTestCoverageVerification'
+}
+
+jacocoTestCoverageVerification {
+    def Qdomains = []
+
+    for (qPattern in '*.QA'..'*.QZ') {
+        Qdomains.add(qPattern + '*')
+    }
+
+
+    violationRules {
+        rule {
+            enabled = true
+            element = 'CLASS'
+
+            limit {
+                counter = 'METHOD'
+                value = 'COVEREDRATIO'
+                minimum = 0.00
+            }
+
+            limit {
+                counter = 'INSTRUCTION'
+                value = 'COVEREDRATIO'
+                minimum = 0.00
+            }
+            excludes = [] + Qdomains
+        }
+    }
 }
 
 jib {
@@ -91,3 +151,4 @@ jib {
         jvmFlags = ['-Dspring.profiles.active=dev']
     }
 }
+
