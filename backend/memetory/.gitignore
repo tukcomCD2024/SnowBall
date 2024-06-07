@@ -38,4 +38,4 @@ out/
 
 src/main/resources/application-*
 
-src/main/resources/firebase/*
+src/main/resources/firebase/firebase_key.json
