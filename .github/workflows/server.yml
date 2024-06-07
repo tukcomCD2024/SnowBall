@@ -28,8 +28,8 @@ jobs:
           distribution: temurin
           java-version: 17
       
-      - run : echo "${{ secrets.DEV_YML }}" > ./src/main/resources/application-dev.yml
-      - run : echo "${{ secrets.FIREBASE_KEY }}" > ./src/main/resources/firebase/firebase_key.json
+      - run : echo -e "${{ secrets.DEV_YML }}" > ./src/main/resources/application-dev.yml
+      - run : echo -e "${{ secrets.FIREBASE_KEY }}" > ./src/main/resources/firebase/firebase_key.json
 
       - name: Log in to Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
