@@ -1,6 +1,5 @@
 name: server
 env : 
-  DEV_YAML : ${{ secrets.DEV_YML }}
   FIREBASE_KEY : ${{ secrets.FIREBASE_KEY }}
 
 
@@ -32,8 +31,8 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name : injection-
-        run : echo -E $DEV_YML > ./src/main/resources/application-dev.yml
+      - name : injection-yml
+        run : echo -E "${{ secrets.DEV_YML }}" > ./src/main/resources/application-dev.yml
 
       - name : injection-firebase
         run : echo -E $FIREBASE_KEY > ./src/main/resources/firebase/firebase_key.json
