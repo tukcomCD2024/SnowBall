@@ -16,6 +16,7 @@ public class MemberFixture {
 			.nickname("junRain")
 			.socialType(SocialType.GOOGLE)
 			.socialId("123456789")
+			.fcmToken("fcmToken")
 			.build();
 	}
 
@@ -28,6 +29,7 @@ public class MemberFixture {
 			.nickname("goDDm")
 			.socialType(SocialType.GOOGLE)
 			.socialId("-2")
+			.fcmToken("fcmToken2")
 			.build();
 	}
 

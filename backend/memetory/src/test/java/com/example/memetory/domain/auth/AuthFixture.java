@@ -19,7 +19,7 @@ public class AuthFixture {
 	}
 
 	public static LoginRequest GOOGLE_LOGIN_REQUEST_OTHER_FCM_TOKE() {
-		return new LoginRequest("google login token", SocialType.GOOGLE, "fcmToken");
+		return new LoginRequest("google login token", SocialType.GOOGLE, "fcmToken5");
 	}
 
 	public static String JSON_GOOGLE_OAUTH2_RESPONSE() throws JsonProcessingException {

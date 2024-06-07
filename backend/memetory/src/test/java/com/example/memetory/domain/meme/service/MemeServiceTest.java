@@ -31,6 +31,7 @@ import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.exception.AccessDeniedMemeException;
 import com.example.memetory.domain.meme.exception.NotFoundMemeException;
 import com.example.memetory.domain.meme.repository.MemeRepository;
+import com.example.memetory.global.firebase.service.FirebaseService;
 
 @DisplayName("memeService 테스트의 ")
 @ExtendWith(MockitoExtension.class)
@@ -42,6 +43,8 @@ public class MemeServiceTest {
 	private MemberService memberService;
 	@Mock
 	private MemeRepository memeRepository;
+	@Mock
+	private FirebaseService	firebaseService;
 
 	private Member member;
 	private Meme meme;
@@ -62,6 +65,7 @@ public class MemeServiceTest {
 
 		given(memberService.findMemberFromId(memberId)).willReturn(member);
 		given(memeRepository.save(any(Meme.class))).willReturn(meme);
+		doNothing().when(firebaseService).sendMessage(any());
 
 		// when
 		MemeResponse result = memeService.registerMeme(memeServiceDto);
