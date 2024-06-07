@@ -31,11 +31,6 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
         super.onNewToken(token)
         Log.d(TAG, "onNewToken: $token")
 
-        // 토큰 저장
-        TokenManager.saveFcmToken(token)
-        // 토큰 전송 상태 초기화
-        TokenManager.setTokenSentToServer(false)
-
     }
 
     // Foreground에서 Push Service를 받기 위해 Notification 설정
@@ -43,13 +38,7 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
         // Handle FCM messages here.
 //        Log.d(TAG, "From: $remoteMessage")
 //        Log.d(TAG, "From: ${remoteMessage.data}")
-//        Log.d(TAG, "From: ${remoteMessage.from}")
-//        // Check if message contains a data payload.
-//        if (remoteMessage.data.isNotEmpty()) {
-//            Log.d(TAG, "Message data payload: ${remoteMessage.data}")
-//        }
-
-        Log.d(TAG, "FCMToken: ${TokenManager.getFCMToken()}")
+//
         Log.d(TAG, "From: ${remoteMessage.from}")
 
         // Check if message contains a data payload.
@@ -88,19 +77,6 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
             val channel = NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_DEFAULT)
             notificationManager.createNotificationChannel(channel)
 
-//            val intent = Intent(this@MyFirebaseMessagingService, MainActivity::class.java).apply{
-//                putExtra("destination", "LockerFragment")
-////                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-//            }
-//            val pendingIntent = PendingIntent.getActivity(this@MyFirebaseMessagingService, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-//
-//            val notificationBuilder = NotificationCompat.Builder(this@MyFirebaseMessagingService, channelID)
-//                .setSmallIcon(R.drawable.main_logo)  // ensure you have this icon
-//                .setContentTitle(title)
-//                .setContentText(body)
-//                .setContentIntent(pendingIntent)
-//                .setAutoCancel(true)
             // NavDeepLinkBuilder를 사용하여 PendingIntent 생성
             val pendingIntent = NavDeepLinkBuilder(this@MyFirebaseMessagingService)
                 .setComponentName(MainActivity::class.java)

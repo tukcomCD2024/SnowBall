@@ -43,7 +43,6 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
             val result = authRepository.loginUser(request)
             _loginResult.postValue(result)
             Log.d("AuthViewModel", "$result, $loginResult")
-            Log.d("AuthViewModel", "FCMToken: ${TokenManager.getFCMToken()}")
 
         }
     }
