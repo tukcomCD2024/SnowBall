@@ -37,3 +37,5 @@ out/
 .vscode/
 
 src/main/resources/application-*
+
+src/main/resources/firebase/firebase_key.json

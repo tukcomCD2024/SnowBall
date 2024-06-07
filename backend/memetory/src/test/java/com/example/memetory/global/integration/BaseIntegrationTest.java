@@ -2,6 +2,8 @@ package com.example.memetory.global.integration;
 
 import static com.example.memetory.domain.member.MemberFixture.*;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,9 +44,12 @@ public abstract class BaseIntegrationTest {
 			databaseCleanup.afterPropertiesSet();
 		}
 
-		databaseCleanup.execute();
-
 		member = memberRepository.save(MEMBER());
 		accessToken = jwtUtil.generateAccessToken(member.getEmail());
+	}
+
+	@AfterEach
+	public void afterEach() {
+		databaseCleanup.execute();
 	}
 }

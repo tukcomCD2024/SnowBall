@@ -11,11 +11,13 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 
 import com.example.memetory.domain.meme.dto.GenerateMemeListRequest;
 import com.example.memetory.domain.meme.dto.MemePageResponse;
 import com.example.memetory.domain.meme.dto.MemeResponse;
+import com.example.memetory.domain.meme.dto.ShotStackCallBackRequest;
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.repository.MemeRepository;
 import com.example.memetory.global.integration.BaseIntegrationTest;
@@ -26,6 +28,9 @@ import io.restassured.response.Response;
 
 @DisplayName("Meme 통합 테스트의 ")
 public class MemeIntegrationTest extends BaseIntegrationTest {
+	@Value("${spring.firebase.token}")
+	private String fcmToken;
+
 	@Autowired
 	private MemeRepository memeRepository;
 
@@ -156,4 +161,34 @@ public class MemeIntegrationTest extends BaseIntegrationTest {
 		assertThat(result).isEqualTo(MEME_NOT_FOUND.getMessage());
 	}
 
+	@Test
+	@DisplayName("멤버 Id와 ShotStackCallBackRequest을 통한 밈 생성 성공")
+	public void Given_memberIdAndShotStackCallBackRequest_When_callBackMeme_Then_HttpStatus200() {
+
+		ShotStackCallBackRequest request = new ShotStackCallBackRequest("200", "s3Url", null);
+
+		member.updateFcmToken(fcmToken);
+		memberRepository.save(member);
+
+		// when
+		ExtractableResponse<Response> response =
+			given()
+				.log()
+				.all()
+				.auth().oauth2(accessToken)
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.body(request)
+				.when()
+				.post("/meme/create/" + member.getId())
+				.then()
+				.log()
+				.all()
+				.extract();
+
+		Long memeCount = memeRepository.count();
+
+		// then
+		assertThat(memeCount).isEqualTo(1);
+		assertThat(200).isEqualTo(response.statusCode());
+	}
 }

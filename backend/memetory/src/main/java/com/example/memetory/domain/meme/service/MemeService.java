@@ -1,5 +1,7 @@
 package com.example.memetory.domain.meme.service;
 
+import static com.example.memetory.global.firebase.FirebaseMessage.*;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,15 +21,19 @@ import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.exception.AccessDeniedMemeException;
 import com.example.memetory.domain.meme.exception.NotFoundMemeException;
 import com.example.memetory.domain.meme.repository.MemeRepository;
+import com.example.memetory.global.firebase.service.FirebaseService;
 import com.google.gson.Gson;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemeService {
 	private final MemberService memberService;
 	private final MemeRepository memeRepository;
+	private final FirebaseService firebaseService;
 
 	@Value("${spring.ai-server.url}")
 	private String aiServerUrl;
@@ -38,6 +44,8 @@ public class MemeService {
 		Meme meme = memeServiceDto.toEntityFromMember(member);
 
 		Meme savedMeme = memeRepository.save(meme);
+
+		firebaseService.sendMessage(MEME_CREATE_MESSAGE.toMessageWithFcmToken(member.getFcmToken()));
 
 		return MemeResponse.of(savedMeme);
 	}
