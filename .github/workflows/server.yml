@@ -1,4 +1,8 @@
 name: server
+env : 
+  DEV_YAML : ${{ secrets.DEV_YML }}
+  FIREBASE_KEY : ${{ secrets.FIREBASE_KEY }}
+
 
 on:
   workflow_dispatch:
@@ -27,9 +31,12 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      
-      - run : echo -E ${{ secrets.DEV_YML }} > ./src/main/resources/application-dev.yml
-      - run : echo -E ${{ secrets.FIREBASE_KEY }} > ./src/main/resources/firebase/firebase_key.json
+
+      - name : injection-
+        run : echo -E $DEV_YML > ./src/main/resources/application-dev.yml
+
+      - name : injection-firebase
+        run : echo -E $FIREBASE_KEY > ./src/main/resources/firebase/firebase_key.json
 
       - name: Log in to Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
