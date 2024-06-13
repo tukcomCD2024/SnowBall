@@ -1,6 +1,7 @@
 package com.example.memetory.domain.memes;
 
 import static com.example.memetory.domain.meme.MemeFixture.*;
+import static com.example.memetory.global.response.ErrorCode.*;
 import static io.restassured.RestAssured.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -54,5 +55,33 @@ public class MemesIntegrationTest extends BaseIntegrationTest {
 
 		// then
 		assertThat(result.getTitle()).isEqualTo(title);
+	}
+
+	@Test
+	@DisplayName("존재하지 않는 MemeId로 인한 MEME_NOT_FOUND 반환")
+	public void Given_NotExistedMemeId_When_findMemberMemePageResponse_Throw_NotFoundMemberMemeException() {
+		// given
+		final String title = "new Memes";
+		GenerateMemesRequest request = new GenerateMemesRequest(-1L, title);
+
+		// when
+		ExtractableResponse<Response> response =
+			given()
+				.log()
+				.all()
+				.auth().oauth2(accessToken)
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.body(request)
+				.when()
+				.post("/memes")
+				.then()
+				.log()
+				.all()
+				.extract();
+
+		String result = response.jsonPath().get(ERROR_MESSAGE);
+
+		// then
+		assertThat(result).isEqualTo(MEME_NOT_FOUND.getMessage());
 	}
 }
