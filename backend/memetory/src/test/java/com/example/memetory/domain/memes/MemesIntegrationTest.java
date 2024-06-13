@@ -7,6 +7,7 @@ import static com.example.memetory.global.response.ErrorCode.*;
 import static com.example.memetory.global.response.ResultCode.*;
 import static io.restassured.RestAssured.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.repository.MemeRepository;
 import com.example.memetory.domain.memes.dto.request.GenerateMemesRequest;
+import com.example.memetory.domain.memes.dto.response.MemesInfoSliceResponse;
 import com.example.memetory.domain.memes.dto.response.MemesResponse;
 import com.example.memetory.domain.memes.entity.Memes;
 import com.example.memetory.domain.memes.repository.MemesRepository;
@@ -168,4 +170,33 @@ public class MemesIntegrationTest extends BaseIntegrationTest {
 		assertThat(result.getMemesId()).isEqualTo(memes.getId());
 	}
 
+	@Test
+	@DisplayName("Pageable을 통한 MemesInfoSliceResponse 반환 성공")
+	public void Given_Pageable_When_findMemesInfoSliceResponse_Then_MemesInfoPageResponse() throws Exception {
+		final int SIZE = 10;
+		Meme meme = memeRepository.save(MEME(member));
+
+		for (int i = 0; i < SIZE + 1; i++) {
+			memesRepository.save(MEMES(member, meme));
+		}
+
+		// when
+		ExtractableResponse<Response> response =
+			given()
+				.log()
+				.all()
+				.auth().oauth2(accessToken)
+				.when()
+				.get("/memes?page={page}&size={size}", 0, SIZE)
+				.then()
+				.log()
+				.all()
+				.extract();
+
+		MemesInfoSliceResponse result = response.jsonPath().getObject("data", MemesInfoSliceResponse.class);
+
+		// then
+		assertTrue(result.isHasNext());
+		assertThat(result.getMemesInfoResponseList()).hasSize(SIZE);
+	}
 }
