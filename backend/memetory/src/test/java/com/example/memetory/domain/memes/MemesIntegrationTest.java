@@ -1,7 +1,9 @@
 package com.example.memetory.domain.memes;
 
 import static com.example.memetory.domain.meme.MemeFixture.*;
+import static com.example.memetory.domain.memes.MemesFixture.*;
 import static com.example.memetory.global.response.ErrorCode.*;
+import static com.example.memetory.global.response.ResultCode.*;
 import static io.restassured.RestAssured.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -14,6 +16,7 @@ import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.repository.MemeRepository;
 import com.example.memetory.domain.memes.dto.request.GenerateMemesRequest;
 import com.example.memetory.domain.memes.dto.response.MemesResponse;
+import com.example.memetory.domain.memes.entity.Memes;
 import com.example.memetory.domain.memes.repository.MemesRepository;
 import com.example.memetory.global.integration.BaseIntegrationTest;
 
@@ -83,5 +86,31 @@ public class MemesIntegrationTest extends BaseIntegrationTest {
 
 		// then
 		assertThat(result).isEqualTo(MEME_NOT_FOUND.getMessage());
+	}
+
+	@Test
+	@DisplayName("memesId를 통한 밈스 삭제 성공")
+	public void Given_memesId_When_deleteMemes_Then_DELETE_MEMES_SUCCESS() throws Exception {
+		// given
+		Meme meme = memeRepository.save(MEME(member));
+		Memes memes = memesRepository.save(MEMES(member, meme));
+
+		// when
+		ExtractableResponse<Response> response =
+			given()
+				.log()
+				.all()
+				.auth().oauth2(accessToken)
+				.when()
+				.delete("/memes/{memesId}", memes.getId())
+				.then()
+				.log()
+				.all()
+				.extract();
+
+		String result = response.jsonPath().get(MESSAGE);
+
+		// then
+		assertThat(result).isEqualTo(DELETE_MEMES_SUCCESS.getMessage());
 	}
 }
