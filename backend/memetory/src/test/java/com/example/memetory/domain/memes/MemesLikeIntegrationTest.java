@@ -30,6 +30,7 @@ import com.example.memetory.global.integration.BaseIntegrationTest;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 
+@DisplayName("MemesLike 통합 테스트의 ")
 public class MemesLikeIntegrationTest extends BaseIntegrationTest {
 	@Autowired
 	MemeRepository memeRepository;
