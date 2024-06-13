@@ -2,8 +2,6 @@ package com.example.memetory.domain.memes.controller;
 
 import static com.example.memetory.global.response.ResultCode.*;
 
-import java.util.List;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.memetory.domain.like.dto.LikeServiceDto;
-import com.example.memetory.domain.like.service.LikeService;
 import com.example.memetory.domain.memes.dto.MemesServiceDto;
 import com.example.memetory.domain.memes.dto.request.GenerateMemesRequest;
-import com.example.memetory.domain.memes.dto.response.MemesInfoResponse;
 import com.example.memetory.domain.memes.dto.response.MemesInfoSliceResponse;
 import com.example.memetory.domain.memes.dto.response.MemesResponse;
 import com.example.memetory.domain.memes.service.MemesService;
@@ -33,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/memes")
 public class MemesController implements MemesApi {
 	private final MemesService memesService;
-	private final LikeService likeService;
 
 	@GetMapping
 	@Override
@@ -67,44 +61,5 @@ public class MemesController implements MemesApi {
 
 		memesService.deleteMemes(memesServiceDto);
 		return ResponseEntity.ok(ResultResponse.of(DELETE_MEMES_SUCCESS));
-	}
-
-	@GetMapping("/like/all")
-	@Override
-	public ResponseEntity<ResultResponse> findTopMemesByLike() {
-		List<MemesInfoResponse> response = memesService.findTopMemesByLike();
-		return ResponseEntity.ok(ResultResponse.of(GET_TOP_TEN_MEMES_SUCCESS, response));
-	}
-
-	@GetMapping("/like/month")
-	@Override
-	public ResponseEntity<ResultResponse> findTopMemesByLikeForMonth() {
-		List<MemesInfoResponse> response = memesService.findTopMemesByLikeForMonth();
-		return ResponseEntity.ok(ResultResponse.of(GET_MONTH_TOP_TEN_MEMES_SUCCESS, response));
-	}
-
-	@GetMapping("/like/week")
-	@Override
-	public ResponseEntity<ResultResponse> findTopMemesByLikeForWeek() {
-		List<MemesInfoResponse> response = memesService.findTopMemesByLikeForWeek();
-		return ResponseEntity.ok(ResultResponse.of(GET_WEEK_TOP_TEN_MEMES_SUCCESS, response));
-	}
-
-	@PostMapping("/{memesId}/like")
-	@Override
-	public ResponseEntity<ResultResponse> registerLike(@LoginMemberEmail String email, @PathVariable Long memesId) {
-		LikeServiceDto likeServiceDto = LikeServiceDto.fromEmailAndMemesId(email, memesId);
-		likeService.registerLike(likeServiceDto);
-
-		return ResponseEntity.status(HttpStatus.CREATED).body(ResultResponse.of(CREATE_LIKE_SUCCESS));
-	}
-
-	@DeleteMapping("/{memesId}/like")
-	@Override
-	public ResponseEntity<ResultResponse> cancelLike(@LoginMemberEmail String email, @PathVariable Long memesId) {
-		LikeServiceDto likeServiceDto = LikeServiceDto.fromEmailAndMemesId(email, memesId);
-		likeService.cancelLike(likeServiceDto);
-
-		return ResponseEntity.ok(ResultResponse.of(DELETE_LIKE_SUCCESS));
 	}
 }
