@@ -7,18 +7,16 @@ import static com.example.memetory.global.response.ErrorCode.*;
 import static com.example.memetory.global.response.ResultCode.*;
 import static io.restassured.RestAssured.*;
 import static org.assertj.core.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.ZSetOperations;
 
 import com.example.memetory.domain.like.entity.Like;
 import com.example.memetory.domain.like.repository.LikeRepository;
@@ -40,6 +38,11 @@ public class MemesLikeIntegrationTest extends BaseIntegrationTest {
 	@Autowired
 	LikeRepository likeRepository;
 
+	@Autowired
+	private ZSetOperations<String, Long> rankingZSet;
+	@Autowired
+	private RedisConnectionFactory redisConnectionFactory;
+
 	private Meme meme;
 	private Memes memes;
 
@@ -47,6 +50,7 @@ public class MemesLikeIntegrationTest extends BaseIntegrationTest {
 	@BeforeEach
 	public void setUp() {
 		super.setUp();
+		redisConnectionFactory.getConnection().flushAll();
 
 		meme = memeRepository.save(MEME(member));
 		memes = memesRepository.save(MEMES(member, meme));
@@ -166,6 +170,40 @@ public class MemesLikeIntegrationTest extends BaseIntegrationTest {
 				.auth().oauth2(accessToken)
 				.when()
 				.get("/memes/like/all")
+				.then()
+				.log()
+				.all()
+				.extract();
+
+		List<MemesInfoResponse> responses = response.jsonPath().getList("data", MemesInfoResponse.class);
+
+		// then
+		assertThat(responses).hasSize(10);
+		assertThat(responses.get(0).getLikeCount()).isEqualTo(SIZE - 1);
+	}
+
+	@Test
+	@DisplayName("주간 좋아요 Top 10 밈스 반환 성공")
+	public void When_findTopMemesByLikeForWeek_Then_GET_WEEK_TOP_TEN_MEMES_SUCCESS() {
+		// given
+		final Long SIZE = 15L;
+		String dateKey = "LIKE_RANKING_DATE::" + LocalDate.now().minusDays(1);
+
+		for (Long i = 0L; i < SIZE; i++) {
+			// 총 좋아요 수와 오늘 좋아요 수의 차이를 주기 위해 + 3
+			Memes rankMemes = memesRepository.save(MEMES_SET_LIKE(member, meme, i + 3));
+
+			rankingZSet.add(dateKey, rankMemes.getId(), i);
+		}
+
+		// when
+		ExtractableResponse<Response> response =
+			given()
+				.log()
+				.all()
+				.auth().oauth2(accessToken)
+				.when()
+				.get("/memes/like/week")
 				.then()
 				.log()
 				.all()
