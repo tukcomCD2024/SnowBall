@@ -7,16 +7,24 @@ import static com.example.memetory.global.response.ErrorCode.*;
 import static com.example.memetory.global.response.ResultCode.*;
 import static io.restassured.RestAssured.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
 
 import com.example.memetory.domain.like.entity.Like;
 import com.example.memetory.domain.like.repository.LikeRepository;
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.repository.MemeRepository;
+import com.example.memetory.domain.memes.dto.response.MemesInfoResponse;
 import com.example.memetory.domain.memes.entity.Memes;
 import com.example.memetory.domain.memes.repository.MemesRepository;
 import com.example.memetory.global.integration.BaseIntegrationTest;
@@ -116,5 +124,57 @@ public class MemesLikeIntegrationTest extends BaseIntegrationTest {
 
 		// then
 		assertThat(result).isEqualTo(DELETE_LIKE_SUCCESS.getMessage());
+	}
+
+	@Test
+	@DisplayName("DB에 없는 좋아요로 인한 LIKE_NOT_FOUND 반환")
+	void Given_NotExistLike_When_cancelLike_Then_LIKE_NOT_FOUND() {
+		// when
+		ExtractableResponse<Response> response =
+			given()
+				.log()
+				.all()
+				.auth().oauth2(accessToken)
+				.when()
+				.delete("/memes/{memesId}/like", memes.getId())
+				.then()
+				.log()
+				.all()
+				.extract();
+
+		String result = response.jsonPath().get(ERROR_MESSAGE);
+
+		// then
+		assertThat(result).isEqualTo(LIKE_NOT_FOUND.getMessage());
+	}
+
+	@Test
+	@DisplayName("올타임 좋아요 Top 10 밈스 반환 성공")
+	public void When_findTopMemesByLike_Then_GET_TOP_TEN_MEMES_SUCCESS() {
+		// given
+		final Long SIZE = 15L;
+
+		for (long i = 0; i < SIZE; i++) {
+			memesRepository.save(MEMES_SET_LIKE(member, meme, i));
+		}
+
+		// when
+		ExtractableResponse<Response> response =
+			given()
+				.log()
+				.all()
+				.auth().oauth2(accessToken)
+				.when()
+				.get("/memes/like/all")
+				.then()
+				.log()
+				.all()
+				.extract();
+
+		List<MemesInfoResponse> responses = response.jsonPath().getList("data", MemesInfoResponse.class);
+
+		// then
+		assertThat(responses).hasSize(10);
+		assertThat(responses.get(0).getLikeCount()).isEqualTo(SIZE - 1);
 	}
 }
