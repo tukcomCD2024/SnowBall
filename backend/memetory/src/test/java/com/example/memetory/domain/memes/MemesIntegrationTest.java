@@ -142,4 +142,30 @@ public class MemesIntegrationTest extends BaseIntegrationTest {
 		// then
 		assertThat(result).isEqualTo(MEMES_ACCESS_DENY.getMessage());
 	}
+
+	@Test
+	@DisplayName("memesId를 통한 MemesResponse 반환 성공")
+	public void Given_memesId_When_findMemesResponse_Thee_MemeResponse() {
+		Meme meme = memeRepository.save(MEME(member));
+		Memes memes = memesRepository.save(MEMES(member, meme));
+
+		// when
+		ExtractableResponse<Response> response =
+			given()
+				.log()
+				.all()
+				.auth().oauth2(accessToken)
+				.when()
+				.get("/memes/{memesId}", memes.getId())
+				.then()
+				.log()
+				.all()
+				.extract();
+
+		MemesResponse result = response.jsonPath().getObject("data", MemesResponse.class);
+
+		// then
+		assertThat(result.getMemesId()).isEqualTo(memes.getId());
+	}
+
 }
