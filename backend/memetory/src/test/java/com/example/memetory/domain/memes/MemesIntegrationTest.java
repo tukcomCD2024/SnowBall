@@ -1,5 +1,6 @@
 package com.example.memetory.domain.memes;
 
+import static com.example.memetory.domain.member.MemberFixture.*;
 import static com.example.memetory.domain.meme.MemeFixture.*;
 import static com.example.memetory.domain.memes.MemesFixture.*;
 import static com.example.memetory.global.response.ErrorCode.*;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
+import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.meme.entity.Meme;
 import com.example.memetory.domain.meme.repository.MemeRepository;
 import com.example.memetory.domain.memes.dto.request.GenerateMemesRequest;
@@ -90,7 +92,7 @@ public class MemesIntegrationTest extends BaseIntegrationTest {
 
 	@Test
 	@DisplayName("memesId를 통한 밈스 삭제 성공")
-	public void Given_memesId_When_deleteMemes_Then_DELETE_MEMES_SUCCESS() throws Exception {
+	public void Given_memesId_When_deleteMemes_Then_DELETE_MEMES_SUCCESS() {
 		// given
 		Meme meme = memeRepository.save(MEME(member));
 		Memes memes = memesRepository.save(MEMES(member, meme));
@@ -112,5 +114,32 @@ public class MemesIntegrationTest extends BaseIntegrationTest {
 
 		// then
 		assertThat(result).isEqualTo(DELETE_MEMES_SUCCESS.getMessage());
+	}
+
+	@DisplayName("권한 없는 멤버로 인한 MEMES_ACCESS_DENY 반환")
+	@Test
+	public void Given_unAuthorizedMember_When_deleteMemes_Then_MEMES_ACCESS_DENY() {
+		// given
+		Member unAuthorizationMember = memberRepository.save(OTHER_MEMBER());
+		Meme meme = memeRepository.save(MEME(unAuthorizationMember));
+		Memes memes = memesRepository.save(MEMES(unAuthorizationMember, meme));
+
+		// when
+		ExtractableResponse<Response> response =
+			given()
+				.log()
+				.all()
+				.auth().oauth2(accessToken)
+				.when()
+				.delete("/memes/{memesId}", memes.getId())
+				.then()
+				.log()
+				.all()
+				.extract();
+
+		String result = response.jsonPath().get(ERROR_MESSAGE);
+
+		// then
+		assertThat(result).isEqualTo(MEMES_ACCESS_DENY.getMessage());
 	}
 }
