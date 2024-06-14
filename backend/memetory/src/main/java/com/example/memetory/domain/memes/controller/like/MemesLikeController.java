@@ -1,4 +1,4 @@
-package com.example.memetory.domain.memes.controller;
+package com.example.memetory.domain.memes.controller.like;
 
 import static com.example.memetory.global.response.ResultCode.*;
 

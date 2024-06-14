@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.example.memetory.domain.member.dto.MemberServiceDto;
 import com.example.memetory.domain.member.dto.response.MemberResponse;
 import com.example.memetory.domain.member.entity.Member;
+import com.example.memetory.domain.member.exception.DeniedAccessException;
 import com.example.memetory.domain.member.exception.DuplicatedMemberException;
 import com.example.memetory.domain.member.exception.NotFoundMemberException;
 import com.example.memetory.domain.member.repository.MemberRepository;
@@ -133,5 +134,16 @@ public class MemberServiceTest {
 
 		// then
 		assertThat(expectedResult).usingRecursiveComparison().isEqualTo(result);
+	}
+
+	@Test
+	@DisplayName("다른 두 멤버로 인한 AccessDeniedException 반환")
+	void Given_differentMember_When_certifyMember_Throw_AccessDeniedException() {
+		// given
+		Member m1 = MEMBER();
+		Member m2 = OTHER_MEMBER();
+
+		// then
+		assertThrows(DeniedAccessException.class, () -> memberService.certifyMember(m1, m2));
 	}
 }

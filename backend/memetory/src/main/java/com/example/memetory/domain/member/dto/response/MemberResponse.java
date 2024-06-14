@@ -3,6 +3,7 @@ package com.example.memetory.domain.member.dto.response;
 import java.time.LocalDateTime;
 
 import com.example.memetory.domain.member.entity.Member;
+import com.querydsl.core.annotations.QueryProjection;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,6 +18,7 @@ public class MemberResponse {
 	private String imageUrl;
 	private LocalDateTime createdAt;
 
+	@QueryProjection
 	@Builder
 	public MemberResponse(Long memberId, String nickName, String imageUrl, LocalDateTime createdAt) {
 		this.memberId = memberId;

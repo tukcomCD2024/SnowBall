@@ -19,14 +19,13 @@ public enum ErrorCode {
 	// Member
 	MEMBER_NOT_FOUND(404, "멤버를 찾기 실패"),
 	NICKNAME_IS_DUPLICATED(409, "닉네임 중복"),
+	MEMBER_ACCESS_DENY(403, "자원 접근 실패"),
 
 	// Meme
 	MEME_NOT_FOUND(404, "밈을 찾기 실패"),
-	MEME_ACCESS_DENY(403, "밈 접근 실패"),
 
 	// Memes
 	MEMES_NOT_FOUND(404, "밈스를 찾기 실패"),
-	MEMES_ACCESS_DENY(403, "밈스 접근 실패"),
 
 	// Like
 	LIKE_NOT_FOUND(404, "좋아요 찾기 실패"),
@@ -39,8 +38,9 @@ public enum ErrorCode {
 	COMMENT_NOT_FOUND(404, "댓글 찾기 실패"),
 
 	// Voice
-	VOICE_NOT_FOUND(404, "보이스 찾기 실패")
+	VOICE_NOT_FOUND(404, "보이스 찾기 실패"),
 	;
+
 
 	private final int status;
 	private final String message;

@@ -32,6 +32,7 @@ public enum ResultCode {
 	// comment
 	CREATE_COMMENT_SUCCESS(201, "댓글 생성 성공"),
 	DELETE_COMMENT_SUCCESS(200, "댓글 삭제 성공"),
+	GET_ALL_MEMES_COMMENT_SUCCESS(200, "전체 밈스 댓글 조회 성공"),
 
 	//complain
 	CREATE_COMPLAIN_SUCCESS(201, "신고 생성 성공"),

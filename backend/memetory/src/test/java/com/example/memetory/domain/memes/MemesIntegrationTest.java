@@ -118,7 +118,7 @@ public class MemesIntegrationTest extends BaseIntegrationTest {
 		assertThat(result).isEqualTo(DELETE_MEMES_SUCCESS.getMessage());
 	}
 
-	@DisplayName("권한 없는 멤버로 인한 MEMES_ACCESS_DENY 반환")
+	@DisplayName("권한 없는 멤버로 인한 MEMBER_ACCESS_DENY 반환")
 	@Test
 	public void Given_unAuthorizedMember_When_deleteMemes_Then_MEMES_ACCESS_DENY() {
 		// given
@@ -142,7 +142,7 @@ public class MemesIntegrationTest extends BaseIntegrationTest {
 		String result = response.jsonPath().get(ERROR_MESSAGE);
 
 		// then
-		assertThat(result).isEqualTo(MEMES_ACCESS_DENY.getMessage());
+		assertThat(result).isEqualTo(MEMBER_ACCESS_DENY.getMessage());
 	}
 
 	@Test

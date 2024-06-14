@@ -23,12 +23,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import com.example.memetory.domain.member.entity.Member;
+import com.example.memetory.domain.member.exception.DeniedAccessException;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.meme.dto.MemePageResponse;
 import com.example.memetory.domain.meme.dto.MemeResponse;
 import com.example.memetory.domain.meme.dto.MemeServiceDto;
 import com.example.memetory.domain.meme.entity.Meme;
-import com.example.memetory.domain.meme.exception.AccessDeniedMemeException;
 import com.example.memetory.domain.meme.exception.NotFoundMemeException;
 import com.example.memetory.domain.meme.repository.MemeRepository;
 import com.example.memetory.global.firebase.service.FirebaseService;
@@ -44,7 +44,7 @@ public class MemeServiceTest {
 	@Mock
 	private MemeRepository memeRepository;
 	@Mock
-	private FirebaseService	firebaseService;
+	private FirebaseService firebaseService;
 
 	private Member member;
 	private Meme meme;
@@ -140,15 +140,4 @@ public class MemeServiceTest {
 
 		return memeResponseList;
 	}
-
-	@Test
-	@DisplayName("밈 멤버와 다른 멤버로 인한 AccessDeniedMemeException 반환")
-	void Given_differentMember_When_certifyMemeMember_Throw_AccessDeniedMemeException() {
-		// given
-		Member differentMember = OTHER_MEMBER();
-
-		// then
-		assertThrows(AccessDeniedMemeException.class, () -> memeService.certifyMemeMember(member, differentMember));
-	}
-
 }
