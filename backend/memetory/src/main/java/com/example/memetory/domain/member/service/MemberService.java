@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.memetory.domain.member.dto.MemberServiceDto;
 import com.example.memetory.domain.member.dto.response.MemberResponse;
 import com.example.memetory.domain.member.entity.Member;
+import com.example.memetory.domain.member.exception.AccessDeniedException;
 import com.example.memetory.domain.member.exception.DuplicatedMemberException;
 import com.example.memetory.domain.member.exception.NotFoundMemberException;
 import com.example.memetory.domain.member.repository.MemberRepository;
@@ -47,5 +48,11 @@ public class MemberService {
 	@Transactional(readOnly = true)
 	public Member findMemberFromId(Long id) {
 		return memberRepository.findById(id).orElseThrow(NotFoundMemberException::new);
+	}
+
+	public void certifyMember(Member m1, Member m2) {
+		if (!m1.equals(m2)) {
+			throw new AccessDeniedException();
+		}
 	}
 }

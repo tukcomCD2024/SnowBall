@@ -142,7 +142,7 @@ public class MemesIntegrationTest extends BaseIntegrationTest {
 		String result = response.jsonPath().get(ERROR_MESSAGE);
 
 		// then
-		assertThat(result).isEqualTo(MEMES_ACCESS_DENY.getMessage());
+		assertThat(result).isEqualTo(MEMBER_ACCESS_DENY.getMessage());
 	}
 
 	@Test

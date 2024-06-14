@@ -1,5 +1,7 @@
 package com.example.memetory.domain.memes.service;
 
+import static com.example.memetory.global.response.ErrorCode.*;
+
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
@@ -17,7 +19,6 @@ import com.example.memetory.domain.memes.dto.response.MemesInfoResponse;
 import com.example.memetory.domain.memes.dto.response.MemesInfoSliceResponse;
 import com.example.memetory.domain.memes.dto.response.MemesResponse;
 import com.example.memetory.domain.memes.entity.Memes;
-import com.example.memetory.domain.memes.exception.AccessDinedMemesException;
 import com.example.memetory.domain.memes.exception.NotFoundMemesException;
 import com.example.memetory.domain.memes.repository.MemesRepository;
 
@@ -37,7 +38,8 @@ public class MemesService {
 
 		Member member = memberService.findMemberFromEmail(memesServiceDto.getEmail());
 		Member memeMember = meme.getMember();
-		memeService.certifyMemeMember(member, memeMember);
+
+		memberService.certifyMember(member, memeMember);
 
 		Memes memes = memesServiceDto.toEntityFromMemberAndMeme(member, meme);
 		Memes savedMemes = memesRepository.save(memes);
@@ -57,15 +59,9 @@ public class MemesService {
 
 		Member loginMember = memberService.findMemberFromEmail(memesServiceDto.getEmail());
 		Member memesMember = memes.getMember();
-		certifyMemesMember(loginMember, memesMember);
+		memberService.certifyMember(loginMember, memesMember);
 
 		return memes;
-	}
-
-	private void certifyMemesMember(Member m1, Member m2) {
-		if (!m1.equals(m2)) {
-			throw new AccessDinedMemesException();
-		}
 	}
 
 	@Transactional(readOnly = true)

@@ -18,7 +18,6 @@ import com.example.memetory.domain.meme.dto.MemePageResponse;
 import com.example.memetory.domain.meme.dto.MemeResponse;
 import com.example.memetory.domain.meme.dto.MemeServiceDto;
 import com.example.memetory.domain.meme.entity.Meme;
-import com.example.memetory.domain.meme.exception.AccessDeniedMemeException;
 import com.example.memetory.domain.meme.exception.NotFoundMemeException;
 import com.example.memetory.domain.meme.repository.MemeRepository;
 import com.example.memetory.global.firebase.service.FirebaseService;
@@ -80,15 +79,9 @@ public class MemeService {
 
 		Member loginMember = memberService.findMemberFromEmail(memeServiceDto.getEmail());
 		Member memeMember = meme.getMember();
-		certifyMemeMember(memeMember, loginMember);
+		memberService.certifyMember(memeMember, loginMember);
 
 		return MemeResponse.of(meme);
-	}
-
-	public void certifyMemeMember(Member m1, Member m2) {
-		if (!m1.equals(m2)) {
-			throw new AccessDeniedMemeException();
-		}
 	}
 
 	@Transactional

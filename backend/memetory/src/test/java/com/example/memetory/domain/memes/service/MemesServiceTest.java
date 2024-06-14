@@ -20,16 +20,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.memetory.domain.member.entity.Member;
+import com.example.memetory.domain.member.exception.AccessDeniedException;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.meme.entity.Meme;
-import com.example.memetory.domain.meme.exception.AccessDeniedMemeException;
 import com.example.memetory.domain.meme.service.MemeService;
 import com.example.memetory.domain.memes.dto.MemesRankDto;
 import com.example.memetory.domain.memes.dto.MemesServiceDto;
 import com.example.memetory.domain.memes.dto.response.MemesInfoResponse;
 import com.example.memetory.domain.memes.dto.response.MemesResponse;
 import com.example.memetory.domain.memes.entity.Memes;
-import com.example.memetory.domain.memes.exception.AccessDinedMemesException;
 import com.example.memetory.domain.memes.exception.NotFoundMemesException;
 import com.example.memetory.domain.memes.repository.MemesRepository;
 
@@ -86,11 +85,11 @@ public class MemesServiceTest {
 		given(memeService.findMemeFromId(memesServiceDto.getMemeId())).willReturn(meme);
 		given(memberService.findMemberFromEmail(any(String.class))).willReturn(unAuthorizedMember);
 
-		doThrow(new AccessDeniedMemeException()).when(memeService)
-			.certifyMemeMember(any(Member.class), any(Member.class));
+		doThrow(new AccessDeniedException()).when(memberService)
+			.certifyMember(any(Member.class), any(Member.class));
 
 		// then
-		assertThrows(AccessDeniedMemeException.class, () -> memesService.registerMemes(memesServiceDto));
+		assertThrows(AccessDeniedException.class, () -> memesService.registerMemes(memesServiceDto));
 	}
 
 	@Test
@@ -117,7 +116,7 @@ public class MemesServiceTest {
 		given(memberService.findMemberFromEmail(any())).willReturn(unAuthorizedMember);
 
 		// then
-		assertThrows(AccessDinedMemesException.class, () -> memesService.deleteMemes(memesServiceDto));
+		assertThrows(AccessDeniedException.class, () -> memesService.deleteMemes(memesServiceDto));
 	}
 
 	@Test
