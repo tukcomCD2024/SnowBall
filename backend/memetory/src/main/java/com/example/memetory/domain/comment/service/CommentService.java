@@ -1,6 +1,10 @@
 package com.example.memetory.domain.comment.service;
 
-import com.example.memetory.domain.comment.dto.CommentServiceDto;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.memetory.domain.comment.dto.CommentInfo;
+import com.example.memetory.domain.comment.dto.request.CommentRequest;
 import com.example.memetory.domain.comment.entity.Comment;
 import com.example.memetory.domain.comment.exception.NotFoundCommentException;
 import com.example.memetory.domain.comment.repository.CommentRepository;
@@ -8,35 +12,42 @@ import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.memes.entity.Memes;
 import com.example.memetory.domain.memes.service.MemesService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class CommentService {
+	private final CommentRepository commentRepository;
+	private final MemberService memberService;
+	private final MemesService memesService;
 
-    private final CommentRepository commentRepository;
-    private final MemberService memberService;
-    private final MemesService memesService;
+	@Transactional
+	public CommentInfo saveComment(CommentRequest commentRequest) {
+		Member member = memberService.findMemberFromEmail(commentRequest.getEmail());
+		Memes memes = memesService.findMemesFromMemesId(commentRequest.getMemesId());
 
-    @Transactional
-    public void register(CommentServiceDto commentServiceDto) {
-        Member foundMember = memberService.findMemberFromEmail(commentServiceDto.getEmail());
-        Memes foundMemes = memesService.findMemesFromMemesId(commentServiceDto.getMemesId());
-        foundMemes.addCommentCount();
+		Comment comment = commentRepository.save(
+			Comment.builder()
+				.member(member)
+				.memes(memes)
+				.content(commentRequest.getContent())
+				.build()
+		);
 
-        Comment newComment = commentServiceDto.toEntity(foundMember, foundMemes);
+		memes.addCommentCount();
 
-        commentRepository.save(newComment);
-    }
+		return CommentInfo.of(comment);
+	}
 
-    @Transactional
-    public void delete(CommentServiceDto commentServiceDto) {
-        Comment foundComment = commentRepository.findById(commentServiceDto.getCommentId()).orElseThrow(NotFoundCommentException::new);
-        Memes foundMemes = memesService.findMemesFromMemesId(foundComment.getMemes().getId());
-        foundMemes.cancelCommentCount();
+	@Transactional
+	public void deleteComment(String email, Long commentId) {
+		Comment comment = commentRepository.findById(commentId).orElseThrow(NotFoundCommentException::new);
+		Member loginMember = memberService.findMemberFromEmail(email);
 
-        commentRepository.delete(foundComment);
-    }
+		memberService.certifyMember(loginMember, comment.getMember());
+
+		comment.getMemes().cancelCommentCount();
+		commentRepository.delete(comment);
+	}
 }
