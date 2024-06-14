@@ -1,9 +1,12 @@
 package com.example.memetory.domain.comment.service;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.memetory.domain.comment.dto.CommentInfo;
+import com.example.memetory.domain.comment.dto.CommentInfoSlice;
 import com.example.memetory.domain.comment.dto.request.CommentRequest;
 import com.example.memetory.domain.comment.entity.Comment;
 import com.example.memetory.domain.comment.exception.NotFoundCommentException;
@@ -49,5 +52,16 @@ public class CommentService {
 
 		comment.getMemes().cancelCommentCount();
 		commentRepository.delete(comment);
+	}
+
+	@Transactional(readOnly = true)
+	public CommentInfoSlice findCommentFromMemesId(Long memesId, Pageable pageable) {
+		Slice<CommentInfo> commentInfos = commentRepository.findCommentsSliceByMemesId(memesId, pageable);
+
+		return CommentInfoSlice.builder()
+			.commentInfoList(commentInfos.getContent())
+			.currentPage(pageable.getPageNumber())
+			.hasNext(commentInfos.hasNext())
+			.build();
 	}
 }

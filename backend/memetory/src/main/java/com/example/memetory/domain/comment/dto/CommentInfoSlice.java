@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+import org.springframework.data.domain.Slice;
+
 @Getter
 @NoArgsConstructor
 @Schema(description = "댓글 리스트")
@@ -19,7 +21,9 @@ public class CommentInfoSlice {
     private List<CommentInfo> commentInfoList;
 
     @Builder
-    public CommentInfoSlice(List<CommentInfo> commentInfoList) {
+    public CommentInfoSlice(int currentPage, boolean hasNext, List<CommentInfo> commentInfoList) {
+        this.currentPage = currentPage;
+        this.hasNext = hasNext;
         this.commentInfoList = commentInfoList;
     }
 }
