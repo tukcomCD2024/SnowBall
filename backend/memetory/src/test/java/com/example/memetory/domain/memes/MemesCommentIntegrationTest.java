@@ -8,6 +8,7 @@ import static com.example.memetory.global.response.ErrorCode.*;
 import static com.example.memetory.global.response.ResultCode.*;
 import static io.restassured.RestAssured.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import com.example.memetory.domain.comment.dto.CommentInfo;
+import com.example.memetory.domain.comment.dto.CommentInfoSlice;
 import com.example.memetory.domain.comment.dto.request.CommentRequest;
 import com.example.memetory.domain.comment.entity.Comment;
 import com.example.memetory.domain.comment.repository.CommentRepository;
@@ -128,5 +130,33 @@ public class MemesCommentIntegrationTest extends BaseIntegrationTest {
 
 		//then
 		assertThat(result).isEqualTo(DELETE_COMMENT_SUCCESS.getMessage());
+	}
+
+	@Test
+	@DisplayName("memesId를 통한 전체 밈스 댓글 조회 성공")
+	void Given_memesId_When_deleteComment_Then_DELETE_COMMENT_SUCCESS() {
+		// given
+		for (int i = 0; i < 30; i++) {
+			commentRepository.save(new Comment("댓글" + i, member, memes));
+		}
+
+		// when
+		ExtractableResponse<Response> response =
+			given()
+				.log()
+				.all()
+				.auth().oauth2(accessToken)
+				.when()
+				.get("/memes/{memesId}/comments?page={page}&size={size}", memes.getId(), 0, 10)
+				.then()
+				.log()
+				.all()
+				.extract();
+
+		CommentInfoSlice result = response.jsonPath().getObject("data", CommentInfoSlice.class);
+
+		//then
+		assertThat(result.getCommentInfoList()).hasSize(10);
+		assertTrue(result.isHasNext());
 	}
 }
