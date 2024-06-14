@@ -80,7 +80,7 @@ public class MemesCommentIntegrationTest extends BaseIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("접근 불가능한 멤버로 인한 MEMBER_NOT_DENY 반환")
+	@DisplayName("접근 불가능한 멤버로 인한 MEMBER_ACCESS_DENY 반환")
 	void Given_DeniedMember_When_deleteComment_Then_MEMBER_NOT_DENY() {
 		// then
 		Member deninedMember = memberRepository.save(OTHER_MEMBER());
