@@ -23,7 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import com.example.memetory.domain.member.entity.Member;
-import com.example.memetory.domain.member.exception.AccessDeniedException;
+import com.example.memetory.domain.member.exception.DeniedAccessException;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.meme.dto.MemePageResponse;
 import com.example.memetory.domain.meme.dto.MemeResponse;
@@ -140,15 +140,4 @@ public class MemeServiceTest {
 
 		return memeResponseList;
 	}
-
-	@Test
-	@DisplayName("밈 멤버와 다른 멤버로 인한 AccessDeniedMemeException 반환")
-	void Given_differentMember_When_certifyMemeMember_Throw_AccessDeniedMemeException() {
-		// given
-		Member differentMember = OTHER_MEMBER();
-
-		// then
-		assertThrows(AccessDeniedException.class, () -> memberService.certifyMember(member, differentMember));
-	}
-
 }

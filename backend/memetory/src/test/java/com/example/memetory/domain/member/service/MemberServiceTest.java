@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.example.memetory.domain.member.dto.MemberServiceDto;
 import com.example.memetory.domain.member.dto.response.MemberResponse;
 import com.example.memetory.domain.member.entity.Member;
-import com.example.memetory.domain.member.exception.AccessDeniedException;
+import com.example.memetory.domain.member.exception.DeniedAccessException;
 import com.example.memetory.domain.member.exception.DuplicatedMemberException;
 import com.example.memetory.domain.member.exception.NotFoundMemberException;
 import com.example.memetory.domain.member.repository.MemberRepository;
@@ -144,6 +144,6 @@ public class MemberServiceTest {
 		Member m2 = OTHER_MEMBER();
 
 		// then
-		assertThrows(AccessDeniedException.class, () -> memberService.certifyMember(m1, m2));
+		assertThrows(DeniedAccessException.class, () -> memberService.certifyMember(m1, m2));
 	}
 }
