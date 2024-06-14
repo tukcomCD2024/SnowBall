@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.example.memetory.domain.comment.entity.Comment;
 import com.example.memetory.domain.member.dto.response.MemberResponse;
+import com.querydsl.core.annotations.QueryProjection;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -27,6 +28,7 @@ public class CommentInfo {
 	@Schema(description = "댓글 생성 시각")
 	private LocalDateTime createdAt;
 
+	@QueryProjection
 	@Builder
 	public CommentInfo(Long commentId, MemberResponse member, String content, LocalDateTime createdAt) {
 		this.commentId = commentId;
