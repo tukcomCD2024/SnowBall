@@ -2,9 +2,11 @@ package com.example.memetory.domain.memes.controller.comment;
 
 import static com.example.memetory.global.response.ResultCode.*;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.memetory.domain.comment.dto.CommentInfo;
+import com.example.memetory.domain.comment.dto.CommentInfoSlice;
 import com.example.memetory.domain.comment.dto.request.CommentRequest;
 import com.example.memetory.domain.comment.service.CommentService;
 import com.example.memetory.global.annotation.LoginMemberEmail;
@@ -46,6 +49,10 @@ public class MemesCommentController implements MemesCommentApi {
 		return ResponseEntity.ok(ResultResponse.of(DELETE_COMMENT_SUCCESS));
 	}
 
-	//TODO 조회(슬라이스 형식)
+	@GetMapping()
+	public ResponseEntity<ResultResponse> findCommentInfoSlice(@PathVariable Long memesId, Pageable pageable) {
+		CommentInfoSlice response = commentService.findCommentFromMemesId(memesId, pageable);
 
+		return ResponseEntity.ok(ResultResponse.of(GET_ALL_MEMES_COMMENT_SUCCESS, response));
+	}
 }
