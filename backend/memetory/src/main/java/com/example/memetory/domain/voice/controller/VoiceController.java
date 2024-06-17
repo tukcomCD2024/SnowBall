@@ -5,6 +5,7 @@ import com.example.memetory.domain.voice.dto.request.GenerateVoiceRequestDto;
 import com.example.memetory.domain.voice.dto.response.ElevenlabsVoiceLibraryResponse;
 import com.example.memetory.domain.voice.dto.response.ElevenlabsVoiceResponse;
 import com.example.memetory.domain.voice.dto.response.GenerateVoiceResponseDto;
+import com.example.memetory.domain.voice.exception.AlreadyExistVoiceException;
 import com.example.memetory.domain.voice.service.VoiceService;
 import com.example.memetory.global.annotation.LoginMemberEmail;
 import com.example.memetory.global.response.ResultCode;
@@ -21,6 +22,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.io.*;
+import java.rmi.AlreadyBoundException;
 
 
 @RestController
@@ -42,12 +44,16 @@ public class VoiceController implements VoiceApi {
     @Value("${elevenlabs.api.key}")
     private String apiKey;
 
+    // 보이스 추출 및 생성
     @PostMapping
     @Override
-    public ResponseEntity<ResultResponse> register(@LoginMemberEmail String email, @RequestBody GenerateVoiceRequestDto generateVoiceRequestDto) throws IOException {
+    public ResponseEntity<ResultResponse> register(@LoginMemberEmail String email, @RequestBody GenerateVoiceRequestDto generateVoiceRequestDto) throws IOException, AlreadyBoundException {
 
         // s3 url을 받아서 음성파일을 가져오는 ServiceDto 로직 1개
         VoiceServiceDto voiceServiceDtoS3 = generateVoiceRequestDto.toServiceDtoS3(email);
+
+        // 보이스가 이미 존재하는지 체크
+        voiceService.isExistVoice(voiceServiceDtoS3);
         MultiValueMap<String, Object> formData = voiceService.generateVoice(voiceServiceDtoS3);
 
         return WebClient
@@ -72,6 +78,7 @@ public class VoiceController implements VoiceApi {
                 .block();
     }
 
+    // 멤버별 보이스 조회
     @GetMapping("/member")
     @Override
     public ResponseEntity<ResultResponse> findByMemberId(@LoginMemberEmail String email) throws IOException {
@@ -95,6 +102,7 @@ public class VoiceController implements VoiceApi {
                 .block();
     }
 
+    // 기본 목소리 라이브러리 조회
     @GetMapping("/library")
     @Override
     public ResponseEntity<ResultResponse> getVoiceLibrary() throws IOException {

@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
+import java.rmi.AlreadyBoundException;
 
 @Tag(name = "Voice")
 public interface VoiceApi {
@@ -31,7 +32,7 @@ public interface VoiceApi {
     ResponseEntity<ResultResponse> register(
             @Parameter(hidden = true) String email,
             GenerateVoiceRequestDto generateVoiceRequestDto
-    ) throws IOException;
+    ) throws IOException, AlreadyBoundException;
 
     @Operation(
             summary = "멤버별 목소리 조회",
