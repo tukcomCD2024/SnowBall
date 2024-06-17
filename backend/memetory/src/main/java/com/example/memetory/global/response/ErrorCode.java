@@ -39,6 +39,7 @@ public enum ErrorCode {
 
 	// Voice
 	VOICE_NOT_FOUND(404, "보이스 찾기 실패"),
+	VOICE_ALREADY_EXIST(404, "보이스 이미 존재")
 	;
 
 
