@@ -34,6 +34,7 @@ class NickNameSetViewController: UIViewController {
         let tf = UITextField()
         tf.textAlignment = .left
         tf.borderStyle = .none
+        tf.textColor = .black
         return tf
     }()
     
@@ -137,4 +138,45 @@ class NickNameSetViewController: UIViewController {
         navigationController?.pushViewController(onboardingViewController, animated: true)
     }
 
+}
+
+extension NickNameSetViewController: UITextViewDelegate {
+    //화면 터치시 키보드 내림
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+//    func textView(_ textView: UITextView, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//        let newText = (textView.text as NSString?)?.replacingCharacters(in: range, with: string) ?? ""
+//        let characterCount = newText.count
+//
+//        if characterCount <= 50 {
+//            characterCountLabel.text = "\(characterCount)/50"
+//            return true
+//        } else {
+//            return false
+//        }
+//    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        // 텍스트 필드가 편집을 시작할 때 호출되는 메서드
+        textView.layer.cornerRadius = 8.0 // 둥근 테두리 반지름 설정
+        textView.layer.borderWidth = 1.0 // 테두리 두께 설정
+//        textView.text = nil
+//        textField.layer.borderColor = WithYouAsset.mainColorDark.color.cgColor
+    }
+    
+//    func textViewDidEndEditing(_ textView: UITextView) {
+////        textField.layer.borderColor = WithYouAsset.subColor.color.cgColor
+//        if (lineTextView.text == "") {
+//            lineTextView.text = "대사를 입력해주세요!"
+//            lineTextView.textColor = .gray
+//        }
+//    }
+    
+    func textViewShouldReturn(_ textView: UITextView) -> Bool {
+        // Process of closing the Keyboard when the line feed button is pressed.
+        textView.resignFirstResponder()
+        return true
+    }
 }

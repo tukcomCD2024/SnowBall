@@ -80,8 +80,8 @@ class TemSelectViewController: UIViewController {
     }
     
     @objc func selectButtonTapped() {
-        let selectVC = SelectViewController()
-        navigationController?.pushViewController(selectVC, animated: true)
+        let storageVC = StorageViewController()
+        navigationController?.pushViewController(storageVC, animated: true)
     }
     
     func setViews() {

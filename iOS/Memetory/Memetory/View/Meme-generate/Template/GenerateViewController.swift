@@ -81,7 +81,7 @@ extension GenerateViewController: UICollectionViewDataSource, UICollectionViewDe
         
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let selectVC = SelectViewController()
+        let selectVC = TemSelectViewController()
         //        settingVC.delegate = self
         
         //        let array = memberListManager.getMemberList()

@@ -10,6 +10,8 @@
 		5C25F6712B74A4280038F9AD /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C25F6702B74A4270038F9AD /* OnboardingViewController.swift */; };
 		5C25F6732B74A6530038F9AD /* OnboardingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C25F6722B74A6530038F9AD /* OnboardingCollectionViewCell.swift */; };
 		5C25F6752B74AA6B0038F9AD /* OnboardingDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C25F6742B74AA6B0038F9AD /* OnboardingDataModel.swift */; };
+		5C2B97462C20200A000EE2A1 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2B97452C20200A000EE2A1 /* Environment.swift */; };
+		5C2B97482C2022CA000EE2A1 /* S3Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2B97472C2022CA000EE2A1 /* S3Manager.swift */; };
 		5C382FD22B95B093003DD4C6 /* TemplateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C382FD12B95B093003DD4C6 /* TemplateCollectionViewCell.swift */; };
 		5C382FD42B95E49D003DD4C6 /* CheckViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C382FD32B95E49D003DD4C6 /* CheckViewController.swift */; };
 		5C382FD62B95E4BC003DD4C6 /* VoiceSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C382FD52B95E4BC003DD4C6 /* VoiceSelectViewController.swift */; };
@@ -59,16 +61,72 @@
 		5CAE246D2BC804DA00322AC6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAE246C2BC804DA00322AC6 /* Constants.swift */; };
 		5CAE24702BC91C0400322AC6 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 5CAE246F2BC91C0400322AC6 /* GoogleSignIn */; };
 		5CAE24722BC91C0400322AC6 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 5CAE24712BC91C0400322AC6 /* GoogleSignInSwift */; };
+		5CC28F882BF4A60F00089EC7 /* Member.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC28F872BF4A60F00089EC7 /* Member.swift */; };
+		5CC28F8A2BF4BFE200089EC7 /* VoiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC28F892BF4BFE200089EC7 /* VoiceManager.swift */; };
+		5CC28F8C2BF5AC8900089EC7 /* StorageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC28F8B2BF5AC8900089EC7 /* StorageCollectionViewCell.swift */; };
+		5CC28F8E2BF5BEDF00089EC7 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC28F8D2BF5BEDF00089EC7 /* LoadingView.swift */; };
+		5CC28F902BF5C02F00089EC7 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC28F8F2BF5C02F00089EC7 /* LoadingViewController.swift */; };
 		5CC4BADD2B68E3DD00A2D259 /* NickNameSetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC4BADC2B68E3DD00A2D259 /* NickNameSetViewController.swift */; };
 		5CC889BF2BCD0EDB0074FFA2 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC889BE2BCD0EDB0074FFA2 /* DataManager.swift */; };
 		5CC889C12BCD0F060074FFA2 /* SecureDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC889C02BCD0F060074FFA2 /* SecureDataManager.swift */; };
 		5CE3A12E2BEFD453001BF120 /* MainTemplateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE3A12D2BEFD453001BF120 /* MainTemplateCollectionViewCell.swift */; };
+		5CE3A1312BF0A804001BF120 /* AWSAPIGateway in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1302BF0A804001BF120 /* AWSAPIGateway */; };
+		5CE3A1332BF0A804001BF120 /* AWSAppleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1322BF0A804001BF120 /* AWSAppleSignIn */; };
+		5CE3A1352BF0A804001BF120 /* AWSAuthCore in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1342BF0A804001BF120 /* AWSAuthCore */; };
+		5CE3A1372BF0A804001BF120 /* AWSAuthUI in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1362BF0A804001BF120 /* AWSAuthUI */; };
+		5CE3A1392BF0A804001BF120 /* AWSAutoScaling in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1382BF0A804001BF120 /* AWSAutoScaling */; };
+		5CE3A13B2BF0A804001BF120 /* AWSChimeSDKIdentity in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A13A2BF0A804001BF120 /* AWSChimeSDKIdentity */; };
+		5CE3A13D2BF0A804001BF120 /* AWSChimeSDKMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A13C2BF0A804001BF120 /* AWSChimeSDKMessaging */; };
+		5CE3A13F2BF0A804001BF120 /* AWSCloudWatch in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A13E2BF0A804001BF120 /* AWSCloudWatch */; };
+		5CE3A1412BF0A804001BF120 /* AWSCognitoAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1402BF0A804001BF120 /* AWSCognitoAuth */; };
+		5CE3A1432BF0A804001BF120 /* AWSCognitoIdentityProvider in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1422BF0A804001BF120 /* AWSCognitoIdentityProvider */; };
+		5CE3A1452BF0A804001BF120 /* AWSCognitoIdentityProviderASF in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1442BF0A804001BF120 /* AWSCognitoIdentityProviderASF */; };
+		5CE3A1472BF0A804001BF120 /* AWSComprehend in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1462BF0A804001BF120 /* AWSComprehend */; };
+		5CE3A1492BF0A804001BF120 /* AWSConnect in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1482BF0A804001BF120 /* AWSConnect */; };
+		5CE3A14B2BF0A804001BF120 /* AWSConnectParticipant in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A14A2BF0A804001BF120 /* AWSConnectParticipant */; };
+		5CE3A14D2BF0A804001BF120 /* AWSCore in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A14C2BF0A804001BF120 /* AWSCore */; };
+		5CE3A14F2BF0A804001BF120 /* AWSDynamoDB in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A14E2BF0A804001BF120 /* AWSDynamoDB */; };
+		5CE3A1512BF0A804001BF120 /* AWSEC2 in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1502BF0A804001BF120 /* AWSEC2 */; };
+		5CE3A1532BF0A804001BF120 /* AWSElasticLoadBalancing in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1522BF0A804001BF120 /* AWSElasticLoadBalancing */; };
+		5CE3A1552BF0A804001BF120 /* AWSFacebookSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1542BF0A804001BF120 /* AWSFacebookSignIn */; };
+		5CE3A1572BF0A804001BF120 /* AWSGoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1562BF0A804001BF120 /* AWSGoogleSignIn */; };
+		5CE3A1592BF0A804001BF120 /* AWSIoT in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1582BF0A804001BF120 /* AWSIoT */; };
+		5CE3A15B2BF0A804001BF120 /* AWSKMS in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A15A2BF0A804001BF120 /* AWSKMS */; };
+		5CE3A15D2BF0A804001BF120 /* AWSKinesis in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A15C2BF0A804001BF120 /* AWSKinesis */; };
+		5CE3A15F2BF0A804001BF120 /* AWSKinesisVideo in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A15E2BF0A804001BF120 /* AWSKinesisVideo */; };
+		5CE3A1612BF0A804001BF120 /* AWSKinesisVideoArchivedMedia in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1602BF0A804001BF120 /* AWSKinesisVideoArchivedMedia */; };
+		5CE3A1632BF0A804001BF120 /* AWSKinesisVideoSignaling in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1622BF0A804001BF120 /* AWSKinesisVideoSignaling */; };
+		5CE3A1652BF0A804001BF120 /* AWSKinesisVideoWebRTCStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1642BF0A804001BF120 /* AWSKinesisVideoWebRTCStorage */; };
+		5CE3A1672BF0A804001BF120 /* AWSLambda in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1662BF0A804001BF120 /* AWSLambda */; };
+		5CE3A1692BF0A804001BF120 /* AWSLex in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1682BF0A804001BF120 /* AWSLex */; };
+		5CE3A16B2BF0A804001BF120 /* AWSLocationXCF in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A16A2BF0A804001BF120 /* AWSLocationXCF */; };
+		5CE3A16D2BF0A804001BF120 /* AWSLogs in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A16C2BF0A804001BF120 /* AWSLogs */; };
+		5CE3A16F2BF0A804001BF120 /* AWSMachineLearning in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A16E2BF0A804001BF120 /* AWSMachineLearning */; };
+		5CE3A1712BF0A804001BF120 /* AWSMobileClientXCF in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1702BF0A804001BF120 /* AWSMobileClientXCF */; };
+		5CE3A1732BF0A804001BF120 /* AWSPinpoint in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1722BF0A804001BF120 /* AWSPinpoint */; };
+		5CE3A1752BF0A804001BF120 /* AWSPolly in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1742BF0A804001BF120 /* AWSPolly */; };
+		5CE3A1772BF0A804001BF120 /* AWSRekognition in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1762BF0A804001BF120 /* AWSRekognition */; };
+		5CE3A1792BF0A804001BF120 /* AWSS3 in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1782BF0A804001BF120 /* AWSS3 */; };
+		5CE3A17B2BF0A804001BF120 /* AWSSES in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A17A2BF0A804001BF120 /* AWSSES */; };
+		5CE3A17D2BF0A804001BF120 /* AWSSNS in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A17C2BF0A804001BF120 /* AWSSNS */; };
+		5CE3A17F2BF0A804001BF120 /* AWSSQS in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A17E2BF0A804001BF120 /* AWSSQS */; };
+		5CE3A1812BF0A804001BF120 /* AWSSageMakerRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1802BF0A804001BF120 /* AWSSageMakerRuntime */; };
+		5CE3A1832BF0A804001BF120 /* AWSSimpleDB in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1822BF0A804001BF120 /* AWSSimpleDB */; };
+		5CE3A1852BF0A804001BF120 /* AWSTextract in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1842BF0A804001BF120 /* AWSTextract */; };
+		5CE3A1872BF0A804001BF120 /* AWSTranscribe in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1862BF0A804001BF120 /* AWSTranscribe */; };
+		5CE3A1892BF0A804001BF120 /* AWSTranscribeStreaming in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A1882BF0A804001BF120 /* AWSTranscribeStreaming */; };
+		5CE3A18B2BF0A804001BF120 /* AWSTranslate in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A18A2BF0A804001BF120 /* AWSTranslate */; };
+		5CE3A18D2BF0A804001BF120 /* AWSUserPoolsSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A18C2BF0A804001BF120 /* AWSUserPoolsSignIn */; };
+		5CE3A1902BF0C6CA001BF120 /* S3Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE3A18F2BF0C6CA001BF120 /* S3Configuration.swift */; };
+		5CF617842BF328FD00CCB297 /* Voice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF617832BF328FD00CCB297 /* Voice.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		5C25F6702B74A4270038F9AD /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		5C25F6722B74A6530038F9AD /* OnboardingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCollectionViewCell.swift; sourceTree = "<group>"; };
 		5C25F6742B74AA6B0038F9AD /* OnboardingDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDataModel.swift; sourceTree = "<group>"; };
+		5C2B97452C20200A000EE2A1 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		5C2B97472C2022CA000EE2A1 /* S3Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3Manager.swift; sourceTree = "<group>"; };
 		5C382FD12B95B093003DD4C6 /* TemplateCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateCollectionViewCell.swift; sourceTree = "<group>"; };
 		5C382FD32B95E49D003DD4C6 /* CheckViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckViewController.swift; sourceTree = "<group>"; };
 		5C382FD52B95E4BC003DD4C6 /* VoiceSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceSelectViewController.swift; sourceTree = "<group>"; };
@@ -104,10 +162,17 @@
 		5CAE24682BC8040900322AC6 /* RequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestParams.swift; sourceTree = "<group>"; };
 		5CAE246A2BC8043D00322AC6 /* APIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIContainer.swift; sourceTree = "<group>"; };
 		5CAE246C2BC804DA00322AC6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		5CC28F872BF4A60F00089EC7 /* Member.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Member.swift; sourceTree = "<group>"; };
+		5CC28F892BF4BFE200089EC7 /* VoiceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceManager.swift; sourceTree = "<group>"; };
+		5CC28F8B2BF5AC8900089EC7 /* StorageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageCollectionViewCell.swift; sourceTree = "<group>"; };
+		5CC28F8D2BF5BEDF00089EC7 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		5CC28F8F2BF5C02F00089EC7 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		5CC4BADC2B68E3DD00A2D259 /* NickNameSetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NickNameSetViewController.swift; sourceTree = "<group>"; };
 		5CC889BE2BCD0EDB0074FFA2 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		5CC889C02BCD0F060074FFA2 /* SecureDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureDataManager.swift; sourceTree = "<group>"; };
 		5CE3A12D2BEFD453001BF120 /* MainTemplateCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTemplateCollectionViewCell.swift; sourceTree = "<group>"; };
+		5CE3A18F2BF0C6CA001BF120 /* S3Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3Configuration.swift; sourceTree = "<group>"; };
+		5CF617832BF328FD00CCB297 /* Voice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Voice.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,21 +180,68 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CE3A17B2BF0A804001BF120 /* AWSSES in Frameworks */,
 				5CAE24532BC7FFCD00322AC6 /* KakaoSDKCertCore in Frameworks */,
+				5CE3A16D2BF0A804001BF120 /* AWSLogs in Frameworks */,
+				5CE3A16F2BF0A804001BF120 /* AWSMachineLearning in Frameworks */,
+				5CE3A1472BF0A804001BF120 /* AWSComprehend in Frameworks */,
+				5CE3A18B2BF0A804001BF120 /* AWSTranslate in Frameworks */,
+				5CE3A1332BF0A804001BF120 /* AWSAppleSignIn in Frameworks */,
+				5CE3A1572BF0A804001BF120 /* AWSGoogleSignIn in Frameworks */,
+				5CE3A1632BF0A804001BF120 /* AWSKinesisVideoSignaling in Frameworks */,
+				5CE3A1832BF0A804001BF120 /* AWSSimpleDB in Frameworks */,
+				5CE3A1812BF0A804001BF120 /* AWSSageMakerRuntime in Frameworks */,
 				5CAE244D2BC7FFCD00322AC6 /* KakaoSDK in Frameworks */,
+				5CE3A14F2BF0A804001BF120 /* AWSDynamoDB in Frameworks */,
+				5CE3A1732BF0A804001BF120 /* AWSPinpoint in Frameworks */,
+				5CE3A15B2BF0A804001BF120 /* AWSKMS in Frameworks */,
+				5CE3A18D2BF0A804001BF120 /* AWSUserPoolsSignIn in Frameworks */,
+				5CE3A1892BF0A804001BF120 /* AWSTranscribeStreaming in Frameworks */,
+				5CE3A15F2BF0A804001BF120 /* AWSKinesisVideo in Frameworks */,
+				5CE3A1452BF0A804001BF120 /* AWSCognitoIdentityProviderASF in Frameworks */,
+				5CE3A1532BF0A804001BF120 /* AWSElasticLoadBalancing in Frameworks */,
+				5CE3A14B2BF0A804001BF120 /* AWSConnectParticipant in Frameworks */,
+				5CE3A17F2BF0A804001BF120 /* AWSSQS in Frameworks */,
+				5CE3A1552BF0A804001BF120 /* AWSFacebookSignIn in Frameworks */,
+				5CE3A1672BF0A804001BF120 /* AWSLambda in Frameworks */,
 				5CAB5B642B610F5500B2AF59 /* Alamofire in Frameworks */,
+				5CE3A1372BF0A804001BF120 /* AWSAuthUI in Frameworks */,
 				5CAE24722BC91C0400322AC6 /* GoogleSignInSwift in Frameworks */,
+				5CE3A1792BF0A804001BF120 /* AWSS3 in Frameworks */,
+				5CE3A14D2BF0A804001BF120 /* AWSCore in Frameworks */,
+				5CE3A13F2BF0A804001BF120 /* AWSCloudWatch in Frameworks */,
+				5CE3A1852BF0A804001BF120 /* AWSTextract in Frameworks */,
 				5CAE24612BC7FFCD00322AC6 /* KakaoSDKTemplate in Frameworks */,
 				5CAE24552BC7FFCD00322AC6 /* KakaoSDKCommon in Frameworks */,
 				5CAE245F2BC7FFCD00322AC6 /* KakaoSDKTalk in Frameworks */,
+				5CE3A1712BF0A804001BF120 /* AWSMobileClientXCF in Frameworks */,
 				5CAE245B2BC7FFCD00322AC6 /* KakaoSDKNavi in Frameworks */,
 				5CAE244F2BC7FFCD00322AC6 /* KakaoSDKAuth in Frameworks */,
+				5CE3A1612BF0A804001BF120 /* AWSKinesisVideoArchivedMedia in Frameworks */,
 				5CAE24572BC7FFCD00322AC6 /* KakaoSDKFriend in Frameworks */,
+				5CE3A13D2BF0A804001BF120 /* AWSChimeSDKMessaging in Frameworks */,
+				5CE3A1872BF0A804001BF120 /* AWSTranscribe in Frameworks */,
+				5CE3A16B2BF0A804001BF120 /* AWSLocationXCF in Frameworks */,
+				5CE3A1392BF0A804001BF120 /* AWSAutoScaling in Frameworks */,
 				5CAE24702BC91C0400322AC6 /* GoogleSignIn in Frameworks */,
+				5CE3A1512BF0A804001BF120 /* AWSEC2 in Frameworks */,
 				5CAE24512BC7FFCD00322AC6 /* KakaoSDKCert in Frameworks */,
 				5CAE245D2BC7FFCD00322AC6 /* KakaoSDKShare in Frameworks */,
+				5CE3A15D2BF0A804001BF120 /* AWSKinesis in Frameworks */,
+				5CE3A13B2BF0A804001BF120 /* AWSChimeSDKIdentity in Frameworks */,
+				5CE3A1352BF0A804001BF120 /* AWSAuthCore in Frameworks */,
+				5CE3A1692BF0A804001BF120 /* AWSLex in Frameworks */,
+				5CE3A1312BF0A804001BF120 /* AWSAPIGateway in Frameworks */,
 				5CAB5B672B6110F600B2AF59 /* SnapKit in Frameworks */,
+				5CE3A1752BF0A804001BF120 /* AWSPolly in Frameworks */,
 				5CAE24632BC7FFCD00322AC6 /* KakaoSDKUser in Frameworks */,
+				5CE3A1592BF0A804001BF120 /* AWSIoT in Frameworks */,
+				5CE3A1772BF0A804001BF120 /* AWSRekognition in Frameworks */,
+				5CE3A1432BF0A804001BF120 /* AWSCognitoIdentityProvider in Frameworks */,
+				5CE3A17D2BF0A804001BF120 /* AWSSNS in Frameworks */,
+				5CE3A1652BF0A804001BF120 /* AWSKinesisVideoWebRTCStorage in Frameworks */,
+				5CE3A1492BF0A804001BF120 /* AWSConnect in Frameworks */,
+				5CE3A1412BF0A804001BF120 /* AWSCognitoAuth in Frameworks */,
 				5CAE24592BC7FFCD00322AC6 /* KakaoSDKFriendCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -180,6 +292,8 @@
 			isa = PBXGroup;
 			children = (
 				5C382FD52B95E4BC003DD4C6 /* VoiceSelectViewController.swift */,
+				5CC28F8D2BF5BEDF00089EC7 /* LoadingView.swift */,
+				5CC28F8F2BF5C02F00089EC7 /* LoadingViewController.swift */,
 				5C382FDA2B95E654003DD4C6 /* VoiceTableViewCell.swift */,
 			);
 			path = Voice;
@@ -188,7 +302,10 @@
 		5C382FDC2B96EF37003DD4C6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				5C382FDD2B96EF8E003DD4C6 /* Scene.swift */,
+				5CC28F862BF4A60100089EC7 /* PackingItem */,
+				5CF617872BF32B3400CCB297 /* Text */,
+				5CF617852BF32B1900CCB297 /* Scene */,
+				5CF617862BF32B2200CCB297 /* Vocie */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -223,6 +340,7 @@
 				5C4BB46B2B7B55280045FB28 /* HomeViewController.swift */,
 				5C4BB46D2B7B55540045FB28 /* MemesViewController.swift */,
 				5C4BB46F2B7B55720045FB28 /* StorageViewController.swift */,
+				5CC28F8B2BF5AC8900089EC7 /* StorageCollectionViewCell.swift */,
 				5C4BB4652B7B4FAC0045FB28 /* Meme-generate */,
 				5C25F66E2B74A3EB0038F9AD /* Login */,
 			);
@@ -277,6 +395,7 @@
 				5CC889BC2BCD0EA30074FFA2 /* Sources */,
 				5CAB5B4E2B610EA600B2AF59 /* AppDelegate.swift */,
 				5CAB5B502B610EA600B2AF59 /* SceneDelegate.swift */,
+				5CE3A18E2BF0A82A001BF120 /* AWS */,
 				5C8C1C0A2BC6A1A100E44813 /* Networking */,
 				5C83D3592B68DAA500F34F0B /* View */,
 				5CAB5B5C2B610EA800B2AF59 /* Info.plist */,
@@ -312,6 +431,14 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		5CC28F862BF4A60100089EC7 /* PackingItem */ = {
+			isa = PBXGroup;
+			children = (
+				5CC28F872BF4A60F00089EC7 /* Member.swift */,
+			);
+			path = PackingItem;
+			sourceTree = "<group>";
+		};
 		5CC889BC2BCD0EA30074FFA2 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -327,6 +454,40 @@
 				5CC889C02BCD0F060074FFA2 /* SecureDataManager.swift */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		5CE3A18E2BF0A82A001BF120 /* AWS */ = {
+			isa = PBXGroup;
+			children = (
+				5CE3A18F2BF0C6CA001BF120 /* S3Configuration.swift */,
+				5C2B97452C20200A000EE2A1 /* Environment.swift */,
+				5C2B97472C2022CA000EE2A1 /* S3Manager.swift */,
+			);
+			path = AWS;
+			sourceTree = "<group>";
+		};
+		5CF617852BF32B1900CCB297 /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				5C382FDD2B96EF8E003DD4C6 /* Scene.swift */,
+			);
+			path = Scene;
+			sourceTree = "<group>";
+		};
+		5CF617862BF32B2200CCB297 /* Vocie */ = {
+			isa = PBXGroup;
+			children = (
+				5CF617832BF328FD00CCB297 /* Voice.swift */,
+				5CC28F892BF4BFE200089EC7 /* VoiceManager.swift */,
+			);
+			path = Vocie;
+			sourceTree = "<group>";
+		};
+		5CF617872BF32B3400CCB297 /* Text */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Text;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -362,6 +523,53 @@
 				5CAE24622BC7FFCD00322AC6 /* KakaoSDKUser */,
 				5CAE246F2BC91C0400322AC6 /* GoogleSignIn */,
 				5CAE24712BC91C0400322AC6 /* GoogleSignInSwift */,
+				5CE3A1302BF0A804001BF120 /* AWSAPIGateway */,
+				5CE3A1322BF0A804001BF120 /* AWSAppleSignIn */,
+				5CE3A1342BF0A804001BF120 /* AWSAuthCore */,
+				5CE3A1362BF0A804001BF120 /* AWSAuthUI */,
+				5CE3A1382BF0A804001BF120 /* AWSAutoScaling */,
+				5CE3A13A2BF0A804001BF120 /* AWSChimeSDKIdentity */,
+				5CE3A13C2BF0A804001BF120 /* AWSChimeSDKMessaging */,
+				5CE3A13E2BF0A804001BF120 /* AWSCloudWatch */,
+				5CE3A1402BF0A804001BF120 /* AWSCognitoAuth */,
+				5CE3A1422BF0A804001BF120 /* AWSCognitoIdentityProvider */,
+				5CE3A1442BF0A804001BF120 /* AWSCognitoIdentityProviderASF */,
+				5CE3A1462BF0A804001BF120 /* AWSComprehend */,
+				5CE3A1482BF0A804001BF120 /* AWSConnect */,
+				5CE3A14A2BF0A804001BF120 /* AWSConnectParticipant */,
+				5CE3A14C2BF0A804001BF120 /* AWSCore */,
+				5CE3A14E2BF0A804001BF120 /* AWSDynamoDB */,
+				5CE3A1502BF0A804001BF120 /* AWSEC2 */,
+				5CE3A1522BF0A804001BF120 /* AWSElasticLoadBalancing */,
+				5CE3A1542BF0A804001BF120 /* AWSFacebookSignIn */,
+				5CE3A1562BF0A804001BF120 /* AWSGoogleSignIn */,
+				5CE3A1582BF0A804001BF120 /* AWSIoT */,
+				5CE3A15A2BF0A804001BF120 /* AWSKMS */,
+				5CE3A15C2BF0A804001BF120 /* AWSKinesis */,
+				5CE3A15E2BF0A804001BF120 /* AWSKinesisVideo */,
+				5CE3A1602BF0A804001BF120 /* AWSKinesisVideoArchivedMedia */,
+				5CE3A1622BF0A804001BF120 /* AWSKinesisVideoSignaling */,
+				5CE3A1642BF0A804001BF120 /* AWSKinesisVideoWebRTCStorage */,
+				5CE3A1662BF0A804001BF120 /* AWSLambda */,
+				5CE3A1682BF0A804001BF120 /* AWSLex */,
+				5CE3A16A2BF0A804001BF120 /* AWSLocationXCF */,
+				5CE3A16C2BF0A804001BF120 /* AWSLogs */,
+				5CE3A16E2BF0A804001BF120 /* AWSMachineLearning */,
+				5CE3A1702BF0A804001BF120 /* AWSMobileClientXCF */,
+				5CE3A1722BF0A804001BF120 /* AWSPinpoint */,
+				5CE3A1742BF0A804001BF120 /* AWSPolly */,
+				5CE3A1762BF0A804001BF120 /* AWSRekognition */,
+				5CE3A1782BF0A804001BF120 /* AWSS3 */,
+				5CE3A17A2BF0A804001BF120 /* AWSSES */,
+				5CE3A17C2BF0A804001BF120 /* AWSSNS */,
+				5CE3A17E2BF0A804001BF120 /* AWSSQS */,
+				5CE3A1802BF0A804001BF120 /* AWSSageMakerRuntime */,
+				5CE3A1822BF0A804001BF120 /* AWSSimpleDB */,
+				5CE3A1842BF0A804001BF120 /* AWSTextract */,
+				5CE3A1862BF0A804001BF120 /* AWSTranscribe */,
+				5CE3A1882BF0A804001BF120 /* AWSTranscribeStreaming */,
+				5CE3A18A2BF0A804001BF120 /* AWSTranslate */,
+				5CE3A18C2BF0A804001BF120 /* AWSUserPoolsSignIn */,
 			);
 			productName = Memetory;
 			productReference = 5CAB5B4B2B610EA600B2AF59 /* Memetory.app */;
@@ -396,6 +604,7 @@
 				5CAB5B652B6110F500B2AF59 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				5CAE244B2BC7FFCD00322AC6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 				5CAE246E2BC91C0400322AC6 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */,
 			);
 			productRefGroup = 5CAB5B4C2B610EA600B2AF59 /* Products */;
 			projectDirPath = "";
@@ -429,33 +638,42 @@
 				5CE3A12E2BEFD453001BF120 /* MainTemplateCollectionViewCell.swift in Sources */,
 				5C4BB4722B7B58AF0045FB28 /* GenerateViewController.swift in Sources */,
 				5CC889BF2BCD0EDB0074FFA2 /* DataManager.swift in Sources */,
+				5C2B97482C2022CA000EE2A1 /* S3Manager.swift in Sources */,
 				5CC889C12BCD0F060074FFA2 /* SecureDataManager.swift in Sources */,
 				5C83D35B2B68DABC00F34F0B /* LoginViewController.swift in Sources */,
 				5C25F6712B74A4280038F9AD /* OnboardingViewController.swift in Sources */,
+				5CE3A1902BF0C6CA001BF120 /* S3Configuration.swift in Sources */,
 				5C382FD22B95B093003DD4C6 /* TemplateCollectionViewCell.swift in Sources */,
 				5C382FD62B95E4BC003DD4C6 /* VoiceSelectViewController.swift in Sources */,
 				5C4BB4702B7B55720045FB28 /* StorageViewController.swift in Sources */,
 				5CAE24672BC803EA00322AC6 /* HeaderType.swift in Sources */,
 				5C25F6752B74AA6B0038F9AD /* OnboardingDataModel.swift in Sources */,
+				5CC28F8A2BF4BFE200089EC7 /* VoiceManager.swift in Sources */,
 				5CAE246B2BC8043E00322AC6 /* APIContainer.swift in Sources */,
+				5CC28F8C2BF5AC8900089EC7 /* StorageCollectionViewCell.swift in Sources */,
 				5CAE246D2BC804DA00322AC6 /* Constants.swift in Sources */,
 				5CC4BADD2B68E3DD00A2D259 /* NickNameSetViewController.swift in Sources */,
 				5C4BB4682B7B501F0045FB28 /* TabBarViewController.swift in Sources */,
 				5CAB5B532B610EA600B2AF59 /* ViewController.swift in Sources */,
 				5CAB5B4F2B610EA600B2AF59 /* AppDelegate.swift in Sources */,
 				5C382FDB2B95E654003DD4C6 /* VoiceTableViewCell.swift in Sources */,
+				5CC28F882BF4A60F00089EC7 /* Member.swift in Sources */,
 				5C4BB46C2B7B55280045FB28 /* HomeViewController.swift in Sources */,
 				5C25F6732B74A6530038F9AD /* OnboardingCollectionViewCell.swift in Sources */,
 				5C382FD42B95E49D003DD4C6 /* CheckViewController.swift in Sources */,
 				5C8C1C132BC6A21400E44813 /* AuthService.swift in Sources */,
+				5CC28F8E2BF5BEDF00089EC7 /* LoadingView.swift in Sources */,
 				5CAB5B512B610EA600B2AF59 /* SceneDelegate.swift in Sources */,
 				5C4BB46E2B7B55540045FB28 /* MemesViewController.swift in Sources */,
 				5CAE24652BC803A600322AC6 /* APIEventLogger.swift in Sources */,
 				5C8C1C112BC6A20500E44813 /* AuthRouter.swift in Sources */,
 				5CAE24692BC8040900322AC6 /* RequestParams.swift in Sources */,
 				5C4BB4742B7B5E300045FB28 /* TemplateTableViewCell.swift in Sources */,
+				5C2B97462C20200A000EE2A1 /* Environment.swift in Sources */,
 				5CAE24342BC7EFAA00322AC6 /* BaseService.swift in Sources */,
 				5C4BB4762B7B62D30045FB28 /* TemSelectViewController.swift in Sources */,
+				5CC28F902BF5C02F00089EC7 /* LoadingViewController.swift in Sources */,
+				5CF617842BF328FD00CCB297 /* Voice.swift in Sources */,
 				5C9FE6062BE3DD020037EFCD /* Encodable+Extension.swift in Sources */,
 				5C382FDE2B96EF8E003DD4C6 /* Scene.swift in Sources */,
 				5CAE24322BC7EF9D00322AC6 /* BaseRouter.swift in Sources */,
@@ -605,11 +823,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Memetory/Memetory.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = D8KHM6Q8SA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Memetory/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Use mic to record";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "\"사진 라이브러리에 접근하여 음성 파일을 선택합니다.\"";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -633,11 +854,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Memetory/Memetory.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = D8KHM6Q8SA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Memetory/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Use mic to record";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "\"사진 라이브러리에 접근하여 음성 파일을 선택합니다.\"";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -710,6 +934,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 7.1.0;
+			};
+		};
+		5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/aws-amplify/aws-sdk-ios-spm";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.36.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -794,6 +1026,241 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5CAE246E2BC91C0400322AC6 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
+		};
+		5CE3A1302BF0A804001BF120 /* AWSAPIGateway */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSAPIGateway;
+		};
+		5CE3A1322BF0A804001BF120 /* AWSAppleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSAppleSignIn;
+		};
+		5CE3A1342BF0A804001BF120 /* AWSAuthCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSAuthCore;
+		};
+		5CE3A1362BF0A804001BF120 /* AWSAuthUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSAuthUI;
+		};
+		5CE3A1382BF0A804001BF120 /* AWSAutoScaling */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSAutoScaling;
+		};
+		5CE3A13A2BF0A804001BF120 /* AWSChimeSDKIdentity */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSChimeSDKIdentity;
+		};
+		5CE3A13C2BF0A804001BF120 /* AWSChimeSDKMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSChimeSDKMessaging;
+		};
+		5CE3A13E2BF0A804001BF120 /* AWSCloudWatch */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSCloudWatch;
+		};
+		5CE3A1402BF0A804001BF120 /* AWSCognitoAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSCognitoAuth;
+		};
+		5CE3A1422BF0A804001BF120 /* AWSCognitoIdentityProvider */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSCognitoIdentityProvider;
+		};
+		5CE3A1442BF0A804001BF120 /* AWSCognitoIdentityProviderASF */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSCognitoIdentityProviderASF;
+		};
+		5CE3A1462BF0A804001BF120 /* AWSComprehend */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSComprehend;
+		};
+		5CE3A1482BF0A804001BF120 /* AWSConnect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSConnect;
+		};
+		5CE3A14A2BF0A804001BF120 /* AWSConnectParticipant */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSConnectParticipant;
+		};
+		5CE3A14C2BF0A804001BF120 /* AWSCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSCore;
+		};
+		5CE3A14E2BF0A804001BF120 /* AWSDynamoDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSDynamoDB;
+		};
+		5CE3A1502BF0A804001BF120 /* AWSEC2 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSEC2;
+		};
+		5CE3A1522BF0A804001BF120 /* AWSElasticLoadBalancing */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSElasticLoadBalancing;
+		};
+		5CE3A1542BF0A804001BF120 /* AWSFacebookSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSFacebookSignIn;
+		};
+		5CE3A1562BF0A804001BF120 /* AWSGoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSGoogleSignIn;
+		};
+		5CE3A1582BF0A804001BF120 /* AWSIoT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSIoT;
+		};
+		5CE3A15A2BF0A804001BF120 /* AWSKMS */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSKMS;
+		};
+		5CE3A15C2BF0A804001BF120 /* AWSKinesis */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSKinesis;
+		};
+		5CE3A15E2BF0A804001BF120 /* AWSKinesisVideo */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSKinesisVideo;
+		};
+		5CE3A1602BF0A804001BF120 /* AWSKinesisVideoArchivedMedia */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSKinesisVideoArchivedMedia;
+		};
+		5CE3A1622BF0A804001BF120 /* AWSKinesisVideoSignaling */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSKinesisVideoSignaling;
+		};
+		5CE3A1642BF0A804001BF120 /* AWSKinesisVideoWebRTCStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSKinesisVideoWebRTCStorage;
+		};
+		5CE3A1662BF0A804001BF120 /* AWSLambda */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSLambda;
+		};
+		5CE3A1682BF0A804001BF120 /* AWSLex */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSLex;
+		};
+		5CE3A16A2BF0A804001BF120 /* AWSLocationXCF */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSLocationXCF;
+		};
+		5CE3A16C2BF0A804001BF120 /* AWSLogs */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSLogs;
+		};
+		5CE3A16E2BF0A804001BF120 /* AWSMachineLearning */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSMachineLearning;
+		};
+		5CE3A1702BF0A804001BF120 /* AWSMobileClientXCF */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSMobileClientXCF;
+		};
+		5CE3A1722BF0A804001BF120 /* AWSPinpoint */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSPinpoint;
+		};
+		5CE3A1742BF0A804001BF120 /* AWSPolly */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSPolly;
+		};
+		5CE3A1762BF0A804001BF120 /* AWSRekognition */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSRekognition;
+		};
+		5CE3A1782BF0A804001BF120 /* AWSS3 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSS3;
+		};
+		5CE3A17A2BF0A804001BF120 /* AWSSES */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSSES;
+		};
+		5CE3A17C2BF0A804001BF120 /* AWSSNS */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSSNS;
+		};
+		5CE3A17E2BF0A804001BF120 /* AWSSQS */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSSQS;
+		};
+		5CE3A1802BF0A804001BF120 /* AWSSageMakerRuntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSSageMakerRuntime;
+		};
+		5CE3A1822BF0A804001BF120 /* AWSSimpleDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSSimpleDB;
+		};
+		5CE3A1842BF0A804001BF120 /* AWSTextract */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSTextract;
+		};
+		5CE3A1862BF0A804001BF120 /* AWSTranscribe */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSTranscribe;
+		};
+		5CE3A1882BF0A804001BF120 /* AWSTranscribeStreaming */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSTranscribeStreaming;
+		};
+		5CE3A18A2BF0A804001BF120 /* AWSTranslate */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSTranslate;
+		};
+		5CE3A18C2BF0A804001BF120 /* AWSUserPoolsSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSUserPoolsSignIn;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
