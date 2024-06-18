@@ -18,6 +18,19 @@ class HomeViewController: UIViewController {
         label.font = UIFont(name: "Pretendard-Bold", size: 25)
         return label
     }()
+    
+    let monthLikeView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    let playButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(systemName: "play.circle"), for: .normal)
+        button.tintColor = .white
+        return button
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
