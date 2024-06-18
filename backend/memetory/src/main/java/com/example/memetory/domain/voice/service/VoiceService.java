@@ -18,7 +18,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.io.*;
-import java.rmi.AlreadyBoundException;
 import java.util.Optional;
 
 
@@ -43,10 +42,18 @@ public class VoiceService {
 
     @Transactional(readOnly = true)
     public String findVoiceByMemberId(VoiceServiceDto voiceServiceDto) {
-        Member foundMember = memberService.findMemberFromEmail(voiceServiceDto.getEmail());
-        Voice foundVoice = voiceRepository.findByMemberId(foundMember.getId()).orElseThrow(NotFoundVoiceException::new);
-
+        Voice foundVoice = findVoiceByMemberEmail(voiceServiceDto);
         return foundVoice.getElevenlabsVoiceId();
+    }
+
+    public void deleteVoice(VoiceServiceDto voiceServiceDto) {
+        Voice foundVoice = findVoiceByMemberEmail(voiceServiceDto);
+        voiceRepository.delete(foundVoice);
+    }
+
+    private Voice findVoiceByMemberEmail(VoiceServiceDto voiceServiceDto) {
+        Member foundMember = memberService.findMemberFromEmail(voiceServiceDto.getEmail());
+        return voiceRepository.findByMemberId(foundMember.getId()).orElseThrow(NotFoundVoiceException::new);
     }
 
     // 목소리 생성
@@ -57,7 +64,7 @@ public class VoiceService {
     }
 
     // 목소리가 이미 생성되어 있는지 체크
-    public void isExistVoice(VoiceServiceDto voiceServiceDto) throws AlreadyBoundException {
+    public void isExistVoice(VoiceServiceDto voiceServiceDto) {
         Member foundMember = memberService.findMemberFromEmail(voiceServiceDto.getEmail());
         Optional<Voice> foundVoice = voiceRepository.findByMemberId(foundMember.getId());
 
