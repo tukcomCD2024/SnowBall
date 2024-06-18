@@ -5,7 +5,6 @@ import com.example.memetory.domain.voice.dto.request.GenerateVoiceRequestDto;
 import com.example.memetory.domain.voice.dto.response.ElevenlabsVoiceLibraryResponse;
 import com.example.memetory.domain.voice.dto.response.ElevenlabsVoiceResponse;
 import com.example.memetory.domain.voice.dto.response.GenerateVoiceResponseDto;
-import com.example.memetory.domain.voice.exception.AlreadyExistVoiceException;
 import com.example.memetory.domain.voice.service.VoiceService;
 import com.example.memetory.global.annotation.LoginMemberEmail;
 import com.example.memetory.global.response.ResultCode;
@@ -37,6 +36,9 @@ public class VoiceController implements VoiceApi {
 
     @Value("${elevenlabs.api.url.get}")
     private String getApiUrl;
+
+    @Value("${elevenlabs.api.url.delete}")
+    private String deleteApiUrl;
 
     @Value("${elevenlabs.api.url.library}")
     private String getLibraryApiUrl;
@@ -100,6 +102,22 @@ public class VoiceController implements VoiceApi {
                     return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
                 })
                 .block();
+    }
+
+    @DeleteMapping("/member")
+    @Override
+    public void deleteVoice(@LoginMemberEmail String email) {
+        VoiceServiceDto voiceServiceDto = VoiceServiceDto.create(email);
+        String voiceId = voiceService.findVoiceByMemberId(voiceServiceDto);
+
+        WebClient.create(deleteApiUrl + "/" + voiceId)
+                .delete()
+                .header("xi-api-key", apiKey)
+                .retrieve()
+                .bodyToMono(Void.class)
+                .subscribe();
+
+        voiceService.deleteVoice(voiceServiceDto);
     }
 
     // 기본 목소리 라이브러리 조회

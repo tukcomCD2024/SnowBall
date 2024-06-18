@@ -50,6 +50,21 @@ public interface VoiceApi {
     ) throws IOException;
 
     @Operation(
+            summary = "목소리 삭제",
+            description = "voice_id에 해당하는 목소리를 삭제한다.",
+            security = {@SecurityRequirement(name = "access_token")}
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "목소리 삭제!"
+            )
+    })
+    void deleteVoice(
+            @Parameter(hidden = true) String email
+    );
+
+    @Operation(
             summary = "기본 라이브러리 목소리 조회",
             description = "기본 라이브러리 목소리를 조회한다.",
             security = {@SecurityRequirement(name = "access_token")}
