@@ -1,4 +1,5 @@
 import hashlib
+import math
 import subprocess
 import time
 from urllib.parse import urlparse
@@ -74,7 +75,7 @@ def generate_meme(data):
     start_time = 0
     while result_url_queue:
         item = result_url_queue.pop(0)
-        duration = int(item[1])
+        duration = duration = int(math.ceil(item[1]))
         print("duration : " + str(duration))
         shotstack.add_track(timeline_data["timeline"]["tracks"], "video", item[0], start_time, duration)
         start_time = start_time + duration
