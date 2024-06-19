@@ -1,6 +1,8 @@
 package com.example.memetory.domain.memes.controller.comment;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.memetory.domain.comment.dto.request.CommentRequest;
 import com.example.memetory.global.response.ResultResponse;
@@ -48,4 +50,14 @@ public interface MemesCommentApi {
 		@Parameter(hidden = true) String email,
 		@Parameter(in = ParameterIn.PATH, description = "댓글 아이디", required = true) Long commentId
 	);
+
+	@Operation(
+		summary = "전체 밈스 댓글 조회",
+		description = "전체 밈스 댓글을 조회한다.",
+		security = {@SecurityRequirement(name = "access_token")}
+	)
+	@GetMapping()
+	ResponseEntity<ResultResponse> findCommentInfoSlice(
+		@Parameter(in = ParameterIn.PATH, description = "댓글 아이디", required = true) Long memesId,
+		Pageable pageable);
 }
