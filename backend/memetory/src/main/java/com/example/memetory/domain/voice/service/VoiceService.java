@@ -6,6 +6,7 @@ import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.voice.dto.VoiceServiceDto;
 import com.example.memetory.domain.voice.entity.Voice;
+import com.example.memetory.domain.voice.exception.AlreadyExistVoiceException;
 import com.example.memetory.domain.voice.exception.NotFoundVoiceException;
 import com.example.memetory.domain.voice.repository.VoiceRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.io.*;
+import java.util.Optional;
 
 
 @Service
@@ -40,10 +42,18 @@ public class VoiceService {
 
     @Transactional(readOnly = true)
     public String findVoiceByMemberId(VoiceServiceDto voiceServiceDto) {
-        Member foundMember = memberService.findMemberFromEmail(voiceServiceDto.getEmail());
-        Voice foundVoice = voiceRepository.findByMemberId(foundMember.getId()).orElseThrow(NotFoundVoiceException::new);
-
+        Voice foundVoice = findVoiceByMemberEmail(voiceServiceDto);
         return foundVoice.getElevenlabsVoiceId();
+    }
+
+    public void deleteVoice(VoiceServiceDto voiceServiceDto) {
+        Voice foundVoice = findVoiceByMemberEmail(voiceServiceDto);
+        voiceRepository.delete(foundVoice);
+    }
+
+    private Voice findVoiceByMemberEmail(VoiceServiceDto voiceServiceDto) {
+        Member foundMember = memberService.findMemberFromEmail(voiceServiceDto.getEmail());
+        return voiceRepository.findByMemberId(foundMember.getId()).orElseThrow(NotFoundVoiceException::new);
     }
 
     // 목소리 생성
@@ -51,6 +61,16 @@ public class VoiceService {
         S3Object s3Object = getS3File(voiceServiceDto);
 
         return createFormData(s3Object, voiceServiceDto);
+    }
+
+    // 목소리가 이미 생성되어 있는지 체크
+    public void isExistVoice(VoiceServiceDto voiceServiceDto) {
+        Member foundMember = memberService.findMemberFromEmail(voiceServiceDto.getEmail());
+        Optional<Voice> foundVoice = voiceRepository.findByMemberId(foundMember.getId());
+
+        if (foundVoice.isPresent()) {
+            throw new AlreadyExistVoiceException();
+        }
     }
 
     // S3 파일 가져오기

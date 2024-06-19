@@ -40,6 +40,7 @@ public enum ResultCode {
 
 	// voice
 	CREATE_VOICE_SUCCESS(201, "목소리 생성 성공"),
+	DELETE_VOICE_SUCCESS(200, "목소리 삭제 성공"),
 	GET_MEMBER_VOICE_SUCCESS(200, "멤버별 목소리 조회 성공"),
 	GET_VOICE_LIBRARY_SUCCESS(200, "기본 목소리 라이브러리 조회 성공"),
 	;
