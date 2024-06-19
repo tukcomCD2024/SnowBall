@@ -50,6 +50,7 @@ public class MemesCommentController implements MemesCommentApi {
 	}
 
 	@GetMapping()
+	@Override
 	public ResponseEntity<ResultResponse> findCommentInfoSlice(@PathVariable Long memesId, Pageable pageable) {
 		CommentInfoSlice response = commentService.findCommentFromMemesId(memesId, pageable);
 

@@ -1,10 +1,10 @@
 package com.example.memetory.domain.meme.controller;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.example.memetory.domain.meme.dto.GenerateMemeListRequest;
+import com.example.memetory.domain.meme.dto.MemeResponse;
 import com.example.memetory.domain.meme.dto.ShotStackCallBackRequest;
 import com.example.memetory.global.response.ResultResponse;
 
@@ -29,7 +29,7 @@ public interface MemeApi {
 			description = "콜백 성공!"
 		)
 	})
-	ResponseEntity<HttpStatus> callBackMeme(
+	ResponseEntity<MemeResponse> callBackMeme(
 		@Parameter(in = ParameterIn.PATH, description = "멤버 아이디", required = true) Long memberId,
 		ShotStackCallBackRequest shotStackCallBackRequest
 	);

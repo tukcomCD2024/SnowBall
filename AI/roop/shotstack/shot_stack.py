@@ -31,7 +31,8 @@ class ShotStackAPI:
     # timeline에 영상을 붙임
     def add_track(self, clips, asset_type, asset_src, start, length):
         # 새로운 track을 생성하고 clips를 추가
-        new_track = {"clips": [{"asset": {"type": asset_type, "src": asset_src}, "start": start, "length": length}]}
+        new_track = {"clips": [
+            {"asset": {"type": asset_type, "src": asset_src}, "start": start, "length": length, "fit": "contain"}]}
         clips.append(new_track)
 
     # 결과 불러오기

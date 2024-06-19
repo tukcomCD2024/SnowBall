@@ -31,13 +31,13 @@ public class MemeController implements MemeApi {
 
 	@PostMapping("/create/{memberId}")
 	@Override
-	public ResponseEntity<HttpStatus> callBackMeme(@PathVariable Long memberId,
+	public ResponseEntity<MemeResponse> callBackMeme(@PathVariable Long memberId,
 		@RequestBody ShotStackCallBackRequest shotStackCallBackRequest) {
 		MemeServiceDto memeServiceDto = shotStackCallBackRequest.toServiceDtoFromMemberId(memberId);
 
-		memeService.registerMeme(memeServiceDto);
+		MemeResponse response = memeService.registerMeme(memeServiceDto);
 
-		return ResponseEntity.status(HttpStatus.OK).build();
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
 	@PostMapping
