@@ -49,7 +49,8 @@ class DIdAPI:
             },
             "config": {
                 "fluent": "false",
-                "pad_audio": "0.0"
+                "pad_audio": "0.0",
+                "stitch": True
             },
             "source_url": s3_image_url  # 소스 이미지
         }
