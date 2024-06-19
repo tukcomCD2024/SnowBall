@@ -1,8 +1,6 @@
 package com.example.memetory.domain.voice.controller;
 
 import com.example.memetory.domain.voice.dto.request.GenerateVoiceRequestDto;
-import com.example.memetory.domain.voice.dto.response.ElevenlabsVoiceLibraryResponse;
-import com.example.memetory.domain.voice.dto.response.ElevenlabsVoiceResponse;
 import com.example.memetory.global.response.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -47,7 +45,7 @@ public interface VoiceApi {
     })
     ResponseEntity<ResultResponse> findByMemberId(
             @Parameter(hidden = true) String email
-    ) throws IOException;
+    );
 
     @Operation(
             summary = "목소리 삭제",
@@ -63,17 +61,4 @@ public interface VoiceApi {
     void deleteVoice(
             @Parameter(hidden = true) String email
     );
-
-    @Operation(
-            summary = "기본 라이브러리 목소리 조회",
-            description = "기본 라이브러리 목소리를 조회한다.",
-            security = {@SecurityRequirement(name = "access_token")}
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "기본 라이브러리 목소리 조회!"
-            )
-    })
-    ResponseEntity<ResultResponse> getVoiceLibrary() throws IOException;
 }

@@ -2,8 +2,6 @@ package com.example.memetory.domain.voice.controller;
 
 import com.example.memetory.domain.voice.dto.VoiceServiceDto;
 import com.example.memetory.domain.voice.dto.request.GenerateVoiceRequestDto;
-import com.example.memetory.domain.voice.dto.response.ElevenlabsVoiceLibraryResponse;
-import com.example.memetory.domain.voice.dto.response.ElevenlabsVoiceResponse;
 import com.example.memetory.domain.voice.dto.response.GenerateVoiceResponseDto;
 import com.example.memetory.domain.voice.service.VoiceService;
 import com.example.memetory.global.annotation.LoginMemberEmail;
@@ -21,7 +19,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.io.*;
-import java.rmi.AlreadyBoundException;
 
 
 @RestController
@@ -40,16 +37,13 @@ public class VoiceController implements VoiceApi {
     @Value("${elevenlabs.api.url.delete}")
     private String deleteApiUrl;
 
-    @Value("${elevenlabs.api.url.library}")
-    private String getLibraryApiUrl;
-
     @Value("${elevenlabs.api.key}")
     private String apiKey;
 
     // 보이스 추출 및 생성
     @PostMapping
     @Override
-    public ResponseEntity<ResultResponse> register(@LoginMemberEmail String email, @RequestBody GenerateVoiceRequestDto generateVoiceRequestDto) throws IOException, AlreadyBoundException {
+    public ResponseEntity<ResultResponse> register(@LoginMemberEmail String email, @RequestBody GenerateVoiceRequestDto generateVoiceRequestDto) throws IOException{
 
         // s3 url을 받아서 음성파일을 가져오는 ServiceDto 로직 1개
         VoiceServiceDto voiceServiceDtoS3 = generateVoiceRequestDto.toServiceDtoS3(email);
@@ -83,7 +77,7 @@ public class VoiceController implements VoiceApi {
     // 멤버별 보이스 조회
     @GetMapping("/member")
     @Override
-    public ResponseEntity<ResultResponse> findByMemberId(@LoginMemberEmail String email) throws IOException {
+    public ResponseEntity<ResultResponse> findByMemberId(@LoginMemberEmail String email){
         VoiceServiceDto voiceServiceDto = VoiceServiceDto.create(email);
         String voiceId = voiceService.findVoiceByMemberId(voiceServiceDto);
 
@@ -118,26 +112,5 @@ public class VoiceController implements VoiceApi {
                 .subscribe();
 
         voiceService.deleteVoice(voiceServiceDto);
-    }
-
-    // 기본 목소리 라이브러리 조회
-    @GetMapping("/library")
-    @Override
-    public ResponseEntity<ResultResponse> getVoiceLibrary() throws IOException {
-        return WebClient
-                .create(getLibraryApiUrl)
-                .get()
-                .header("xi-api-key", apiKey)
-                .retrieve()
-                .bodyToMono(ElevenlabsVoiceLibraryResponse.class)
-                .flatMap(response -> {
-                    // elevenlabs API 호출이 완료 되면 실행할 로직
-                    return Mono.just(ResponseEntity.ok(ResultResponse.of(ResultCode.GET_VOICE_LIBRARY_SUCCESS, response)));
-                })
-                .onErrorResume(error -> {
-                    System.out.println(("An error occurred while processing the request: {}" + error.getMessage()));
-                    return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
-                })
-                .block();
     }
 }
