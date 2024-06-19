@@ -68,7 +68,8 @@ def generate_meme(data):
         },
         "output": {
             "format": "mp4",
-            "resolution": "sd"
+            "resolution": "hd",
+            "aspectRatio": "9:16"
         },
         "callback": CALLBACK_URL + member_id
     }
