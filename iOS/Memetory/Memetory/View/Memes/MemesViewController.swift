@@ -22,14 +22,14 @@ class MemesViewController: UIViewController {
     
     private var nowPage = 0
     
-    private let videoURLStrArr = ["video01", "video02", "dummyVideo01", "dummyVideo02", "dummyVideo03"]
+    private let videoURLStrArr = ["dummyVideo03", "dummyVideo04", "dummyVideo05", "dummyVideo06", "dummyVideo07"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
     
         setupcollectionView()
-        removeVisualEffectSubviews()
+//        removeVisualEffectSubviews()
         
     }
     
@@ -57,7 +57,7 @@ class MemesViewController: UIViewController {
     }
     
     private func startLoop() {
-        let _ = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { _ in
+        let _ = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
             self.moveNextPage()
         }
     }
@@ -77,14 +77,14 @@ class MemesViewController: UIViewController {
             animated: true)
     }
     
-    // Method to remove UIVisualEffectSubview
-    private func removeVisualEffectSubviews() {
-        for subview in view.subviews {
-            if let visualEffectSubview = subview as? UIVisualEffectView {
-                visualEffectSubview.removeFromSuperview()
-            }
-        }
-    }
+//    // Method to remove UIVisualEffectSubview
+//    private func removeVisualEffectSubviews() {
+//        for subview in view.subviews {
+//            if let visualEffectSubview = subview as? UIVisualEffectView {
+//                visualEffectSubview.removeFromSuperview()
+//            }
+//        }
+//    }
 }
 
 //MARK: -UICollectionViewDelegate, UICollectionViewDataSource
@@ -118,11 +118,11 @@ extension MemesViewController: UICollectionViewDelegateFlowLayout {
         1
     }
 }
-
-extension UITabBar {
-    func setUpUITabBar(){
-        self.backgroundImage = UIImage()
-        self.shadowImage = UIImage()
-        self.clipsToBounds = true
-    }
-}
+//
+//extension UITabBar {
+//    func setUpUITabBar(){
+//        self.backgroundImage = UIImage()
+//        self.shadowImage = UIImage()
+//        self.clipsToBounds = true
+//    }
+//}
