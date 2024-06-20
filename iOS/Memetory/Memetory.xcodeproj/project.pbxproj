@@ -31,6 +31,9 @@
 		5C8C1C0F2BC6A1F600E44813 /* AuthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8C1C0E2BC6A1F600E44813 /* AuthModel.swift */; };
 		5C8C1C112BC6A20500E44813 /* AuthRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8C1C102BC6A20500E44813 /* AuthRouter.swift */; };
 		5C8C1C132BC6A21400E44813 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8C1C122BC6A21400E44813 /* AuthService.swift */; };
+		5C8E3F4D2C22A05F00CCB7C2 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8E3F4C2C22A05F00CCB7C2 /* BaseView.swift */; };
+		5C8E3F502C22A22800CCB7C2 /* UITableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8E3F4F2C22A22800CCB7C2 /* UITableView+Extension.swift */; };
+		5C8E3F582C22B00600CCB7C2 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8E3F572C22B00600CCB7C2 /* GradientView.swift */; };
 		5C9FE6062BE3DD020037EFCD /* Encodable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9FE6052BE3DD020037EFCD /* Encodable+Extension.swift */; };
 		5CAB5B4F2B610EA600B2AF59 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAB5B4E2B610EA600B2AF59 /* AppDelegate.swift */; };
 		5CAB5B512B610EA600B2AF59 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAB5B502B610EA600B2AF59 /* SceneDelegate.swift */; };
@@ -118,6 +121,14 @@
 		5CE3A18B2BF0A804001BF120 /* AWSTranslate in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A18A2BF0A804001BF120 /* AWSTranslate */; };
 		5CE3A18D2BF0A804001BF120 /* AWSUserPoolsSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE3A18C2BF0A804001BF120 /* AWSUserPoolsSignIn */; };
 		5CE3A1902BF0C6CA001BF120 /* S3Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE3A18F2BF0C6CA001BF120 /* S3Configuration.swift */; };
+		5CE50AE12C22C396000A0CCE /* MuxPlayerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 5CE50AE02C22C396000A0CCE /* MuxPlayerSwift */; };
+		5CE50AE32C22E378000A0CCE /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE50AE22C22E378000A0CCE /* VideoPlayerView.swift */; };
+		5CE50AE52C23347C000A0CCE /* MemesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE50AE42C23347C000A0CCE /* MemesCollectionViewCell.swift */; };
+		5CE50AEA2C23434D000A0CCE /* dummyVideo02.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 5CE50AE62C23434C000A0CCE /* dummyVideo02.mp4 */; };
+		5CE50AEB2C23434D000A0CCE /* video02.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 5CE50AE72C23434D000A0CCE /* video02.mp4 */; };
+		5CE50AEC2C23434D000A0CCE /* dummyVideo01.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 5CE50AE82C23434D000A0CCE /* dummyVideo01.mp4 */; };
+		5CE50AED2C23434D000A0CCE /* video01.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 5CE50AE92C23434D000A0CCE /* video01.mp4 */; };
+		5CE50AEF2C235027000A0CCE /* dummyVideo03.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 5CE50AEE2C235027000A0CCE /* dummyVideo03.mp4 */; };
 		5CF617842BF328FD00CCB297 /* Voice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF617832BF328FD00CCB297 /* Voice.swift */; };
 /* End PBXBuildFile section */
 
@@ -146,6 +157,9 @@
 		5C8C1C0E2BC6A1F600E44813 /* AuthModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthModel.swift; sourceTree = "<group>"; };
 		5C8C1C102BC6A20500E44813 /* AuthRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRouter.swift; sourceTree = "<group>"; };
 		5C8C1C122BC6A21400E44813 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		5C8E3F4C2C22A05F00CCB7C2 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
+		5C8E3F4F2C22A22800CCB7C2 /* UITableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extension.swift"; sourceTree = "<group>"; };
+		5C8E3F572C22B00600CCB7C2 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		5C9FE6052BE3DD020037EFCD /* Encodable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+Extension.swift"; sourceTree = "<group>"; };
 		5CAB5B4B2B610EA600B2AF59 /* Memetory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Memetory.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CAB5B4E2B610EA600B2AF59 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -172,6 +186,13 @@
 		5CC889C02BCD0F060074FFA2 /* SecureDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureDataManager.swift; sourceTree = "<group>"; };
 		5CE3A12D2BEFD453001BF120 /* MainTemplateCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTemplateCollectionViewCell.swift; sourceTree = "<group>"; };
 		5CE3A18F2BF0C6CA001BF120 /* S3Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3Configuration.swift; sourceTree = "<group>"; };
+		5CE50AE22C22E378000A0CCE /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
+		5CE50AE42C23347C000A0CCE /* MemesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemesCollectionViewCell.swift; sourceTree = "<group>"; };
+		5CE50AE62C23434C000A0CCE /* dummyVideo02.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = dummyVideo02.mp4; sourceTree = "<group>"; };
+		5CE50AE72C23434D000A0CCE /* video02.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video02.mp4; sourceTree = "<group>"; };
+		5CE50AE82C23434D000A0CCE /* dummyVideo01.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = dummyVideo01.mp4; sourceTree = "<group>"; };
+		5CE50AE92C23434D000A0CCE /* video01.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video01.mp4; sourceTree = "<group>"; };
+		5CE50AEE2C235027000A0CCE /* dummyVideo03.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = dummyVideo03.mp4; sourceTree = "<group>"; };
 		5CF617832BF328FD00CCB297 /* Voice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Voice.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -182,6 +203,7 @@
 			files = (
 				5CE3A17B2BF0A804001BF120 /* AWSSES in Frameworks */,
 				5CAE24532BC7FFCD00322AC6 /* KakaoSDKCertCore in Frameworks */,
+				5CE50AE12C22C396000A0CCE /* MuxPlayerSwift in Frameworks */,
 				5CE3A16D2BF0A804001BF120 /* AWSLogs in Frameworks */,
 				5CE3A16F2BF0A804001BF120 /* AWSMachineLearning in Frameworks */,
 				5CE3A1472BF0A804001BF120 /* AWSComprehend in Frameworks */,
@@ -335,12 +357,11 @@
 		5C83D3592B68DAA500F34F0B /* View */ = {
 			isa = PBXGroup;
 			children = (
-				5C8C1C142BC6A34400E44813 /* CommonUI */,
-				5C4BB4672B7B501F0045FB28 /* TabBarViewController.swift */,
-				5C4BB46B2B7B55280045FB28 /* HomeViewController.swift */,
-				5C4BB46D2B7B55540045FB28 /* MemesViewController.swift */,
-				5C4BB46F2B7B55720045FB28 /* StorageViewController.swift */,
-				5CC28F8B2BF5AC8900089EC7 /* StorageCollectionViewCell.swift */,
+				5C8E3F512C22A2B900CCB7C2 /* TabBar */,
+				5C8C1C142BC6A34400E44813 /* ReusableView */,
+				5C8E3F522C22A2CE00CCB7C2 /* Home */,
+				5C8E3F532C22A2D500CCB7C2 /* Storage */,
+				5C8E3F4B2C216C8800CCB7C2 /* Memes */,
 				5C4BB4652B7B4FAC0045FB28 /* Meme-generate */,
 				5C25F66E2B74A3EB0038F9AD /* Login */,
 			);
@@ -366,11 +387,56 @@
 			path = AuthNetwork;
 			sourceTree = "<group>";
 		};
-		5C8C1C142BC6A34400E44813 /* CommonUI */ = {
+		5C8C1C142BC6A34400E44813 /* ReusableView */ = {
 			isa = PBXGroup;
 			children = (
+				5C8E3F4C2C22A05F00CCB7C2 /* BaseView.swift */,
 			);
-			path = CommonUI;
+			path = ReusableView;
+			sourceTree = "<group>";
+		};
+		5C8E3F4B2C216C8800CCB7C2 /* Memes */ = {
+			isa = PBXGroup;
+			children = (
+				5C4BB46D2B7B55540045FB28 /* MemesViewController.swift */,
+				5CE50AE42C23347C000A0CCE /* MemesCollectionViewCell.swift */,
+				5CE50AE22C22E378000A0CCE /* VideoPlayerView.swift */,
+			);
+			path = Memes;
+			sourceTree = "<group>";
+		};
+		5C8E3F4E2C22A1F300CCB7C2 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				5C8E3F4F2C22A22800CCB7C2 /* UITableView+Extension.swift */,
+				5C8E3F572C22B00600CCB7C2 /* GradientView.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		5C8E3F512C22A2B900CCB7C2 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				5C4BB4672B7B501F0045FB28 /* TabBarViewController.swift */,
+			);
+			path = TabBar;
+			sourceTree = "<group>";
+		};
+		5C8E3F522C22A2CE00CCB7C2 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				5C4BB46B2B7B55280045FB28 /* HomeViewController.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		5C8E3F532C22A2D500CCB7C2 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				5C4BB46F2B7B55720045FB28 /* StorageViewController.swift */,
+				5CC28F8B2BF5AC8900089EC7 /* StorageCollectionViewCell.swift */,
+			);
+			path = Storage;
 			sourceTree = "<group>";
 		};
 		5CAB5B422B610EA600B2AF59 = {
@@ -399,6 +465,11 @@
 				5C8C1C0A2BC6A1A100E44813 /* Networking */,
 				5C83D3592B68DAA500F34F0B /* View */,
 				5CAB5B5C2B610EA800B2AF59 /* Info.plist */,
+				5CE50AE82C23434D000A0CCE /* dummyVideo01.mp4 */,
+				5CE50AE62C23434C000A0CCE /* dummyVideo02.mp4 */,
+				5CE50AEE2C235027000A0CCE /* dummyVideo03.mp4 */,
+				5CE50AE92C23434D000A0CCE /* video01.mp4 */,
+				5CE50AE72C23434D000A0CCE /* video02.mp4 */,
 				5CAE24732BC91E4300322AC6 /* Resources */,
 			);
 			path = Memetory;
@@ -442,6 +513,7 @@
 		5CC889BC2BCD0EA30074FFA2 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				5C8E3F4E2C22A1F300CCB7C2 /* Extensions */,
 				5CC889BD2BCD0EB10074FFA2 /* Common */,
 			);
 			path = Sources;
@@ -570,6 +642,7 @@
 				5CE3A1882BF0A804001BF120 /* AWSTranscribeStreaming */,
 				5CE3A18A2BF0A804001BF120 /* AWSTranslate */,
 				5CE3A18C2BF0A804001BF120 /* AWSUserPoolsSignIn */,
+				5CE50AE02C22C396000A0CCE /* MuxPlayerSwift */,
 			);
 			productName = Memetory;
 			productReference = 5CAB5B4B2B610EA600B2AF59 /* Memetory.app */;
@@ -605,6 +678,7 @@
 				5CAE244B2BC7FFCD00322AC6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 				5CAE246E2BC91C0400322AC6 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */,
+				5CE50ADF2C22C396000A0CCE /* XCRemoteSwiftPackageReference "mux-player-swift" */,
 			);
 			productRefGroup = 5CAB5B4C2B610EA600B2AF59 /* Products */;
 			projectDirPath = "";
@@ -622,9 +696,14 @@
 			files = (
 				5CAB5B5B2B610EA800B2AF59 /* LaunchScreen.storyboard in Resources */,
 				5C4BB47D2B7BD1B40045FB28 /* Pretendard-Bold.otf in Resources */,
+				5CE50AEA2C23434D000A0CCE /* dummyVideo02.mp4 in Resources */,
+				5CE50AEC2C23434D000A0CCE /* dummyVideo01.mp4 in Resources */,
+				5CE50AEB2C23434D000A0CCE /* video02.mp4 in Resources */,
 				5CAB5B582B610EA800B2AF59 /* Assets.xcassets in Resources */,
 				5CAB5B562B610EA600B2AF59 /* Main.storyboard in Resources */,
+				5CE50AEF2C235027000A0CCE /* dummyVideo03.mp4 in Resources */,
 				5C4BB4642B7B495A0045FB28 /* BMJUA_otf.otf in Resources */,
+				5CE50AED2C23434D000A0CCE /* video01.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -652,6 +731,7 @@
 				5CAE246B2BC8043E00322AC6 /* APIContainer.swift in Sources */,
 				5CC28F8C2BF5AC8900089EC7 /* StorageCollectionViewCell.swift in Sources */,
 				5CAE246D2BC804DA00322AC6 /* Constants.swift in Sources */,
+				5C8E3F502C22A22800CCB7C2 /* UITableView+Extension.swift in Sources */,
 				5CC4BADD2B68E3DD00A2D259 /* NickNameSetViewController.swift in Sources */,
 				5C4BB4682B7B501F0045FB28 /* TabBarViewController.swift in Sources */,
 				5CAB5B532B610EA600B2AF59 /* ViewController.swift in Sources */,
@@ -672,13 +752,17 @@
 				5C2B97462C20200A000EE2A1 /* Environment.swift in Sources */,
 				5CAE24342BC7EFAA00322AC6 /* BaseService.swift in Sources */,
 				5C4BB4762B7B62D30045FB28 /* TemSelectViewController.swift in Sources */,
+				5C8E3F582C22B00600CCB7C2 /* GradientView.swift in Sources */,
 				5CC28F902BF5C02F00089EC7 /* LoadingViewController.swift in Sources */,
 				5CF617842BF328FD00CCB297 /* Voice.swift in Sources */,
 				5C9FE6062BE3DD020037EFCD /* Encodable+Extension.swift in Sources */,
 				5C382FDE2B96EF8E003DD4C6 /* Scene.swift in Sources */,
 				5CAE24322BC7EF9D00322AC6 /* BaseRouter.swift in Sources */,
+				5C8E3F4D2C22A05F00CCB7C2 /* BaseView.swift in Sources */,
+				5CE50AE52C23347C000A0CCE /* MemesCollectionViewCell.swift in Sources */,
 				5C5536322B8B2967004A3E67 /* SelectViewController.swift in Sources */,
 				5C8C1C0F2BC6A1F600E44813 /* AuthModel.swift in Sources */,
+				5CE50AE32C22E378000A0CCE /* VideoPlayerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -823,7 +907,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Memetory/Memetory.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = D8KHM6Q8SA;
@@ -854,7 +938,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Memetory/Memetory.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = D8KHM6Q8SA;
@@ -942,6 +1026,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.36.1;
+			};
+		};
+		5CE50ADF2C22C396000A0CCE /* XCRemoteSwiftPackageReference "mux-player-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/muxinc/mux-player-swift";
+			requirement = {
+				branch = main;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1261,6 +1353,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5CE3A12F2BF0A804001BF120 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
 			productName = AWSUserPoolsSignIn;
+		};
+		5CE50AE02C22C396000A0CCE /* MuxPlayerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CE50ADF2C22C396000A0CCE /* XCRemoteSwiftPackageReference "mux-player-swift" */;
+			productName = MuxPlayerSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
