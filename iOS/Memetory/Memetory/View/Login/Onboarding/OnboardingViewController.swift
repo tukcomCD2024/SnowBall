@@ -142,11 +142,11 @@ extension OnboardingViewController {
     
     private func setOnboardingData() {
         onboardingData.append(contentsOf: [
-            OnboardingDataModel(imageName: "MockUp",
+            OnboardingDataModel(imageName: "MockUp1",
                                 title: "원하는 템플릿을 선택하고"),
-            OnboardingDataModel(imageName: "frame",
+            OnboardingDataModel(imageName: "MockUp2",
                                 title: "얼굴, 목소리, 대사를 입력하면?"),
-            OnboardingDataModel(imageName: "MockUp",
+            OnboardingDataModel(imageName: "MockUp3",
                                 title: "나만의 밈 완성!")
         ])
     }
