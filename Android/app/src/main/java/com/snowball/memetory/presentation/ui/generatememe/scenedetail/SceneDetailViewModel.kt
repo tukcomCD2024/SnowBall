@@ -20,6 +20,14 @@ class SceneDetailViewModel(private val generateMemeRepository: GenerateMemeRepos
     private val _scenes = MutableLiveData<MutableList<Scene>>(mutableListOf())
     val scenes: LiveData<MutableList<Scene>> = _scenes
 
+    private val _selectedTemplateIndex = MutableLiveData<Int>()
+    val selectedTemplateIndex: LiveData<Int> = _selectedTemplateIndex
+
+    fun setSelectedTemplateIndex(index: Int) {
+        _selectedTemplateIndex.value = index
+        // 여기에서 추가로 템플릿에 따른 이미지 로딩 등의 로직을 추가할 수 있습니다.
+    }
+
     private val _selectedScene = MutableLiveData<Scene>()
     val selectedScene: LiveData<Scene> = _selectedScene
 
