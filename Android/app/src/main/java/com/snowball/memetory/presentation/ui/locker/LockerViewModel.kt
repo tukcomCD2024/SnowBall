@@ -17,12 +17,18 @@ class LockerViewModel(private val lockerRepository: LockerRepository): ViewModel
     private val _videoUrls = MutableLiveData<List<String>>()
     val videoUrls: LiveData<List<String>> = _videoUrls  // 외부에서 접근 가능한 LiveData
 
+    private val _memeIdList = MutableLiveData<List<Int>>()
+    val memeIdList: LiveData<List<Int>> = _memeIdList  // MemeIdList
+
     fun getAllMeme(page: Int, size: Int) {
         viewModelScope.launch {
             val result = lockerRepository.getAllMeme(page, size)
             result.onSuccess {
                 _memeList.postValue(it.data.memeList)
-                _videoUrls.postValue(it.data.memeList.map { meme -> meme.s3Url })  // s3Url만 추출하여 저장
+//                _videoUrls.postValue(it.data.memeList.map { meme -> meme.s3Url })  // s3Url만 추출하여 저장
+                _videoUrls.postValue(it.data.memeList.mapNotNull { meme -> meme.s3Url })
+                _memeIdList.postValue(it.data.memeList.mapNotNull { meme -> meme.memeId })
+
                 Log.d("LockerViewModel", "getAllMeme: ${it.data.memeList}")
             }.onFailure {
                 Log.e("LockerViewModel", "Error: ${it.message}")
