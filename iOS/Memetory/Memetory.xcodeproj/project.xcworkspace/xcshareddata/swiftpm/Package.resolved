@@ -28,6 +28,15 @@
       }
     },
     {
+      "identity" : "gcdwebserver",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/yene/GCDWebServer",
+      "state" : {
+        "revision" : "c2f837b30038ef716b77225f40cc8d104b6ff645",
+        "version" : "3.5.7"
+      }
+    },
+    {
       "identity" : "googlesignin-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleSignIn-iOS",
@@ -64,12 +73,39 @@
       }
     },
     {
+      "identity" : "mux-player-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/muxinc/mux-player-swift",
+      "state" : {
+        "branch" : "main",
+        "revision" : "ffc6b34243a1b28545d47997046814145f42f360"
+      }
+    },
+    {
+      "identity" : "mux-stats-sdk-avplayer",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/muxinc/mux-stats-sdk-avplayer",
+      "state" : {
+        "revision" : "ddac23a67cbde6e294937a9d6ed54d71ff80e213",
+        "version" : "3.6.1"
+      }
+    },
+    {
       "identity" : "snapkit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SnapKit/SnapKit.git",
       "state" : {
         "revision" : "2842e6e84e82eb9a8dac0100ca90d9444b0307f4",
         "version" : "5.7.1"
+      }
+    },
+    {
+      "identity" : "stats-sdk-objc",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/muxinc/stats-sdk-objc.git",
+      "state" : {
+        "revision" : "d72b1d40ae9f568d2c6be890c48a17b1ff11c9af",
+        "version" : "4.7.1"
       }
     }
   ],
