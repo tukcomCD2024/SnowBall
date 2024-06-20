@@ -15,6 +15,7 @@ import com.snowball.memetory.R
 import com.snowball.memetory.data.api.NetworkModule
 import com.snowball.memetory.data.repository.LockerRepository
 import com.snowball.memetory.databinding.FragmentLockerBinding
+import com.snowball.memetory.domain.model.locker.Video
 import com.snowball.memetory.presentation.ui.generatememe.GenerateMemeActivity
 import com.snowball.memetory.presentation.ui.locker.adapter.VideoRVAdapter
 
@@ -42,8 +43,11 @@ class LockerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getAllMeme(0, 10)
         // DiffUtil
-        viewModel.videoUrls.observe(viewLifecycleOwner) { videos ->
-            videoRVAdapter.submitList(videos)
+//        viewModel.videoUrls.observe(viewLifecycleOwner) { videos ->
+//            videoRVAdapter.submitList(videos)
+//        }
+        viewModel.memeList.observe(viewLifecycleOwner) { videos ->
+            videoRVAdapter.submitList(videos.map { Video(it.s3Url, it.memeId) })
         }
         setupRecyclerView()
 
@@ -51,11 +55,10 @@ class LockerFragment : Fragment() {
 //            videoRVAdapter.updateData(videos)  // 어댑터에 데이터를 설정합니다.
 //        }
 
-
     }
 
     private fun setupRecyclerView() {
-        videoRVAdapter = VideoRVAdapter { videoUrl ->
+        videoRVAdapter = VideoRVAdapter(childFragmentManager) { videoUrl ->
             navigateToPlayerFragment(videoUrl)
         }
         binding.recyclerView.adapter = videoRVAdapter
