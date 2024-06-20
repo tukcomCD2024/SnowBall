@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.snowball.memetory.R
 import com.snowball.memetory.databinding.ItemTemplateDetailBinding
 
-class TemplateDetailVPAdater(private val imgRes: ArrayList<Int>)
+class TemplateDetailVPAdater(private val imgRes: List<Int>)
     : RecyclerView.Adapter<TemplateDetailVPAdater.ViewHolder>() {
 
     interface OnItemClickListener {
@@ -40,4 +40,5 @@ class TemplateDetailVPAdater(private val imgRes: ArrayList<Int>)
             }
         }
     }
+
 }
