@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="20dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/thumnailImg"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_gravity="center"
+            android:src="@drawable/demon3"
+            android:scaleType="centerCrop"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/settingImg"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_dot_menu_32"
+            android:layout_gravity="top|right"
+            android:layout_marginEnd="10dp" />
+
+    </FrameLayout>
+</layout>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".presentation.ui.locker.VideoOptionsBottomSheetFragment"
+    android:layout_marginVertical="10dp">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/uploadVideoBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="동영상 올리기"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/downloadBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="다운로드"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/uploadVideoBtn"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/deleteBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="삭제"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/downloadBtn"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

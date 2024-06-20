@@ -66,5 +66,7 @@ object NetworkModule {
     val googleAuthService: AuthService = retrofitGoogle.create(AuthService::class.java)
     // 밈 생성
     val generateMemeService: GenerateMemeService = retrofitAppHeader.create(GenerateMemeService::class.java)
+    // 라커(밈 조회)
+    val lockerService: LockerService = retrofitAppHeader.create(LockerService::class.java)
 
 }

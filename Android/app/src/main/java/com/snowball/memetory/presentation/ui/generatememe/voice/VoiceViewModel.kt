@@ -70,7 +70,7 @@ class VoiceViewModel(private val voiceRepository: VoiceRepository) : ViewModel()
                 // 성공 처리 로직
 //                _voices.postValue(voiceResponse.data.voices)  // 데이터를 LiveData에 업데이트
 
-                _voices.postValue(voiceResponse.data)  // 데이터를 LiveData에 업데이트
+                _voices.postValue(voiceResponse.data!!)  // 데이터를 LiveData에 업데이트
                 Log.d("VoiceViewModel", "Voice ID extracted: ,${voiceResponse.status}, ${voiceResponse.message}, " +
                         "${voiceResponse.data}")
             }.onFailure { throwable ->

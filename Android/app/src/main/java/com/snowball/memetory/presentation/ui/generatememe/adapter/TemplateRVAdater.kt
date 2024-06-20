@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.snowball.memetory.R
 import com.snowball.memetory.databinding.ItemTemplateBinding
 
@@ -24,7 +25,10 @@ class TemplateRVAdater(private val imgRes: ArrayList<Int>, private val itemClick
     }
 
     override fun onBindViewHolder(holder: TemplateRVAdater.ViewHolder, position: Int) {
-//        holder.img.setImageResource(imgRes[position])
+        val imageId = imgRes[position]
+        Glide.with(holder.itemView.context)
+            .load(imageId)
+            .into(holder.img)
     }
 
     override fun getItemCount(): Int {
@@ -37,7 +41,6 @@ class TemplateRVAdater(private val imgRes: ArrayList<Int>, private val itemClick
         init {
             itemView.setOnClickListener {
                 itemClick.onItemClick(it, adapterPosition)
-
             }
         }
     }

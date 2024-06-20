@@ -20,6 +20,14 @@ class SceneDetailViewModel(private val generateMemeRepository: GenerateMemeRepos
     private val _scenes = MutableLiveData<MutableList<Scene>>(mutableListOf())
     val scenes: LiveData<MutableList<Scene>> = _scenes
 
+    private val _selectedTemplateIndex = MutableLiveData<Int>()
+    val selectedTemplateIndex: LiveData<Int> = _selectedTemplateIndex
+
+    fun setSelectedTemplateIndex(index: Int) {
+        _selectedTemplateIndex.value = index
+        // 여기에서 추가로 템플릿에 따른 이미지 로딩 등의 로직을 추가할 수 있습니다.
+    }
+
     private val _selectedScene = MutableLiveData<Scene>()
     val selectedScene: LiveData<Scene> = _selectedScene
 
@@ -134,58 +142,3 @@ class SceneDetailViewModel(private val generateMemeRepository: GenerateMemeRepos
         }
     }
 }
-
-
-//class SceneDetailViewModel : ViewModel() {
-//    var selectedImageUri: Uri? = null
-//    var selectedImageFile: File? = null
-//    var enteredText: String? = null
-//    val selectedImagesState = mutableMapOf<Int, Boolean>()
-//    val templateDataMap = mutableMapOf<Int, SceneDetailDto>()
-//
-//    fun setImageSelected(resourceId: Int, isSelected: Boolean) {
-//        selectedImagesState[resourceId] = isSelected
-//    }
-//
-//    fun isImageSelected(resourceId: Int): Boolean {
-//        return selectedImagesState[resourceId] ?: false
-//    }
-//
-//    fun setTemplateData(resourceId: Int, data: SceneDetailDto) {
-//        templateDataMap[resourceId] = data
-//    }
-//
-//    fun getTemplateData(resourceId: Int): SceneDetailDto? {
-//        return templateDataMap[resourceId]
-//    }
-//
-//
-//}
-
-
-
-
-////////////////////////
-//class SceneDetailViewModel: ViewModel() {
-//
-//    var selectedImageUri: Uri? = null
-//    var enteredText: String? = null
-//    var selectedTemplateId: Int? = null
-//    val selectedImagesState = mutableMapOf<Int, Boolean>()
-//    val templateDataMap = mutableMapOf<Int, SceneDetailDto>()
-//
-//    fun setImageSelected(resourceId: Int, isSelected: Boolean) {
-//        selectedImagesState[resourceId] = isSelected
-//    }
-//
-//    fun isImageSelected(resourceId: Int): Boolean {
-//        return selectedImagesState[resourceId] ?: false
-//    }
-//    fun setTemplateData(resourceId: Int, data: SceneDetailDto) {
-//        templateDataMap[resourceId] = data
-//    }
-//
-//    fun getTemplateData(resourceId: Int): SceneDetailDto? {
-//        return templateDataMap[resourceId]
-//    }
-//}

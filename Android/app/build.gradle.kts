@@ -5,6 +5,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("androidx.navigation.safeargs")
+    id("com.google.gms.google-services")
 }
 
 val properties = Properties()
@@ -59,7 +60,7 @@ dependencies {
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
+    implementation("com.google.android.material:material:1.6.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -112,5 +113,16 @@ dependencies {
     // Jetpack Security
     implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
     
-    implementation("com.google.android.gms:play-services-basement:18.3.0")
+//    implementation("com.google.android.gms:play-services-basement:18.3.0")
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-messaging-ktx")
+
+    // exoplayer : https://developer.android.com/media/media3/exoplayer/hello-world?hl=ko#add-exoplayer-modules
+    implementation("androidx.media3:media3-exoplayer:1.3.1")
+    implementation("androidx.media3:media3-exoplayer-dash:1.3.1")
+    implementation("androidx.media3:media3-ui:1.3.1")
+
 }
