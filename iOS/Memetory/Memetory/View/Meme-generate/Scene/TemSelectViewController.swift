@@ -74,7 +74,7 @@ class TemSelectViewController: UIViewController {
 
         view.backgroundColor = .white
         tabBarController?.tabBar.isHidden = true
-        title = "해리포터 템플릿"
+        title = "악마를 보았다 템플릿"
         setViews()
         setConstraints()
     }
