@@ -51,7 +51,7 @@ public class RankingServiceTest {
 		Double expectedScore = 1.0;
 
 		// when
-		rankingService.increaseTodayMemesLikeCountFromMemesId(MEMES_ID);
+		rankingService.increaseCount(MEMES_ID);
 
 		// then
 		assertThat(rankingZSet.score(key, MEMES_ID)).isEqualTo(expectedScore);
@@ -66,8 +66,8 @@ public class RankingServiceTest {
 		Double expectedScore = 2.0;
 
 		// when
-		rankingService.increaseTodayMemesLikeCountFromMemesId(MEMES_ID);
-		rankingService.increaseTodayMemesLikeCountFromMemesId(MEMES_ID);
+		rankingService.increaseCount(MEMES_ID);
+		rankingService.increaseCount(MEMES_ID);
 
 		// then
 		assertThat(rankingZSet.score(key, MEMES_ID)).isEqualTo(expectedScore);
@@ -82,7 +82,7 @@ public class RankingServiceTest {
 		Double expectedScore = -1.0;
 
 		// when
-		rankingService.decreaseTodayMemesLikeCountFromMemesId(MEMES_ID);
+		rankingService.decreaseCount(MEMES_ID);
 
 		// then
 		assertThat(rankingZSet.score(key, MEMES_ID)).isEqualTo(expectedScore);

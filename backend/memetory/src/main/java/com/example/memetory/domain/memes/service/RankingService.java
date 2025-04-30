@@ -24,7 +24,7 @@ public class RankingService {
 	private final ZSetOperations<String, Long> rankingZSet;
 
 	@Transactional
-	public void increaseTodayMemesLikeCountFromMemesId(Long memesId) {
+	public void increaseCount(Long memesId) {
 		String key = PREFIX + LocalDate.now();
 
 		increaseMemesLikeCountForToday(key, memesId);
@@ -75,7 +75,7 @@ public class RankingService {
 	}
 
 	@Transactional
-	public void decreaseTodayMemesLikeCountFromMemesId(Long memesId) {
+	public void decreaseCount(Long memesId) {
 		String key = PREFIX + LocalDate.now();
 
 		decreaseMemesLikeCountForToday(key, memesId);

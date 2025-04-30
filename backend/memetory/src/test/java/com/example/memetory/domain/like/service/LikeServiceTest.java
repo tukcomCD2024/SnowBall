@@ -26,7 +26,6 @@ import com.example.memetory.domain.like.repository.LikeRepository;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.memes.entity.Memes;
-import com.example.memetory.domain.memes.repository.MemesRepository;
 import com.example.memetory.domain.memes.service.MemesService;
 import com.example.memetory.domain.memes.service.RankingService;
 
@@ -67,7 +66,7 @@ public class LikeServiceTest {
 
 		// then
 		assertThat(memes.getLikeCount()).isEqualTo(2L);
-		verify(rankingService).increaseTodayMemesLikeCountFromMemesId(any());
+		verify(rankingService).increaseCount(any());
 		verify(likeRepository).save(any(Like.class));
 	}
 
@@ -100,6 +99,6 @@ public class LikeServiceTest {
 		// then
 		assertThat(memes.getLikeCount()).isZero();
 		verify(likeRepository).delete(like);
-		verify(rankingService).decreaseTodayMemesLikeCountFromMemesId(any());
+		verify(rankingService).decreaseCount(any());
 	}
 }
