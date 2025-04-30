@@ -30,57 +30,81 @@ public class RankingService {
 	private final ZSetOperations<String, Long> rankingZSet;
 
 	public void increaseCount(Long memesId) {
-		Duration ttl = Duration.ofDays(1);
-
 		LocalDate now = LocalDate.now();
-		increaseMemesLikeCountForToday(now, memesId, ttl);
-		increaseMemesLikeCountForLastWeek(now, memesId, ttl);
-		increaseMemesLikeCountForLastMonth(now, memesId, ttl);
+
+		increaseWithTtl(buildDailyKey(now), memesId);
+		increaseWithTtl(buildWeeklyKey(now), memesId);
+		increaseWithTtl(buildMonthlyKey(now), memesId);
 	}
 
-	private void increaseMemesLikeCountForToday(LocalDate now, Long memesId, Duration ttl) {
-		String key = PREFIX + now;
-
+	private void increaseWithTtl(String key, Long memesId) {
 		rankingZSet.incrementScore(key, memesId, 1);
-		setExpireIfAbsent(key, ttl);
+		setExpireIfAbsent(key, Duration.ofDays(1));
 	}
 
-	/**
-	 * 주어진 key가 TTL을 가지고 있지 않을 경우 (즉, 새로 생성된 경우),
-	 * 지정된 TTL을 부여한다.
-	 *
-	 * Redis의 TTL 값이 다음 중 하나일 경우 TTL을 설정함:
-	 * - null: TTL 조회 실패 또는 일시적인 연결 문제
-	 * - -1L: 무제한 저장 상태 (TTL이 없음)
-	 */
 	private void setExpireIfAbsent(String key, Duration ttl) {
 		Long expire = redisTemplate.getExpire(key);
 		if (expire == null || expire == -1L) {
 			redisTemplate.expire(key, ttl);
-
 		}
 	}
 
-	private void increaseMemesLikeCountForLastWeek(LocalDate now, Long memesId, Duration ttl) {
-		WeekFields weekFields = WeekFields.of(Locale.KOREA);
-
-		int year = now.getYear();
-		int week = now.get(weekFields.weekOfYear());
-		String key = PREFIX + String.format("%d-%02d", year, week) + POSTFIX_WEEK;
-
-		rankingZSet.incrementScore(key, memesId, 1);
-
-		setExpireIfAbsent(key, ttl);
+	private String buildDailyKey(LocalDate date) {
+		return PREFIX + date;
 	}
 
-	private void increaseMemesLikeCountForLastMonth(LocalDate now, Long memesId, Duration ttl) {
-		int year = now.getYear();
-		int month = now.getMonthValue();
-		String key = PREFIX + String.format("%d-%02d", year, month) + POSTFIX_MONTH;
+	private String buildWeeklyKey(LocalDate date) {
+		WeekFields weekFields = WeekFields.of(Locale.KOREA);
+		int year = date.getYear();
+		int week = date.get(weekFields.weekOfYear());
+		return PREFIX + String.format("%d-%02d", year, week) + POSTFIX_WEEK;
+	}
 
-		rankingZSet.incrementScore(key, memesId, 1);
+	private String buildMonthlyKey(LocalDate date) {
+		int year = date.getYear();
+		int month = date.getMonthValue();
+		return PREFIX + String.format("%d-%02d", year, month) + POSTFIX_MONTH;
+	}
 
-		setExpireIfAbsent(key, ttl);
+	public void decreaseCount(Long memesId) {
+		LocalDate now = LocalDate.now();
+
+		decreaseIfExists(buildDailyKey(now), memesId);
+		decreaseIfExists(buildWeeklyKey(now), memesId);
+		decreaseIfExists(buildMonthlyKey(now), memesId);
+	}
+
+	private void decreaseIfExists(String key, Long memesId) {
+		if (isMemberScored(key, memesId)) {
+			rankingZSet.incrementScore(key, memesId, -1);
+		}
+	}
+
+	private boolean isMemberScored(String key, Long member) {
+		Double score = rankingZSet.score(key, member);
+		return score != null && score > 0;
+	}
+
+	public List<MemesRankDto> findTopTenMemesLikeCountForWeek() {
+		String key = PREFIX + LocalDate.now() + POSTFIX_WEEK;
+
+		unionMemesIfKeyNotExists(key, 7);
+
+		Set<ZSetOperations.TypedTuple<Long>> rankTuple = rankingZSet.reverseRangeWithScores(key, 0, TOP_TEN);
+		List<MemesRankDto> result = rankTuple.stream().map(MemesRankDto::of).toList();
+
+		return result;
+	}
+
+	public List<MemesRankDto> findTopTenMemesLikeCountForMonth() {
+		String key = PREFIX + LocalDate.now() + POSTFIX_MONTH;
+
+		unionMemesIfKeyNotExists(key, 30);
+
+		Set<ZSetOperations.TypedTuple<Long>> rankTuple = rankingZSet.reverseRangeWithScores(key, 0, TOP_TEN);
+		List<MemesRankDto> result = rankTuple.stream().map(MemesRankDto::of).toList();
+
+		return result;
 	}
 
 	private void unionMemesIfKeyNotExists(String key, int day) {
@@ -106,52 +130,6 @@ public class RankingService {
 
 		rankingZSet.unionAndStore(key, keyList, key);
 	}
-
-	public void decreaseCount(Long memesId) {
-		String key = PREFIX + LocalDate.now();
-
-		decreaseMemesLikeCountForToday(key, memesId);
-		decreaseMemesLikeCountForLastWeek(key, memesId);
-		decreaseMemesLikeCountForLastMonth(key, memesId);
-	}
-
-	private void decreaseMemesLikeCountForToday(String key, Long memesId) {
-		rankingZSet.incrementScore(key, memesId, -1);
-	}
-
-	private void decreaseMemesLikeCountForLastWeek(String key, Long memesId) {
-		key += POSTFIX_WEEK;
-
-		unionMemesIfKeyNotExists(key, 7);
-		rankingZSet.incrementScore(key, memesId, -1);
-	}
-
-	private void decreaseMemesLikeCountForLastMonth(String key, Long memesId) {
-		key += POSTFIX_MONTH;
-
-		unionMemesIfKeyNotExists(key, 30);
-		rankingZSet.incrementScore(key, memesId, -1);
-	}
-
-	public List<MemesRankDto> findTopTenMemesLikeCountForWeek() {
-		String key = PREFIX + LocalDate.now() + POSTFIX_WEEK;
-
-		unionMemesIfKeyNotExists(key, 7);
-
-		Set<ZSetOperations.TypedTuple<Long>> rankTuple = rankingZSet.reverseRangeWithScores(key, 0, TOP_TEN);
-		List<MemesRankDto> result = rankTuple.stream().map(MemesRankDto::of).toList();
-
-		return result;
-	}
-
-	public List<MemesRankDto> findTopTenMemesLikeCountForMonth() {
-		String key = PREFIX + LocalDate.now() + POSTFIX_MONTH;
-
-		unionMemesIfKeyNotExists(key, 30);
-
-		Set<ZSetOperations.TypedTuple<Long>> rankTuple = rankingZSet.reverseRangeWithScores(key, 0, TOP_TEN);
-		List<MemesRankDto> result = rankTuple.stream().map(MemesRankDto::of).toList();
-
-		return result;
-	}
 }
+
+
