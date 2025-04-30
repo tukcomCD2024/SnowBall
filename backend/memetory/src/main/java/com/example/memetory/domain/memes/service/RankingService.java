@@ -2,13 +2,16 @@ package com.example.memetory.domain.memes.service;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.Year;
+import java.time.YearMonth;
 import java.time.temporal.WeekFields;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.DefaultTypedTuple;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
@@ -23,7 +26,7 @@ public class RankingService {
 	private final String PREFIX = "LIKE_RANKING_DATE::";
 	private final String POSTFIX_WEEK = "::WEEK";
 	private final String POSTFIX_MONTH = "::MONTH";
-	private final Long TOP_TEN = 9L;
+	private final Long LIMIT = 99L;
 
 	@Qualifier("rankingRedisTemplate")
 	private final RedisTemplate<String, Long> redisTemplate;
@@ -85,51 +88,66 @@ public class RankingService {
 		return score != null && score > 0;
 	}
 
-	public List<MemesRankDto> findTopTenMemesLikeCountForWeek() {
-		String key = PREFIX + LocalDate.now() + POSTFIX_WEEK;
+	// 그냥 Redis에서 100개의 데이터를 반환
+	public List<MemesRankDto> findDailyRanking(LocalDate localDate) {
+		String key = buildDailyKey(localDate);
 
-		unionMemesIfKeyNotExists(key, 7);
+		Set<ZSetOperations.TypedTuple<Long>> rankTuple = rankingZSet.reverseRangeWithScores(key, 0, LIMIT);
 
-		Set<ZSetOperations.TypedTuple<Long>> rankTuple = rankingZSet.reverseRangeWithScores(key, 0, TOP_TEN);
-		List<MemesRankDto> result = rankTuple.stream().map(MemesRankDto::of).toList();
-
-		return result;
+		return rankTuple.stream().map(MemesRankDto::of).toList();
 	}
 
-	public List<MemesRankDto> findTopTenMemesLikeCountForMonth() {
-		String key = PREFIX + LocalDate.now() + POSTFIX_MONTH;
+	public List<MemesRankDto> findWeeklyRank(Year year, int week) {
+		String key = PREFIX + String.format("%d-%02d", year.getValue(), week) + POSTFIX_WEEK;
 
-		unionMemesIfKeyNotExists(key, 30);
+		Set<ZSetOperations.TypedTuple<Long>> rankTuple = rankingZSet.reverseRangeWithScores(key, 0, LIMIT);
 
-		Set<ZSetOperations.TypedTuple<Long>> rankTuple = rankingZSet.reverseRangeWithScores(key, 0, TOP_TEN);
-		List<MemesRankDto> result = rankTuple.stream().map(MemesRankDto::of).toList();
-
-		return result;
+		return rankTuple.stream().map(MemesRankDto::of).toList();
 	}
 
-	private void unionMemesIfKeyNotExists(String key, int day) {
-		if (isNotExistedKey(key)) {
-			unionMemesFromKeyAndDay(key, day);
-		}
+	public List<MemesRankDto> findMonthlyRank(YearMonth yearMonth) {
+		String key = PREFIX + yearMonth.toString() + POSTFIX_MONTH; // e.g. memes:2024-04:MONTH
+
+		Set<ZSetOperations.TypedTuple<Long>> rankTuple = rankingZSet.reverseRangeWithScores(key, 0, LIMIT);
+
+		return rankTuple.stream()
+			.map(MemesRankDto::of)
+			.toList();
 	}
 
-	private boolean isNotExistedKey(String key) {
-		Set<Long> check = rankingZSet.range(key, 0, 1);
+	public void createDailyRanking(LocalDate date, List<MemesRankDto> rankDtoList) {
+		String key = buildDailyKey(date);
 
-		return check.isEmpty();
+		Set<ZSetOperations.TypedTuple<Long>> tuples = rankDtoList.stream()
+			.map(dto -> new DefaultTypedTuple<>(dto.getMemesId(), (double)dto.getScore()))
+			.collect(Collectors.toSet());
+
+		rankingZSet.add(key, tuples);
+		redisTemplate.expire(key, Duration.ofDays(30));
 	}
 
-	private void unionMemesFromKeyAndDay(String key, int day) {
-		List<String> keyList = new ArrayList<>();
-		LocalDate today = LocalDate.now();
+	public void createWeeklyRanking(Year year, int week, List<MemesRankDto> memesRankDtos) {
+		String key = PREFIX + String.format("%d-%02d", year.getValue(), week) + POSTFIX_WEEK;
 
-		for (int i = 1; i < day; i++) {
-			LocalDate date = today.minusDays(i);
-			keyList.add(PREFIX + date);
-		}
+		Set<ZSetOperations.TypedTuple<Long>> tuples = memesRankDtos.stream()
+			.map(dto -> new DefaultTypedTuple<>(dto.getMemesId(), (double) dto.getScore()))
+			.collect(Collectors.toSet());
 
-		rankingZSet.unionAndStore(key, keyList, key);
+		rankingZSet.add(key, tuples);
+		redisTemplate.expire(key, Duration.ofDays(30));
 	}
+
+	public void createMonthlyRanking(YearMonth yearMonth, List<MemesRankDto> memesRankDtos) {
+		String key = PREFIX + yearMonth.toString() + POSTFIX_MONTH; // e.g. memes:2024-04:MONTH
+
+		Set<ZSetOperations.TypedTuple<Long>> tuples = memesRankDtos.stream()
+			.map(dto -> new DefaultTypedTuple<>(dto.getMemesId(), (double) dto.getScore()))
+			.collect(Collectors.toSet());
+
+		rankingZSet.add(key, tuples);
+		redisTemplate.expire(key, Duration.ofDays(365));
+	}
+
 }
 
 
