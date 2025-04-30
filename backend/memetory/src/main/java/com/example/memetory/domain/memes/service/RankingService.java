@@ -1,13 +1,17 @@
 package com.example.memetory.domain.memes.service;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.memetory.domain.memes.dto.MemesRankDto;
 
@@ -21,33 +25,62 @@ public class RankingService {
 	private final String POSTFIX_MONTH = "::MONTH";
 	private final Long TOP_TEN = 9L;
 
+	@Qualifier("rankingRedisTemplate")
+	private final RedisTemplate<String, Long> redisTemplate;
 	private final ZSetOperations<String, Long> rankingZSet;
 
-	@Transactional
 	public void increaseCount(Long memesId) {
-		String key = PREFIX + LocalDate.now();
+		Duration ttl = Duration.ofDays(1);
 
-		increaseMemesLikeCountForToday(key, memesId);
-		increaseMemesLikeCountForLastWeek(key, memesId);
-		increaseMemesLikeCountForLastMonth(key, memesId);
+		LocalDate now = LocalDate.now();
+		increaseMemesLikeCountForToday(now, memesId, ttl);
+		increaseMemesLikeCountForLastWeek(now, memesId, ttl);
+		increaseMemesLikeCountForLastMonth(now, memesId, ttl);
 	}
 
-	private void increaseMemesLikeCountForToday(String key, Long memesId) {
+	private void increaseMemesLikeCountForToday(LocalDate now, Long memesId, Duration ttl) {
+		String key = PREFIX + now;
+
 		rankingZSet.incrementScore(key, memesId, 1);
+		setExpireIfAbsent(key, ttl);
 	}
 
-	private void increaseMemesLikeCountForLastWeek(String key, Long memesId) {
-		key += POSTFIX_WEEK;
+	/**
+	 * 주어진 key가 TTL을 가지고 있지 않을 경우 (즉, 새로 생성된 경우),
+	 * 지정된 TTL을 부여한다.
+	 *
+	 * Redis의 TTL 값이 다음 중 하나일 경우 TTL을 설정함:
+	 * - null: TTL 조회 실패 또는 일시적인 연결 문제
+	 * - -1L: 무제한 저장 상태 (TTL이 없음)
+	 */
+	private void setExpireIfAbsent(String key, Duration ttl) {
+		Long expire = redisTemplate.getExpire(key);
+		if (expire == null || expire == -1L) {
+			redisTemplate.expire(key, ttl);
 
-		unionMemesIfKeyNotExists(key, 7);
-		rankingZSet.incrementScore(key, memesId, 1);
+		}
 	}
 
-	private void increaseMemesLikeCountForLastMonth(String key, Long memesId) {
-		key += POSTFIX_MONTH;
+	private void increaseMemesLikeCountForLastWeek(LocalDate now, Long memesId, Duration ttl) {
+		WeekFields weekFields = WeekFields.of(Locale.KOREA);
 
-		unionMemesIfKeyNotExists(key, 30);
+		int year = now.getYear();
+		int week = now.get(weekFields.weekOfYear());
+		String key = PREFIX + String.format("%d-%02d", year, week) + POSTFIX_WEEK;
+
 		rankingZSet.incrementScore(key, memesId, 1);
+
+		setExpireIfAbsent(key, ttl);
+	}
+
+	private void increaseMemesLikeCountForLastMonth(LocalDate now, Long memesId, Duration ttl) {
+		int year = now.getYear();
+		int month = now.getMonthValue();
+		String key = PREFIX + String.format("%d-%02d", year, month) + POSTFIX_MONTH;
+
+		rankingZSet.incrementScore(key, memesId, 1);
+
+		setExpireIfAbsent(key, ttl);
 	}
 
 	private void unionMemesIfKeyNotExists(String key, int day) {
@@ -74,7 +107,6 @@ public class RankingService {
 		rankingZSet.unionAndStore(key, keyList, key);
 	}
 
-	@Transactional
 	public void decreaseCount(Long memesId) {
 		String key = PREFIX + LocalDate.now();
 
@@ -101,7 +133,6 @@ public class RankingService {
 		rankingZSet.incrementScore(key, memesId, -1);
 	}
 
-	@Transactional(readOnly = true)
 	public List<MemesRankDto> findTopTenMemesLikeCountForWeek() {
 		String key = PREFIX + LocalDate.now() + POSTFIX_WEEK;
 
@@ -113,7 +144,6 @@ public class RankingService {
 		return result;
 	}
 
-	@Transactional(readOnly = true)
 	public List<MemesRankDto> findTopTenMemesLikeCountForMonth() {
 		String key = PREFIX + LocalDate.now() + POSTFIX_MONTH;
 
