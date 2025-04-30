@@ -150,7 +150,7 @@ public class MemesServiceTest {
 	void When_findTopMemesByLikeForWeek_Then_List_MemesInfoResponse() {
 		// given
 		List<MemesRankDto> memesRankDtoList = generateMemesRankDtoList();
-		given(rankingService.findTopTenMemesLikeCountForWeek()).willReturn(memesRankDtoList);
+		given(rankingService.findDailyRanking()).willReturn(memesRankDtoList);
 		given(memesRepository.findByMemesId(any())).willReturn(Optional.ofNullable(MEMES(member, meme)));
 
 		// when

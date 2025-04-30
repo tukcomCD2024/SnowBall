@@ -74,29 +74,34 @@ public class VoiceController implements VoiceApi {
                 .block();
     }
 
-    // 멤버별 보이스 조회
-    @GetMapping("/member")
     @Override
-    public ResponseEntity<ResultResponse> findByMemberId(@LoginMemberEmail String email){
-        VoiceServiceDto voiceServiceDto = VoiceServiceDto.create(email);
-        String voiceId = voiceService.findVoiceByMemberId(voiceServiceDto);
-
-        return WebClient
-                .create(getApiUrl + "/" + voiceId)
-                .get()
-                .header("xi-api-key", apiKey)
-                .retrieve()
-                .bodyToMono(ElevenlabsVoiceResponse.class)
-                .flatMap(response -> {
-                    // elevenlabs API 호출이 완료 되면 실행할 로직
-                    return Mono.just(ResponseEntity.ok(ResultResponse.of(ResultCode.GET_MEMBER_VOICE_SUCCESS, response)));
-                })
-                .onErrorResume(error -> {
-                    System.out.println(("An error occurred while processing the request: {}" + error.getMessage()));
-                    return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
-                })
-                .block();
+    public ResponseEntity<ResultResponse> findByMemberId(String email) {
+        return null;
     }
+
+    // // 멤버별 보이스 조회
+    // @GetMapping("/member")
+    // @Override
+    // public ResponseEntity<ResultResponse> findByMemberId(@LoginMemberEmail String email){
+    //     VoiceServiceDto voiceServiceDto = VoiceServiceDto.create(email);
+    //     String voiceId = voiceService.findVoiceByMemberId(voiceServiceDto);
+    //
+    //     return WebClient
+    //             .create(getApiUrl + "/" + voiceId)
+    //             .get()
+    //             .header("xi-api-key", apiKey)
+    //             .retrieve()
+    //             .bodyToMono(Elevenlabs.class)
+    //             .flatMap(response -> {
+    //                 // elevenlabs API 호출이 완료 되면 실행할 로직
+    //                 return Mono.just(ResponseEntity.ok(ResultResponse.of(ResultCode.GET_MEMBER_VOICE_SUCCESS, response)));
+    //             })
+    //             .onErrorResume(error -> {
+    //                 System.out.println(("An error occurred while processing the request: {}" + error.getMessage()));
+    //                 return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
+    //             })
+    //             .block();
+    // }
 
     @DeleteMapping("/member")
     @Override

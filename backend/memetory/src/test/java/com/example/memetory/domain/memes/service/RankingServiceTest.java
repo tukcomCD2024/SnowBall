@@ -51,7 +51,7 @@ public class RankingServiceTest {
 		Double expectedScore = 1.0;
 
 		// when
-		rankingService.increaseTodayMemesLikeCountFromMemesId(MEMES_ID);
+		rankingService.increaseCount(MEMES_ID);
 
 		// then
 		assertThat(rankingZSet.score(key, MEMES_ID)).isEqualTo(expectedScore);
@@ -66,8 +66,8 @@ public class RankingServiceTest {
 		Double expectedScore = 2.0;
 
 		// when
-		rankingService.increaseTodayMemesLikeCountFromMemesId(MEMES_ID);
-		rankingService.increaseTodayMemesLikeCountFromMemesId(MEMES_ID);
+		rankingService.increaseCount(MEMES_ID);
+		rankingService.increaseCount(MEMES_ID);
 
 		// then
 		assertThat(rankingZSet.score(key, MEMES_ID)).isEqualTo(expectedScore);
@@ -82,7 +82,7 @@ public class RankingServiceTest {
 		Double expectedScore = -1.0;
 
 		// when
-		rankingService.decreaseTodayMemesLikeCountFromMemesId(MEMES_ID);
+		rankingService.decreaseCount(MEMES_ID);
 
 		// then
 		assertThat(rankingZSet.score(key, MEMES_ID)).isEqualTo(expectedScore);
@@ -92,7 +92,7 @@ public class RankingServiceTest {
 
 	@Test
 	@DisplayName("존재하지 않는 주간 key를 통한 MemesIdList 반환")
-	void Given_NotExistKey_When_findTopTenMemesLikeCountForWeek_Then_MemesIdList() {
+	void Given_NotExistKey_When_findDailyRankingTenMemesLikeCountForWeek_Then_MemesIdList() {
 		// given
 		for (int i = 0; i < 7; i++) {
 			LocalDate date = LocalDate.now().minusDays(i);
@@ -101,7 +101,7 @@ public class RankingServiceTest {
 		}
 
 		// when
-		List<MemesRankDto> result = rankingService.findTopTenMemesLikeCountForWeek();
+		List<MemesRankDto> result = rankingService.findDailyRanking();
 
 		//then
 		assertThat(result.size()).isEqualTo(6);
@@ -110,7 +110,7 @@ public class RankingServiceTest {
 
 	@Test
 	@DisplayName("존재하는 주간 key를 통한 MemesIdList 반환")
-	void Given_ExistKey_When_findTopTenMemesLikeCountForWeek_Then_MemesIdList() {
+	void Given_ExistKey_When_findDailyRankingTenMemesLikeCountForWeek_Then_MemesIdList() {
 		// given
 		key += POSTFIX_WEEK;
 		rankingZSet.add(key, 7L, 7);
@@ -122,7 +122,7 @@ public class RankingServiceTest {
 		}
 
 		// when
-		List<MemesRankDto> result = rankingService.findTopTenMemesLikeCountForWeek();
+		List<MemesRankDto> result = rankingService.findDailyRanking();
 
 		//then
 		assertThat(result.size()).isEqualTo(1);

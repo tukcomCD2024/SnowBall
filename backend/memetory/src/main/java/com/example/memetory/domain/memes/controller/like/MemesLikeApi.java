@@ -1,5 +1,8 @@
 package com.example.memetory.domain.memes.controller.like;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+
 import org.springframework.http.ResponseEntity;
 
 import com.example.memetory.global.response.ResultResponse;
@@ -23,7 +26,7 @@ public interface MemesLikeApi {
 			description = "인기차트 조회"
 		)
 	})
-	ResponseEntity<ResultResponse> findTopMemesByLike();
+	ResponseEntity<ResultResponse> findTopMemesByLike(LocalDate date);
 
 	@Operation(
 		summary = "meme`s 이달의 인기차트 조회",
@@ -36,7 +39,7 @@ public interface MemesLikeApi {
 			description = "이달의 인기차트 조회"
 		)
 	})
-	ResponseEntity<ResultResponse> findTopMemesByLikeForMonth();
+	ResponseEntity<ResultResponse> findTopMemesByLikeForMonth(YearMonth yearMonth);
 
 	@Operation(
 		summary = "meme`s 이주의 인기차트 조회",
@@ -49,7 +52,7 @@ public interface MemesLikeApi {
 			description = "이주의 인기차트 조회"
 		)
 	})
-	ResponseEntity<ResultResponse> findTopMemesByLikeForWeek();
+	ResponseEntity<ResultResponse> findTopMemesByLikeForWeek(int year, int week);
 
 	@Operation(
 		summary = "meme`s 좋아요 등록",

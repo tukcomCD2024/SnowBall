@@ -1,14 +1,25 @@
 package com.example.memetory.domain.memes.service;
 
-import static com.example.memetory.global.response.ErrorCode.*;
-
+import java.time.LocalDate;
+import java.time.Year;
+import java.time.YearMonth;
+import java.time.temporal.WeekFields;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.function.BooleanSupplier;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.memetory.domain.like.repository.LikeRepository;
 import com.example.memetory.domain.member.entity.Member;
 import com.example.memetory.domain.member.service.MemberService;
 import com.example.memetory.domain.meme.entity.Meme;
@@ -19,6 +30,9 @@ import com.example.memetory.domain.memes.dto.response.MemesInfoResponse;
 import com.example.memetory.domain.memes.dto.response.MemesInfoSliceResponse;
 import com.example.memetory.domain.memes.dto.response.MemesResponse;
 import com.example.memetory.domain.memes.entity.Memes;
+import com.example.memetory.domain.memes.event.DailyRankingCreatedEvent;
+import com.example.memetory.domain.memes.event.MonthlyRankingCreatedEvent;
+import com.example.memetory.domain.memes.event.WeeklyRankingCreatedEvent;
 import com.example.memetory.domain.memes.exception.NotFoundMemesException;
 import com.example.memetory.domain.memes.repository.MemesRepository;
 
@@ -31,6 +45,8 @@ public class MemesService {
 	private final MemeService memeService;
 	private final MemesRepository memesRepository;
 	private final RankingService rankingService;
+	private final LikeRepository likeRepository;
+	private final ApplicationEventPublisher eventPublisher;
 
 	@Transactional
 	public MemesResponse registerMemes(MemesServiceDto memesServiceDto) {
@@ -87,32 +103,60 @@ public class MemesService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<MemesInfoResponse> findTopMemesByLike() {
-		return memesRepository.findTopMemesOrderByLikeCount();
+	public List<MemesInfoResponse> findDailyTop10Memes(LocalDate localDate) {
+		return findTop10MemesFromRanking(() -> rankingService.findDailyRanking(localDate),
+			() -> LocalDate.now().equals(localDate), () -> {
+				List<MemesRankDto> dtos = likeRepository.findDailyRankLimit100(localDate);
+				eventPublisher.publishEvent(new DailyRankingCreatedEvent(localDate, dtos));
+				return dtos;
+			});
 	}
 
 	@Transactional(readOnly = true)
-	public List<MemesInfoResponse> findTopMemesByLikeForMonth() {
-		List<MemesRankDto> memesRankDtoList = rankingService.findTopTenMemesLikeCountForMonth();
+	public List<MemesInfoResponse> findWeeklyTop10Memes(Year year, int week) {
+		WeekFields weekFields = WeekFields.of(Locale.KOREA);
+		LocalDate today = LocalDate.now();
 
-		return convertMemesRankDtoListIntoMemesInfoResponseList(memesRankDtoList);
+		return findTop10MemesFromRanking(() -> rankingService.findWeeklyRank(year, week),
+			() -> year.getValue() == today.getYear() && week == today.get(weekFields.weekOfYear()), () -> {
+				List<MemesRankDto> dtos = likeRepository.findWeeklyRankLimit100(year, week);
+				eventPublisher.publishEvent(new WeeklyRankingCreatedEvent(year, week, dtos));
+				return dtos;
+			});
 	}
 
 	@Transactional(readOnly = true)
-	public List<MemesInfoResponse> findTopMemesByLikeForWeek() {
-		List<MemesRankDto> memesRankDtoList = rankingService.findTopTenMemesLikeCountForWeek();
-
-		return convertMemesRankDtoListIntoMemesInfoResponseList(memesRankDtoList);
+	public List<MemesInfoResponse> findMonthlyTop10Memes(YearMonth yearMonth) {
+		return findTop10MemesFromRanking(() -> rankingService.findMonthlyRank(yearMonth),
+			() -> YearMonth.now().equals(yearMonth), () -> {
+				List<MemesRankDto> dtos = likeRepository.findMonthlyRankLimit100(yearMonth);
+				eventPublisher.publishEvent(new MonthlyRankingCreatedEvent(yearMonth, dtos));
+				return dtos;
+			});
 	}
 
-	private List<MemesInfoResponse> convertMemesRankDtoListIntoMemesInfoResponseList(
-		List<MemesRankDto> memesRankDtoList) {
+	private List<MemesInfoResponse> findTop10MemesFromRanking(
+		Supplier<List<MemesRankDto>> cacheSupplier,
+		BooleanSupplier isCurrentPeriodChecker,
+		Supplier<List<MemesRankDto>> dbSupplierWithEvent) {
 
-		return memesRankDtoList.stream().map(this::convertMemesRankDtoInooMemesInfoResponse).toList();
-	}
+		List<MemesRankDto> rankList = cacheSupplier.get();
 
-	private MemesInfoResponse convertMemesRankDtoInooMemesInfoResponse(MemesRankDto memesRank) {
-		Memes memes = findMemesFromMemesId(memesRank.getMemesId());
-		return MemesInfoResponse.fromMemesAndLikeCount(memes, memesRank.getScore());
+		if (rankList.isEmpty()) {
+			if (isCurrentPeriodChecker.getAsBoolean()) {
+				return List.of();
+			}
+			rankList = dbSupplierWithEvent.get();
+		}
+
+		Map<Long, MemesRankDto> rankMap = rankList.stream()
+			.collect(Collectors.toMap(MemesRankDto::getMemesId, Function.identity()));
+
+		List<Memes> memes = memesRepository.findMemesByIdIn(rankMap.keySet());
+
+		return memes.stream().map(m -> {
+			MemesRankDto dto = rankMap.get(m.getId());
+			return MemesInfoResponse.fromMemesAndLikeCount(m, dto.getScore());
+		}).sorted(Comparator.comparing(MemesInfoResponse::getLikeCount).reversed()).limit(10).toList();
 	}
 }
