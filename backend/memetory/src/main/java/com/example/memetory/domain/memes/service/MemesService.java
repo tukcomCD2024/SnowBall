@@ -4,12 +4,12 @@ import java.time.LocalDate;
 import java.time.Year;
 import java.time.YearMonth;
 import java.time.temporal.WeekFields;
-import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BooleanSupplier;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -71,7 +71,7 @@ public class MemesService {
 	}
 
 	private Memes findMemberMemes(MemesServiceDto memesServiceDto) {
-		Memes memes = findMemesFromMemesId(memesServiceDto.getMemesId());
+		Memes memes = this.findMemesFromMemesId(memesServiceDto.getMemesId());
 
 		Member loginMember = memberService.findMemberFromEmail(memesServiceDto.getEmail());
 		Member memesMember = memes.getMember();
@@ -135,10 +135,8 @@ public class MemesService {
 			});
 	}
 
-	private List<MemesInfoResponse> findTop10MemesFromRanking(
-		Supplier<List<MemesRankDto>> cacheSupplier,
-		BooleanSupplier isCurrentPeriodChecker,
-		Supplier<List<MemesRankDto>> dbSupplierWithEvent) {
+	private List<MemesInfoResponse> findTop10MemesFromRanking(Supplier<List<MemesRankDto>> cacheSupplier,
+		BooleanSupplier isCurrentPeriodChecker, Supplier<List<MemesRankDto>> dbSupplierWithEvent) {
 
 		List<MemesRankDto> rankList = cacheSupplier.get();
 
@@ -150,13 +148,28 @@ public class MemesService {
 		}
 
 		Map<Long, MemesRankDto> rankMap = rankList.stream()
-			.collect(Collectors.toMap(MemesRankDto::getMemesId, Function.identity()));
+			.collect(Collectors.toMap(
+				MemesRankDto::getMemesId,
+				e -> e,
+				(a, b) -> b,
+				LinkedHashMap::new
+			));
 
 		List<Memes> memes = memesRepository.findMemesByIdIn(rankMap.keySet());
 
-		return memes.stream().map(m -> {
-			MemesRankDto dto = rankMap.get(m.getId());
-			return MemesInfoResponse.fromMemesAndLikeCount(m, dto.getScore());
-		}).sorted(Comparator.comparing(MemesInfoResponse::getLikeCount).reversed()).limit(10).toList();
+		Map<Long, Memes> memesMap = memes.stream()
+			.collect(Collectors.toMap(Memes::getId, meme -> meme));
+
+		return rankMap.entrySet().stream()
+			.map(entry -> {
+				Long id = entry.getKey();
+				Memes meme = memesMap.get(id);
+				if (meme == null)
+					return null;
+				return MemesInfoResponse.fromMemesAndLikeCount(meme, entry.getValue().getScore());
+			})
+			.filter(Objects::nonNull)
+			.limit(10)
+			.toList();
 	}
 }
